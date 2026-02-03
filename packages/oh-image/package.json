@@ -2,6 +2,19 @@
   "name": "@lonik/oh-image",
   "version": "0.0.1",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nicholasgriffintn/oh-image.git",
+    "directory": "packages/oh-image"
+  },
+  "keywords": [
+    "image",
+    "optimization",
+    "processing"
+  ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
