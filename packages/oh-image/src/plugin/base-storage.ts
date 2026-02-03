@@ -1,1 +1,3 @@
-export abstract class BaseStorage {}
+export abstract class BaseStorage {
+    
+}

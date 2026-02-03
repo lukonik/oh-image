@@ -1,3 +1,4 @@
+import { extname } from "pathe";
 const SHARP_SUPPORTED_FORMATS = new Set([
   // Input formats supported by Sharp
   "jpeg",
@@ -18,14 +19,9 @@ const SHARP_SUPPORTED_FORMATS = new Set([
   "j2c",
 ]);
 
-export class Resolver {
-  constructor(private path: string) {}
-
-  isSupportedFile() {
-    const ext = this.path.split(".").pop()?.toLowerCase();
-    if (!ext) return false;
-    return SHARP_SUPPORTED_FORMATS.has(ext);
-  }
-
-  
+export function isSupportedFile(path: string) {
+  const ext = extname(path);
+  if (!ext) return false;
+  return SHARP_SUPPORTED_FORMATS.has(ext.slice(1)); //ext is returned wit ., it is sliced for correct check
 }
+
