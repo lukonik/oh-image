@@ -32,14 +32,14 @@ export class ImageStorage {
     console.log(genId);
     await pipeline(
       sharp(path).toFormat(format),
-      put.stream(this._cacheDir, genId)
+      put.stream(this._cacheDir, genId),
     );
 
     const blurId = `${genId}-blur.${format}`;
 
     await pipeline(
-      sharp(path).resize(200, 200).toFormat(format),
-      put.stream(this._cacheDir, blurId)
+      sharp(path).resize(100).blur(10).toFormat(format),
+      put.stream(this._cacheDir, blurId),
     );
 
     const image: ImageValue = {
@@ -54,7 +54,9 @@ export class ImageStorage {
 
   getImage(url: string) {
     const base = basename(url);
-    console.log(base);
+    get.info(this._cacheDir, base).then((data) => {
+      console.log("base: ", base, " size: ", (data.size ?? 0) / 1024, "KB");
+    });
     return get.stream(this._cacheDir, base);
   }
 }
