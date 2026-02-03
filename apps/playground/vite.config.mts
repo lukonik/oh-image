@@ -1,8 +1,10 @@
 /// <reference types='vitest' />
-import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
+import Inspect from "vite-plugin-inspect";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { ohImage } from "../../packages/oh-image/src/plugin";
+
 export default defineConfig(() => ({
   root: import.meta.dirname,
   cacheDir: "../../node_modules/.vite/apps/playground",
@@ -18,6 +20,7 @@ export default defineConfig(() => ({
     tsconfigPaths({
       configNames: ["tsconfig.app.json", "../../tsconfig.base.json"],
     }),
+    Inspect(),
     react(),
     ohImage(),
   ],

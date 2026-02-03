@@ -1,3 +1,3 @@
-import { BaseOptimizer } from "./base-optimizer";
+import { Optimizer } from "./optimizer";
 
-export class BundleOptimizer extends BaseOptimizer {}
+export class BundleOptimizer extends Optimizer {}

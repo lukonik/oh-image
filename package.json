@@ -42,8 +42,11 @@
     "vitest": "^4.0.0"
   },
   "dependencies": {
+    "i": "^0.3.7",
+    "pathe": "^2.0.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "vite-plugin-inspect": "^11.3.3"
   },
   "nx": {
     "includedScripts": [],

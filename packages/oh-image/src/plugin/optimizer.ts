@@ -1,6 +1,6 @@
 import sharp from "sharp";
 
-export abstract class BaseOptimizer {
+export class Optimizer {
   constructor(private path: string) {}
 
   private get instance() {
