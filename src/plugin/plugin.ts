@@ -1,27 +1,39 @@
 import type { Plugin } from "vite";
-import { ImageCache } from "./image-cache";
 import { isFileSupported } from "./resolver";
+import { ImageStorage } from "./image-storage";
+
+const CACHE_PREFIX = "/oh-image/";
 
 export function ohImage() {
-  let imageCache!: ImageCache;
+  let storage!: ImageStorage;
   return {
     name: "oh-image",
     configResolved(config) {
-      imageCache = new ImageCache(config.root);
+      storage = new ImageStorage(config.root);
     },
+    enforce: "pre",
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
-        if (!req.url || !isFileSupported(req.url)) {
+        next()
+        if (!req.url?.startsWith(CACHE_PREFIX)) {
           return next();
         }
-        
+
+        const id = req.url.slice(CACHE_PREFIX.length);
+        try {
+          res.pipe(storage.getImage(id))
+          res.setHeader("Content-Type", "image/webp");
+        } catch {
+          next();
+        }
       });
     },
-    transform(code, id) {
-      if (isFileSupported(id)) {
-        return code;
+    async load(id) {
+      if (!isFileSupported(id)) {
+        return null;
       }
-      return code;
+      const image = await storage.create(id);
+      return `export default ${JSON.stringify(image)}`;
     },
   } satisfies Plugin;
 }

@@ -14,5 +14,10 @@ export default defineConfig([
   },
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
+  {
+    rules: {
+      "react/react-in-jsx-scope": "off",
+    },
+  },
   eslintConfigPrettier,
 ]);
