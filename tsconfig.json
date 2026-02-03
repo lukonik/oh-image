@@ -1,10 +1,15 @@
 {
   "extends": "./tsconfig.base.json",
   "compileOnSave": false,
+  "compilerOptions": {
+  },
   "files": [],
   "references": [
     {
       "path": "./packages/oh-image"
+    },
+    {
+      "path": "./apps/playground"
     }
   ]
 }

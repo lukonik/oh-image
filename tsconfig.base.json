@@ -16,6 +16,10 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",
-    "customConditions": ["@oh-image/source"]
+    "customConditions": ["@oh-image/source"],
+    "paths": {
+      "@lonik/oh-image/react": ["./packages/oh-image/src/react/index.ts"],
+      "@lonik/oh-image/plugin": ["./packages/oh-image/src/plugin/index.ts"]
+    }
   }
 }
