@@ -3,7 +3,7 @@ name: Publish
 on:
   push:
     branches:
-      - publish-config
+      - main
 
 
 jobs:
@@ -42,7 +42,7 @@ jobs:
         shell: bash
 
       - name: Publish packages
-        run: pnpx nx release publish --dry-run
+        run: pnpx nx release publish
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
