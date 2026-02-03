@@ -17,7 +17,7 @@ export default defineConfig(() => ({
   },
   plugins: [
     tsconfigPaths({
-      configNames: ["tsconfig.app.json"],
+      configNames: ["tsconfig.app.json","../../tsconfig.base.json"],
     }),
     react(),
   ],
