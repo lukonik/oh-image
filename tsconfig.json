@@ -5,6 +5,9 @@
   "references": [
     {
       "path": "./packages/oh-image"
+    },
+    {
+      "path": "./apps/playground"
     }
   ]
 }
