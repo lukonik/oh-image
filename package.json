@@ -14,12 +14,10 @@
     "url": "https://github.com/author/library/issues"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./plugin": "./dist/plugin.js",
+    "./react": "./dist/react.js"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -62,5 +60,9 @@
     "vite": "^7.3.0",
     "vitest": "^4.0.16",
     "vitest-browser-react": "^2.0.2"
+  },
+  "dependencies": {
+    "pathe": "^2.0.3",
+    "sharp": "^0.34.5"
   }
 }
