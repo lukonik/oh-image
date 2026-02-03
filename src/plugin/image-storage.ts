@@ -1,6 +1,7 @@
-import { basename, join } from "node:path";
+import { basename, join, parse } from "node:path";
+import { pipeline } from "node:stream/promises";
 import sharp from "sharp";
-import { put, get } from "cacache";
+import { get, put } from "cacache";
 import { nanoid } from "nanoid";
 interface ImageValue {
   width: number;
@@ -16,20 +17,30 @@ export class ImageStorage {
     this._cacheDir = join(root, ".cache", "oh-image");
   }
 
-  async create(id: string) {
-    const base = basename(id);
+  private getBase(id: string) {
+    return parse(id).name;
+  }
 
-    const metadata = await sharp(id).metadata();
+  async create(path: string) {
+    const base = this.getBase(path);
+
+    const metadata = await sharp(path).metadata();
 
     const format = "webp";
 
-    const genId = `${id}-${nanoid()}.${format}`;
+    const genId = `oh-image-${base}-${nanoid()}.${format}`;
+    console.log(genId);
+    await pipeline(
+      sharp(path).toFormat(format),
+      put.stream(this._cacheDir, genId)
+    );
 
-    await sharp(id).toFormat(format).pipe(put.stream(this._cacheDir, genId));
+    const blurId = `${genId}-blur.${format}`;
 
-    const blurId = `${id}-blur.${format}`;
-
-    await sharp(id).resize(200, 200).pipe(put.stream(this._cacheDir, blurId));
+    await pipeline(
+      sharp(path).resize(200, 200).toFormat(format),
+      put.stream(this._cacheDir, blurId)
+    );
 
     const image: ImageValue = {
       width: metadata.width || 0,
@@ -43,6 +54,7 @@ export class ImageStorage {
 
   getImage(url: string) {
     const base = basename(url);
+    console.log(base);
     return get.stream(this._cacheDir, base);
   }
 }

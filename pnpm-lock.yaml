@@ -20,6 +20,9 @@ importers:
       fs-extra:
         specifier: ^11.3.3
         version: 11.3.3
+      minipass:
+        specifier: ^7.1.2
+        version: 7.1.2
       nanoid:
         specifier: ^5.1.6
         version: 5.1.6

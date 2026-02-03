@@ -2,7 +2,7 @@ import type { Plugin } from "vite";
 import { isFileSupported } from "./resolver";
 import { ImageStorage } from "./image-storage";
 
-const CACHE_PREFIX = "/oh-image/";
+const CACHE_PREFIX = "oh-image";
 
 export function ohImage() {
   let storage!: ImageStorage;
@@ -14,15 +14,21 @@ export function ohImage() {
     enforce: "pre",
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
-        next()
-        if (!req.url?.startsWith(CACHE_PREFIX)) {
+        if (!req.url?.includes(CACHE_PREFIX) || !isFileSupported(req.url)) {
           return next();
         }
 
-        const id = req.url.slice(CACHE_PREFIX.length);
         try {
-          res.pipe(storage.getImage(id))
+          if (!req.url.includes("blur")) {
+            await new Promise((resolve) => setTimeout(resolve, 3000));
+          }
+          const stream = storage.getImage(req.url);
           res.setHeader("Content-Type", "image/webp");
+          stream.on("error", (err) => {
+            console.error(err);
+            next();
+          });
+          stream.pipe(res);
         } catch {
           next();
         }
