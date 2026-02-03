@@ -10,3 +10,4 @@ export function isFileSupported(path: string) {
   }
   return SUPPORTED_IMAGE_FORMATS.test(extension); // pad to 1 to remove .
 }
+
