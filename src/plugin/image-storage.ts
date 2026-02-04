@@ -2,7 +2,7 @@ import { basename, join, parse } from "node:path";
 import { pipeline } from "node:stream/promises";
 import sharp from "sharp";
 import { get, put } from "cacache";
-import { nanoid } from "nanoid";
+import { generateRandomString } from "./utils";
 interface ImageValue {
   width: number;
   height: number;
@@ -28,7 +28,7 @@ export class ImageStorage {
 
     const format = "webp";
 
-    const genId = `oh-image-${base}-${nanoid()}.${format}`;
+    const genId = `oh-image-${base}-${generateRandomString()}.${format}`;
     console.log(genId);
     await pipeline(
       sharp(path).toFormat(format),
