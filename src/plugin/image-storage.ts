@@ -1,24 +1,22 @@
+import { createWriteStream } from "node:fs";
+import { mkdir } from "node:fs/promises";
 import { basename, extname, join, parse } from "node:path";
 import { pipeline } from "node:stream/promises";
 import sharp from "sharp";
-import { get, put } from "cacache";
+import { get, put, rm } from "cacache";
 import { generateRandomString } from "./utils";
-import type { OhImageConfig } from "./types";
+import type { OhImageConfig, OhImagePluginConfig } from "./types";
 interface ImageValue {
   width: number;
   height: number;
   src: string;
   blur: string | null;
+  srcSet: string[];
 }
 
-const BLUR_FORMAT = "webp";
-const CACHE_DIR = "oh-image";
 export class ImageStorage {
-  private _store = new Map<string, ImageValue>();
-  private _cacheDir: string;
-  constructor(root: string) {
-    this._cacheDir = join(root, ".cache", CACHE_DIR);
-  }
+  private _store = new Set<ImageValue>();
+  constructor(private config: Required<OhImagePluginConfig>) {}
 
   private getBase(id: string) {
     return parse(id).name;
@@ -31,7 +29,7 @@ export class ImageStorage {
   ) {
     const pipe = sharp(path);
     pipe.toFormat(config.format, { quality: config.quality });
-    return pipeline(pipe, put.stream(this._cacheDir, id));
+    return pipeline(pipe, put.stream(this.config.cacheDir, id));
   }
 
   private createBlurPipe(
@@ -40,8 +38,11 @@ export class ImageStorage {
     config: Required<OhImageConfig>,
   ) {
     return pipeline(
-      sharp(path).resize(config.blurResize).blur(config.blur).toFormat("webp"),
-      put.stream(this._cacheDir, id),
+      sharp(path)
+        .resize(config.blurResize)
+        .blur(config.blur)
+        .toFormat(this.config.blurFormat),
+      put.stream(this.config.cacheDir, id),
     );
   }
 
@@ -50,24 +51,29 @@ export class ImageStorage {
   }
 
   private genId(id: string) {
-    return `${CACHE_DIR}-${id}-${generateRandomString()}`;
+    return `${this.config.cachePrefix}-${id}-${generateRandomString()}`;
   }
 
   isStorageUrl(url: string) {
-    return url.includes(CACHE_DIR);
+    return url.includes(this.config.cachePrefix);
   }
 
-  async create(path: string, config: Required<OhImageConfig>) {
+  async create(path: string, config: OhImageConfig) {
+    const configWithDefaults = this.mergeConfigs(config);
     const { name } = parse(path);
     const base = this.getBase(path);
 
     const genId = this.genId(name);
     const genIdWithFormat = `${genId}.${config.format}`;
-    const imagePipe = this.createImagePipe(path, genIdWithFormat, config);
+    const imagePipe = this.createImagePipe(
+      path,
+      genIdWithFormat,
+      configWithDefaults,
+    );
 
-    const blurId = `${this.genBlurId(genId)}.${BLUR_FORMAT}`;
+    const blurId = `${this.genBlurId(genId)}.${this.config.blurFormat}`;
     const blurPipe = config.blur
-      ? this.createBlurPipe(path, blurId, config)
+      ? this.createBlurPipe(path, blurId, configWithDefaults)
       : null;
 
     const [metadata] = await Promise.all([
@@ -80,16 +86,61 @@ export class ImageStorage {
       height: metadata.height || 0,
       src: genIdWithFormat,
       blur: blurId,
+      srcSet: [],
     };
-    this._store.set(base, image);
+    this._store.add(image);
     return image;
   }
 
   getImageStream(url: string) {
     const base = basename(url);
     return {
-      stream: get.stream(this._cacheDir, base),
+      stream: get.stream(this.config.cacheDir, base),
       ext: extname(base).slice(1),
     };
+  }
+
+  private mergeConfigs(config: OhImageConfig): Required<OhImageConfig> {
+    return { ...this.config, ...config };
+  }
+
+  async writeToDist() {
+    await mkdir(this.config.distDir, { recursive: true });
+
+    const writePromises: Promise<void>[] = [];
+
+    for (const image of this._store) {
+      writePromises.push(
+        pipeline(
+          get.stream(this.config.cacheDir, image.src),
+          createWriteStream(join(this.config.distDir, image.src)),
+        ),
+      );
+
+      if (image.blur) {
+        writePromises.push(
+          pipeline(
+            get.stream(this.config.cacheDir, image.blur),
+            createWriteStream(join(this.config.distDir, image.blur)),
+          ),
+        );
+      }
+
+      for (const srcSetImage of image.srcSet) {
+        writePromises.push(
+          pipeline(
+            get.stream(this.config.cacheDir, srcSetImage),
+            createWriteStream(join(this.config.distDir, srcSetImage)),
+          ),
+        );
+      }
+    }
+
+    await Promise.all(writePromises);
+  }
+
+  async clearCache() {
+    this._store.clear();
+    await rm.all(this.config.cacheDir);
   }
 }

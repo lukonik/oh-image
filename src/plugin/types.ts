@@ -6,3 +6,10 @@ export interface OhImageConfig {
   blur?: boolean | number;
   blurResize?: number;
 }
+
+export interface OhImagePluginConfig extends OhImageConfig {
+  cacheDir?: string;
+  cachePrefix?: string;
+  blurFormat: keyof FormatEnum;
+  distDir?: string;
+}
