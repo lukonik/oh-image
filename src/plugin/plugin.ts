@@ -1,8 +1,7 @@
 import type { Plugin } from "vite";
-import { isFileSupported } from "./resolver";
+import { isFileSupported, SUPPORTED_IMAGE_FORMATS } from "./resolver";
 import { ImageStorage } from "./image-storage";
-
-const CACHE_PREFIX = "oh-image";
+import { pipeline } from "node:stream/promises";
 
 export function ohImage() {
   let storage!: ImageStorage;
@@ -14,32 +13,33 @@ export function ohImage() {
     enforce: "pre",
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
-        if (!req.url?.includes(CACHE_PREFIX) || !isFileSupported(req.url)) {
+        const url = req.url;
+        if (!url || !isFileSupported(url) || !storage.isStorageUrl(url)) {
           return next();
         }
 
         try {
-          if (!req.url.includes("blur")) {
-            await new Promise((resolve) => setTimeout(resolve, 3000));
-          }
-          const stream = storage.getImage(req.url);
-          res.setHeader("Content-Type", "image/webp");
-          stream.on("error", (err) => {
-            console.error(err);
-            next();
-          });
-          stream.pipe(res);
+          const { stream, ext } = storage.getImageStream(url);
+          res.setHeader("Content-Type", `image/${ext}`);
+          await pipeline(stream, res);
         } catch {
           next();
         }
       });
     },
-    async load(id) {
-      if (!isFileSupported(id)) {
-        return null;
-      }
-      const image = await storage.create(id);
-      return `export default ${JSON.stringify(image)}`;
+    load: {
+      filter: {
+        id: SUPPORTED_IMAGE_FORMATS,
+      },
+      async handler(id, options) {
+        const image = await storage.create(id, {
+          blur: true,
+          blurResize: 100,
+          format: "webp",
+          quality: 100,
+        });
+        return `export default ${JSON.stringify(image)}`;
+      },
     },
   } satisfies Plugin;
 }

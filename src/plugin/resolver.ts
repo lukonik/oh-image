@@ -1,6 +1,6 @@
 import { extname } from "path";
 
-const SUPPORTED_IMAGE_FORMATS = /\.(jpe?g|png|webp|avif|gif|tiff?|svg)$/i;
+export const SUPPORTED_IMAGE_FORMATS = /\.(jpe?g|png|webp|avif|gif|tiff?|svg)$/i;
 
 export function isFileSupported(path: string) {
   const extension = extname(path);
