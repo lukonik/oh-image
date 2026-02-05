@@ -1,27 +1,28 @@
 import { normalize, resolve } from "node:path";
 import type { ResolvedConfig } from "vite";
+import type { PluginConfig } from "./types";
 
-export interface Config {
-  cacheDir: string;
-  distDir: string;
-  breakpoints?: string[];
-  blur?: boolean;
-}
-
-const CONFIG: Config = {
+const CONFIG: PluginConfig = {
   cacheDir: "",
   distDir: "oh-image",
+  breakpoints: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+  blur: true,
 };
 
 let resolvedConfig!: ResolvedConfig;
 
-const defineConfig = (viteConfig: ResolvedConfig, config: Partial<Config>) => {
-  CONFIG.cacheDir = normalize(config.cacheDir ?? ".cache/oh-image");
-  CONFIG.distDir = config.distDir ?? "oh-image";
+const defineConfig = (
+  viteConfig: ResolvedConfig,
+  config?: Partial<PluginConfig>,
+) => {
+  CONFIG.cacheDir = normalize(config?.cacheDir ?? ".cache/oh-image");
+  CONFIG.distDir = config?.distDir ?? "oh-image";
   resolvedConfig = viteConfig;
 };
 
-const getConfigValue = <K extends keyof Config>(key: K): Config[K] => {
+const getConfigValue = <K extends keyof PluginConfig>(
+  key: K,
+): PluginConfig[K] => {
   return CONFIG[key];
 };
 
@@ -46,7 +47,19 @@ const getCachePath = () => {
 
 /** Returns the filesystem path for build output */
 const getDistPath = () => {
-  return resolve(resolvedConfig.root, resolvedConfig.build.outDir, CONFIG.distDir);
+  return resolve(
+    resolvedConfig.root,
+    resolvedConfig.build.outDir,
+    CONFIG.distDir,
+  );
 };
 
-export { defineConfig, getConfigValue, getViteConfig, getImageUrlPath, getCachePath, getDistPath, isBuild };
+export {
+  defineConfig,
+  getConfigValue,
+  getViteConfig,
+  getImageUrlPath,
+  getCachePath,
+  getDistPath,
+  isBuild,
+};

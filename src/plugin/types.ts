@@ -8,21 +8,11 @@ export interface ProcessedImage {
   srcSets: string[];
 }
 
-export interface OhImagePluginConfig extends OhImageOptions {
+export interface PluginConfig {
   cacheDir: string;
   distDir: string;
-  prefix: string;
-}
-
-export interface OhImageOptions {
-  size?: number;
-  width?: number | undefined;
-  height?: number | undefined;
-  format?: keyof FormatEnum;
-  blur?: boolean | number;
-  srcSetFormat?: keyof FormatEnum;
-  blurFormat?: keyof FormatEnum;
   breakpoints?: number[];
+  blur?: boolean;
 }
 
 export interface ImageSrc {

@@ -1,3 +1,0 @@
-const fetchImage = (url: string) => {
-    
-};
