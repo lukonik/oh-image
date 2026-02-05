@@ -1,5 +1,5 @@
 import createImageCache from "./image-cache";
-import { ImageDescriptor } from "./image-descriptor";
+import { createImageDescriptor } from "./image-descriptor";
 import createImageNaming from "./image-naming";
 import createImageProcessor from "./image-processor";
 import createImageRegistry from "./image-registry";
@@ -9,7 +9,7 @@ import type {
   ProcessedImage,
 } from "./types";
 import { getResizeOptions } from "./options-resolver";
-import { basename, parse } from "node:path";
+import { parse } from "node:path";
 
 export type ImageService = ReturnType<typeof createImageService>;
 
@@ -24,31 +24,37 @@ export default function createImageService(config: OhImagePluginConfig) {
       const naming = createImageNaming(config.prefix, parsedId.name);
       const metadata = await processor.metadata(id);
       const format = options.format ?? metadata.format;
-      registry.add(naming.imageId, {
-        src: `${naming.imageId}.${format}`,
+      // add main image registry
+      registry.add(naming.imageId(format), {
+        src: naming.imageId(format),
         width: metadata.width,
         height: metadata.height,
         origin: id,
+        format: format,
       });
       const processedImage: ProcessedImage = {
         width: metadata.width,
         height: metadata.height,
-        src: `${naming.imageId}.${format}`,
+        src: naming.imageId(format),
         srcSets: [],
       };
 
       if (options.blur) {
-        // const blurId = naming.blurId();
-        // registry.add(blurId, {
-        //   src: blurId,
-        // });
+        const blurId = naming.blurId("webp");
+        registry.add(blurId, {
+          src: blurId,
+          origin: id,
+          width: 100,
+          height: 100,
+          blur: options.blur,
+        });
       }
 
       if (options.breakpoints) {
         for (const breakpoint of options.breakpoints) {
-          const srcSetId = naming.srcSetId(breakpoint);
+          const srcSetId = naming.srcSetId(breakpoint, "webp");
           processedImage.srcSets.push(srcSetId);
-          registry.add(naming.imageId, {
+          registry.add(srcSetId, {
             src: srcSetId,
             width: breakpoint,
             origin: id,
@@ -59,61 +65,15 @@ export default function createImageService(config: OhImagePluginConfig) {
       return processedImage;
     },
 
-    processOld: async (id: string, options: OhImageOptions) => {
-      const descriptor = ImageDescriptor.fromId(id);
-      const naming = createImageNaming(config.prefix, descriptor.name);
-      const metadata = await processor.metadata(descriptor.path);
-      const format = options.format ?? metadata.format;
-      const processedImage: ProcessedImage = {
-        width: metadata.width,
-        height: metadata.height,
-        src: `${naming.imageId}.${format}`,
-        srcSets: [],
-      };
-      const image = await processor.process(descriptor.path, {
-        format: options.format,
-        resize: getResizeOptions(options),
-      });
-      await cache.write(`${naming.imageId}.${format}`, image);
-
-      if (options.blur) {
-        const blurId = naming.blurId();
-        const blurImage = await processor.process(descriptor.path, {
-          blur: options.blur,
-          format: "webp",
-        });
-        await cache.write(blurId, blurImage);
-        processedImage.blur = blurId;
-      }
-
-      if (options.breakpoints) {
-        const srcSetResults = await Promise.all(
-          options.breakpoints.map(async (breakpoint) => {
-            const srcSetId = naming.srcSetId(breakpoint);
-            const srcSetImage = await processor.process(descriptor.path, {
-              resize: breakpoint,
-              format: "webp",
-            });
-            await cache.write(srcSetId, srcSetImage);
-            return srcSetId;
-          }),
-        );
-        processedImage.srcSets.push(...srcSetResults);
-      }
-
-      registry.add(processedImage);
-      return processedImage;
-    },
     getImage: async (url: string) => {
-      const { ext,name } = parse(url);
-      const fullName = basename(url);
+      const { fullName, ext } = createImageDescriptor(url);
       const file = await cache.read(fullName);
 
       if (file) {
-        return { data: file, format: ext.slice(1) };
+        return { data: file, format: ext };
       }
 
-      const registeredImage = registry.get(name);
+      const registeredImage = registry.get(fullName);
       if (!registeredImage) {
         throw new Error(`Image ${fullName} not found`);
       }
@@ -133,4 +93,8 @@ export default function createImageService(config: OhImagePluginConfig) {
       await cache.clear();
     },
   };
+
+  writeToDist(){
+    
+  }
 }

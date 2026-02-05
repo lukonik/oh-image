@@ -46,3 +46,12 @@ export class StoredImageDescriptor extends ImageDescriptor {
     return this._path;
   }
 }
+
+export function createImageDescriptor(uri: string) {
+  const { ext, name } = parse(uri);
+  return {
+    name,
+    ext: ext.slice(1),
+    fullName: `${name}${ext}`,
+  };
+}

@@ -70,7 +70,7 @@ export function ohImage(options?: Partial<OhImagePluginConfig>) {
       },
     },
     async closeBundle() {
-      // await storage.writeToDist();
+      await service.writeToDist();
     },
   } satisfies Plugin;
 }

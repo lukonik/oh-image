@@ -8,13 +8,6 @@ export interface ProcessedImage {
   srcSets: string[];
 }
 
-export interface RegisteredImage {
-  src: string;
-  width?: number;
-  height?: number;
-  origin:string;
-}
-
 export interface OhImagePluginConfig extends OhImageOptions {
   cacheDir: string;
   distDir: string;
@@ -27,5 +20,7 @@ export interface OhImageOptions {
   height?: number | undefined;
   format?: keyof FormatEnum;
   blur?: boolean | number;
+  srcSetFormat?: keyof FormatEnum;
+  blurFormat?: keyof FormatEnum;
   breakpoints?: number[];
 }
