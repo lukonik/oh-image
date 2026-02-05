@@ -1,9 +1,9 @@
-import { basename, format, join, parse } from "node:path";
+import { basename, join, parse } from "node:path";
 import { metadata, process } from "./processor";
 import registry from "./registry";
 import { getRandomString } from "./utils";
 import type { FormatEnum } from "sharp";
-import { getImagePath, getViteConfig } from "./config";
+import { getImageUrlPath, getCachePath } from "./config";
 import { read, write } from "./cache";
 
 interface ServiceImage {
@@ -15,21 +15,26 @@ interface ServiceImage {
   format: keyof FormatEnum;
 }
 
-const breakpoints = [1200, 1400, 1800, 600, 200];
-
 interface ServiceOptions {
-  breakpoints?: number[];
-  blur?: boolean;
+  breakpoints?: number[] | undefined;
+  blur?: boolean | undefined;
 }
 
-function createImagePath(name: string) {
-  return `${getImagePath()}/${name}`;
+/** Creates a URL path for the browser to request */
+function createImageUrl(name: string) {
+  return `${getImageUrlPath()}/${name}`;
+}
+
+/** Creates a filesystem path for caching */
+function createCachePath(name: string) {
+  return join(getCachePath(), name);
 }
 
 const create = async (id: string, options: ServiceOptions) => {
   const { width, height } = await metadata(id);
   const { ext } = parse(id);
-  const src = createImagePath(`${getRandomString()}${ext}`);
+  const filename = `${getRandomString()}${ext}`;
+  const src = createImageUrl(filename);
 
   const serviceImage: ServiceImage = {
     height,
@@ -39,6 +44,7 @@ const create = async (id: string, options: ServiceOptions) => {
     format: "webp",
   };
 
+  // Registry uses URL paths as keys (what the browser requests)
   registry.add(src, {
     width,
     height,
@@ -47,9 +53,10 @@ const create = async (id: string, options: ServiceOptions) => {
   });
 
   if (options.blur) {
-    const blurId = createImagePath(`${getRandomString()}-blur${ext}`);
-    serviceImage.blurUrl = blurId;
-    registry.add(blurId, {
+    const blurFilename = `${getRandomString()}-blur${ext}`;
+    const blurUrl = createImageUrl(blurFilename);
+    serviceImage.blurUrl = blurUrl;
+    registry.add(blurUrl, {
       width: 100,
       height: 100,
       origin: id,
@@ -59,11 +66,10 @@ const create = async (id: string, options: ServiceOptions) => {
 
   if (options.breakpoints) {
     for (const breakpoint of options.breakpoints) {
-      const srcSetId = createImagePath(
-        `${getRandomString()}-${breakpoint}w${ext}`,
-      );
-      serviceImage.srcSets.push(srcSetId);
-      registry.add(srcSetId, {
+      const srcSetFilename = `${getRandomString()}-${breakpoint}w${ext}`;
+      const srcSetUrl = createImageUrl(srcSetFilename);
+      serviceImage.srcSets.push(srcSetUrl);
+      registry.add(srcSetUrl, {
         width: breakpoint,
         height: breakpoint,
         origin: id,
@@ -75,24 +81,34 @@ const create = async (id: string, options: ServiceOptions) => {
   return serviceImage;
 };
 
-const getImage = async (id: string) => {
-  const base = basename(id);
-  const fullPath = createImagePath(base);
-  const resolvedFullPath = join(getViteConfig().root, fullPath);
-  const image = await read(resolvedFullPath);
-  const registryImage = registry.get(resolvedFullPath);
+/** Get image for dev server - processes on demand */
+const getImage = async (url: string) => {
+  // Extract filename from URL path (e.g., "/@oh-image/abc123.jpg" -> "abc123.jpg")
+  const filename = basename(url);
+  const cachePath = createCachePath(filename);
+
+  // Registry is keyed by URL path
+  const registryImage = registry.get(url);
   if (!registryImage) {
-    throw new Error(`Image ${fullPath} not found`);
-  }
-  if (image) {
-    return { data: image, format: registryImage.format };
+    throw new Error(`Image not found in registry: ${url}`);
   }
 
-  const processed = await process(registryImage.origin, {});
+  // Try to read from cache first
+  const cached = await read(cachePath);
+  if (cached) {
+    return { data: cached, format: registryImage.format };
+  }
 
-  await write(fullPath, processed);
+  // Process the image
+  const processed = await process(registryImage.origin, {
+    resize: registryImage.width,
+  });
+  const buffer = await processed.toBuffer();
 
-  return { data: processed, format };
+  // Write to cache
+  await write(cachePath, buffer);
+
+  return { data: buffer, format: registryImage.format };
 };
 
-export { create, getImage };
+export { create, getImage, createCachePath };

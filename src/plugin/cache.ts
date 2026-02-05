@@ -1,10 +1,8 @@
-import { getConfigValue } from "./config";
-import { access, readFile, rm, writeFile } from "node:fs/promises";
-import { mkdirSync } from "node:fs";
-import { resolve } from "node:path";
+import { getCachePath, getDistPath } from "./config";
+import { access, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { dirname } from "node:path";
 
-const read = async (key: string) => {
-  const filePath = resolve(key);
+const read = async (filePath: string) => {
   try {
     await access(filePath);
     return await readFile(filePath);
@@ -12,14 +10,23 @@ const read = async (key: string) => {
     return null;
   }
 };
-const write = async (key: string, data: Parameters<typeof writeFile>[1]) => {
-  const filePath = resolve(key);
+
+const write = async (filePath: string, data: Parameters<typeof writeFile>[1]) => {
+  // Ensure directory exists
+  await mkdir(dirname(filePath), { recursive: true });
   await writeFile(filePath, data);
 };
 
-const clear = async () => {
-  await rm(resolve(getConfigValue("cacheDir")), { recursive: true, force: true });
-  mkdirSync(resolve(getConfigValue("cacheDir")), { recursive: true });
+const clearCache = async () => {
+  const cachePath = getCachePath();
+  await rm(cachePath, { recursive: true, force: true });
+  await mkdir(cachePath, { recursive: true });
 };
 
-export { read, write, clear };
+const clearDist = async () => {
+  const distPath = getDistPath();
+  await rm(distPath, { recursive: true, force: true });
+  await mkdir(distPath, { recursive: true });
+};
+
+export { read, write, clearCache, clearDist };
