@@ -61,5 +61,23 @@ export function parseImageImport(id: string): ParsedImport {
       .filter((n) => !isNaN(n));
   }
 
+  // Parse width option
+  const widthParam = params.get("width");
+  if (widthParam) {
+    const width = parseInt(widthParam, 10);
+    if (!isNaN(width)) {
+      options.width = width;
+    }
+  }
+
+  // Parse height option
+  const heightParam = params.get("height");
+  if (heightParam) {
+    const height = parseInt(heightParam, 10);
+    if (!isNaN(height)) {
+      options.height = height;
+    }
+  }
+
   return { filePath, options, shouldProcess };
 }

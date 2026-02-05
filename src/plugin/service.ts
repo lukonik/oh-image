@@ -18,6 +18,8 @@ interface ServiceImage {
 interface ServiceOptions {
   breakpoints?: number[] | undefined;
   blur?: boolean | undefined;
+  width?: number | undefined;
+  height?: number | undefined;
 }
 
 /** Creates a URL path for the browser to request */
@@ -31,10 +33,14 @@ function createCachePath(name: string) {
 }
 
 const create = async (id: string, options: ServiceOptions) => {
-  const { width, height } = await metadata(id);
+  const originalMetadata = await metadata(id);
   const { ext } = parse(id);
   const filename = `${getRandomString()}${ext}`;
   const src = createImageUrl(filename);
+
+  // Use options width/height if provided, otherwise use original dimensions
+  const width = options.width ?? originalMetadata.width;
+  const height = options.height ?? originalMetadata.height;
 
   const serviceImage: ServiceImage = {
     height,
@@ -101,7 +107,10 @@ const getImage = async (url: string) => {
 
   // Process the image
   const processed = await process(registryImage.origin, {
-    resize: registryImage.width,
+    resize: {
+      width: registryImage.width,
+      height: registryImage.height,
+    },
   });
   const buffer = await processed.toBuffer();
 
@@ -127,7 +136,10 @@ const writeToDist = async (distPath: string) => {
     } else {
       // Process the image
       const processed = process(imageInfo.origin, {
-        resize: imageInfo.width,
+        resize: {
+          width: imageInfo.width,
+          height: imageInfo.height,
+        },
       });
       const newBuffer = await processed.toBuffer();
       // Write to cache for future builds

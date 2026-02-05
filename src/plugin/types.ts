@@ -8,6 +8,8 @@ export interface PluginConfig extends ImageOptions {
 export interface ImageOptions {
   breakpoints?: number[];
   blur?: boolean;
+  width?: number;
+  height?: number;
 }
 
 export interface ImageSrc {
