@@ -1,5 +1,13 @@
 import type { FormatEnum } from "sharp";
 
+export interface ProcessedImage {
+  src: string;
+  blur?: string;
+  width: number;
+  height: number;
+  srcSets: string[];
+}
+
 export interface OhImageConfig {
   format?: keyof FormatEnum;
   quality?: number;
