@@ -19,5 +19,4 @@ export interface ImageSrc {
   blurUrl?: string;
   srcSets: string[];
   src: string;
-  format: keyof FormatEnum;
 }
