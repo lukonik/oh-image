@@ -1,13 +1,10 @@
 import { Image } from "../../src/react/index";
-import image1 from "./image-1.png?oh";
-console.log("IMAGE IS ", image1);
-
+import storm from "./image-1.png?oh";
+import blur from "./blur.png";
 export function App() {
-  console.log(image1);
   return (
     <div>
-      {/* <img src={image1.src} /> */}
-      <Image src={image1} />
+      <Image alt="gtest" src={storm} placeholder blurUrl={blur} />
       <h1>HELO</h1>
     </div>
   );
