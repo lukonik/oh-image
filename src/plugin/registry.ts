@@ -14,4 +14,6 @@ const get = (id: string) => _store.get(id);
 
 const all = () => _store.entries();
 
-export default { add, get, all };
+const size = () => _store.size;
+
+export default { add, get, all, size };

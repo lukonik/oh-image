@@ -111,4 +111,33 @@ const getImage = async (url: string) => {
   return { data: buffer, format: registryImage.format };
 };
 
-export { create, getImage, createCachePath };
+/** Write all registered images to dist folder for production build */
+const writeToDist = async (distPath: string) => {
+  for (const [url, imageInfo] of registry.all()) {
+    const filename = basename(url);
+    const cachePath = createCachePath(filename);
+    const distFilePath = join(distPath, filename);
+
+    // Try cache first
+    const buffer = await read(cachePath);
+
+    if (buffer) {
+      // Write cached image to dist
+      await write(distFilePath, buffer);
+    } else {
+      // Process the image
+      const processed = process(imageInfo.origin, {
+        resize: imageInfo.width,
+      });
+      const newBuffer = await processed.toBuffer();
+      // Write to cache for future builds
+      await write(cachePath, newBuffer);
+      // Write to dist
+      await write(distFilePath, newBuffer);
+    }
+  }
+
+  return registry.size();
+};
+
+export { create, getImage, createCachePath, writeToDist };
