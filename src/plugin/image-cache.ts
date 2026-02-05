@@ -1,6 +1,6 @@
-import { mkdirSync } from "fs";
-import { access, readFile, rm, writeFile } from "fs/promises";
-import { join } from "path";
+import { mkdirSync } from "node:fs";
+import { access, readFile, rm, writeFile } from "node:fs/promises";
+import { join } from "node:path";
 
 export default function createImageCache(cacheDir: string) {
   return {

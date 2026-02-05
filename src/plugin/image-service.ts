@@ -9,7 +9,8 @@ import type {
   ProcessedImage,
 } from "./types";
 import { getResizeOptions } from "./options-resolver";
-import { parse } from "node:path";
+import { parse, join } from "node:path";
+import { mkdir, writeFile } from "node:fs/promises";
 
 export type ImageService = ReturnType<typeof createImageService>;
 
@@ -92,9 +93,33 @@ export default function createImageService(config: OhImagePluginConfig) {
     async reset() {
       await cache.clear();
     },
-  };
 
-  writeToDist(){
-    
-  }
+    async writeToDist() {
+      console.log("CREATING DIST")
+      await mkdir(config.distDir, { recursive: true });
+
+      for (const [id, registeredImage] of registry.all()) {
+        const cachedFile = await cache.read(id);
+
+        if (cachedFile) {
+          await writeFile(join(config.distDir, id), cachedFile);
+          continue;
+        }
+
+        const resizeOption = getResizeOptions({
+          width: registeredImage.width,
+          height: registeredImage.height,
+        });
+
+        const image = await processor.process(registeredImage.origin, {
+          resize: resizeOption,
+          blur: registeredImage.blur === true ? 10 : registeredImage.blur || undefined,
+          format: registeredImage.format ?? "webp",
+        });
+
+        await cache.write(id, image);
+        await writeFile(join(config.distDir, id), image);
+      }
+    },
+  };
 }

@@ -17,5 +17,6 @@ export default defineConfig({
     "sharp",
     "path",
     "node:stream/promises",
+    "node:",
   ],
 });
