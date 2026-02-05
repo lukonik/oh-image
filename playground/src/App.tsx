@@ -1,5 +1,5 @@
 import { useState } from "react";
-import image1 from "./car-1.avif";
+import image1 from "./image-1.png";
 
 function Image({
   src,
@@ -39,6 +39,7 @@ export function App() {
   console.log(image1);
   return (
     <div style={{ width: "600px" }}>
+      <img src={image1.src} />
       <Image
         src={image1.src}
         blurUrl={image1.blur}

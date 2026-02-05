@@ -10,6 +10,7 @@ import type {
   ProcessedImage,
 } from "./types";
 import { getResizeOptions } from "./options-resolver";
+import { parse } from "node:path";
 
 export type ImageService = ReturnType<typeof createImageService>;
 
@@ -49,12 +50,14 @@ export default function createImageService(config: OhImagePluginConfig) {
         );
         processedImage.blur = blurId;
       }
-
       registry.add(processedImage);
+      return processedImage;
     },
-    getImageStream: async (id: string) => {
-      const metadata = await processor.metadata(id);
-      return { stream: await cache.getSream(id), format: metadata.format };
+    getImageStream: async (url: string) => {
+      const { name, ext } = parse(url);
+      const fullName = `${name}${ext}`;
+      console.log(fullName)
+      return { stream: await cache.getSream(fullName), format: ext.slice(1) };
     },
     reset() {
       return cache.deleteAll();
