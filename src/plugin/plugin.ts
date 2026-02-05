@@ -21,8 +21,8 @@ export function ohImage(options?: Partial<OhImagePluginConfig>) {
 
   return {
     name: "oh-image",
-    configResolved() {
-      service = createImageService(pluginConfig);
+    async configResolved() {
+      service = await createImageService(pluginConfig);
     },
     enforce: "pre",
     async buildStart() {

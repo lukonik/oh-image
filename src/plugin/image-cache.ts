@@ -1,15 +1,23 @@
-import { get, put, rm } from "cacache";
+import { createReadStream, createWriteStream, mkdirSync } from "fs";
+import { mkdir, rm, access } from "fs/promises";
+import { join } from "path";
 
 export default function createImageCache(cacheDir: string) {
+  mkdirSync(cacheDir, { recursive: true });
+
   return {
-    async getSream(key: string) {
-      return get.stream(cacheDir, key);
+    async getStream(key: string) {
+      const filePath = join(cacheDir, key);
+      await access(filePath);
+      return createReadStream(filePath);
     },
     put(key: string) {
-      return put.stream(cacheDir, key);
+      const filePath = join(cacheDir, key);
+      return createWriteStream(filePath);
     },
-    deleteAll() {
-      rm.all(cacheDir);
+    async deleteAll() {
+      await rm(cacheDir, { recursive: true, force: true });
+      await mkdir(cacheDir, { recursive: true });
     },
   };
 }

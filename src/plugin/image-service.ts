@@ -56,7 +56,7 @@ export default function createImageService(config: OhImagePluginConfig) {
     getImageStream: async (url: string) => {
       const { name, ext } = parse(url);
       const fullName = `${name}${ext}`;
-      console.log(fullName)
+      console.log(fullName);
       return { stream: await cache.getSream(fullName), format: ext.slice(1) };
     },
     reset() {
