@@ -79,5 +79,11 @@ export function parseImageImport(id: string): ParsedImport {
     }
   }
 
+  // Parse format option
+  const formatParam = params.get("format");
+  if (formatParam && formatParam.length > 0) {
+    options.format = formatParam as NonNullable<ImageOptions["format"]>;
+  }
+
   return { filePath, options, shouldProcess };
 }

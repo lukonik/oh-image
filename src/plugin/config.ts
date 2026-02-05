@@ -7,6 +7,7 @@ const CONFIG: PluginConfig = {
   distDir: "oh-image",
   breakpoints: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
   blur: true,
+  format: "webp",
 };
 
 let resolvedConfig!: ResolvedConfig;
@@ -62,6 +63,9 @@ const getDefaultImageOptions = (): ImageOptions => {
   }
   if (CONFIG.blur !== undefined) {
     options.blur = CONFIG.blur;
+  }
+  if (CONFIG.format !== undefined) {
+    options.format = CONFIG.format;
   }
   return options;
 };

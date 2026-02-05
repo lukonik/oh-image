@@ -20,6 +20,7 @@ interface ServiceOptions {
   blur?: boolean | undefined;
   width?: number | undefined;
   height?: number | undefined;
+  format?: keyof FormatEnum | undefined;
 }
 
 /** Creates a URL path for the browser to request */
@@ -41,13 +42,14 @@ const create = async (id: string, options: ServiceOptions) => {
   // Use options width/height if provided, otherwise use original dimensions
   const width = options.width ?? originalMetadata.width;
   const height = options.height ?? originalMetadata.height;
+  const format = options.format ?? "webp";
 
   const serviceImage: ServiceImage = {
     height,
     src,
     width,
     srcSets: [],
-    format: "webp",
+    format,
   };
 
   // Registry uses URL paths as keys (what the browser requests)
@@ -55,7 +57,7 @@ const create = async (id: string, options: ServiceOptions) => {
     width,
     height,
     origin: id,
-    format: ext.slice(1),
+    format,
   });
 
   if (options.blur) {
@@ -66,7 +68,7 @@ const create = async (id: string, options: ServiceOptions) => {
       width: 100,
       height: 100,
       origin: id,
-      format: "webp",
+      format,
     });
   }
 
@@ -79,7 +81,7 @@ const create = async (id: string, options: ServiceOptions) => {
         width: breakpoint,
         height: breakpoint,
         origin: id,
-        format: "webp",
+        format,
       });
     }
   }
@@ -106,11 +108,12 @@ const getImage = async (url: string) => {
   }
 
   // Process the image
-  const processed = await process(registryImage.origin, {
+  const processed = process(registryImage.origin, {
     resize: {
       width: registryImage.width,
       height: registryImage.height,
     },
+    format: registryImage.format as keyof FormatEnum,
   });
   const buffer = await processed.toBuffer();
 
@@ -140,6 +143,7 @@ const writeToDist = async (distPath: string) => {
           width: imageInfo.width,
           height: imageInfo.height,
         },
+        format: imageInfo.format as keyof FormatEnum,
       });
       const newBuffer = await processed.toBuffer();
       // Write to cache for future builds

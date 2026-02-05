@@ -10,6 +10,7 @@ export interface ImageOptions {
   blur?: boolean;
   width?: number;
   height?: number;
+  format?: keyof FormatEnum;
 }
 
 export interface ImageSrc {
