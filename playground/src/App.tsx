@@ -1,6 +1,6 @@
 import { useState } from "react";
 import image1 from "./image-1.png";
-
+console.log("IMAGE IS ", image1)
 function Image({
   src,
   blurUrl,

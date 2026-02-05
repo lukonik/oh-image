@@ -1,3 +1,6 @@
+import { defineConfig } from "./config";
+import { isFileSupported, SUPPORTED_IMAGE_FORMATS } from "./resolver";
+import { create, getImage } from "./service";
 import type { OhImagePluginConfig } from "./types";
 import type { Plugin } from "vite";
 
@@ -12,6 +15,37 @@ const DEFAULT_CONFIGS: OhImagePluginConfig = {
 export function ohImage(options?: Partial<OhImagePluginConfig>) {
   return {
     name: "oh-image",
+    configResolved(config) {
+      defineConfig(config, {
+        cacheDir: ".cache/oh-image",
+      });
+    },
+    enforce: "pre",
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        const url = req.url;
+
+        if (!url || !isFileSupported(url)) {
+          return next();
+        }
+
+        const { data, format } = await getImage(url);
+        res.setHeader("Content-Type", `image/${format}`);
+        res.end(data);
+      });
+    },
+    load: {
+      filter: {
+        id: SUPPORTED_IMAGE_FORMATS,
+      },
+      async handler(id) {
+        const image = await create(id, {
+          blur: true,
+          breakpoints: [20, 30, 40, 50],
+        });
+        return `export default ${JSON.stringify(image)}`;
+      },
+    },
   } satisfies Plugin;
 }
 

@@ -24,3 +24,12 @@ export interface OhImageOptions {
   blurFormat?: keyof FormatEnum;
   breakpoints?: number[];
 }
+
+export interface ImageSrc {
+  width: number;
+  height: number;
+  blurUrl?: string;
+  srcSets: string[];
+  src: string;
+  format: keyof FormatEnum;
+}

@@ -1,4 +1,4 @@
-import { extname } from "path";
+import { extname } from "node:path";
 
 export const SUPPORTED_IMAGE_FORMATS = /\.(jpe?g|png|webp|avif|gif|tiff?|svg)$/i;
 
