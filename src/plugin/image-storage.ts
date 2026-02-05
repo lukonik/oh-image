@@ -4,7 +4,7 @@ import { basename, extname, join, parse } from "node:path";
 import { pipeline } from "node:stream/promises";
 import sharp from "sharp";
 import { get, put, rm } from "cacache";
-import { generateRandomString } from "./utils";
+import { generateRandomString } from "./options-resolver";
 import type { OhImageConfig, OhImagePluginConfig } from "./types";
 interface ImageValue {
   width: number;

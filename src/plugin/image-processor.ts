@@ -1,33 +1,33 @@
-import sharp from "sharp";
+import sharp, { type FormatEnum, type ResizeOptions } from "sharp";
 
-class Processor {
-  private _sharp: sharp.Sharp;
-  constructor(path: string) {
-    this._sharp = sharp(path);
-  }
+type ResizeParams = Parameters<sharp.Sharp["resize"]>[0];
+type BlurParams = Parameters<sharp.Sharp["blur"]>[0];
+type FormatParamsType = keyof FormatEnum;
+type FormatParamsOptions = Parameters<sharp.Sharp["toFormat"]>[1];
 
-  resize(size: number) {
-    this._sharp.resize(size);
-    return this;
-  }
-  toFormat(format: keyof sharp.FormatEnum, options?: { quality?: number }) {
-    this._sharp.toFormat(format, options);
-    return this;
-  }
-
-  blur(sigma?: number) {
-    this._sharp.blur(sigma);
-    return this;
-  }
-
-  stream(): NodeJS.ReadableStream {
-    return this._sharp;
-  }
+interface ProcessOptions {
+  resize?: ResizeOptions | number | undefined;
+  blur?: BlurParams;
+  format?: keyof FormatEnum | undefined;
+  formatOptions?: FormatParamsOptions;
 }
 
 export default function createImageProcessor() {
   return {
     metadata: (path: string) => sharp(path).metadata(),
-    process: (path: string) => new Processor(path),
+    process: (path: string, options: ProcessOptions) => {
+      let image = sharp(path);
+      if (options.resize !== undefined) {
+        image = image.resize(options.resize);
+      }
+      if (options.blur !== undefined) {
+        image = image.blur(options.blur);
+      }
+      if (options.format !== undefined) {
+        image = image.toFormat(options.format, options.formatOptions);
+      }
+
+      return image;
+    },
   };
 }

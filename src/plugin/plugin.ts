@@ -1,32 +1,30 @@
-import type { Plugin } from "vite";
+import { mergeConfig, type Plugin } from "vite";
 import { isFileSupported, SUPPORTED_IMAGE_FORMATS } from "./resolver";
 import { ImageStorage } from "./image-storage";
 import { pipeline } from "node:stream/promises";
-import { join, normalize } from "node:path";
+import type { OhImagePluginConfig } from "./types";
+import createImageService, { type ImageService } from "./image-service";
+import { queryToOptions } from "./options-resolver";
 
-export function ohImage() {
+const DEFAULT_CONFIGS: OhImagePluginConfig = {
+  cacheDir: "/node_modules/.cache/oh-image",
+  distDir: "oh-image",
+  prefix: "oh-image",
+};
+
+export function ohImage(options?: Partial<OhImagePluginConfig>) {
+  const pluginConfig = mergeConfig(
+    DEFAULT_CONFIGS,
+    options ?? {},
+    false,
+  ) as OhImagePluginConfig;
+  let service!: ImageService;
+
   let storage!: ImageStorage;
   return {
     name: "oh-image",
     configResolved(config) {
-      const cacheDir = join(
-        config.root,
-        normalize("node_modules/.cache/oh-image"),
-      );
-      const cachePrefix = "oh-image";
-      const blurFormat = "webp";
-      const distDir = "oh-image";
-
-      storage = new ImageStorage({
-        cacheDir,
-        cachePrefix,
-        blurFormat,
-        format: "webp",
-        quality: 100,
-        blur: true,
-        blurResize: 100,
-        distDir,
-      });
+      service = createImageService(config.command === "build", pluginConfig);
     },
     enforce: "pre",
     async buildStart() {
@@ -52,13 +50,19 @@ export function ohImage() {
       filter: {
         id: SUPPORTED_IMAGE_FORMATS,
       },
-      async handler(id, options) {
+      async handler(id) {
         const image = await storage.create(id, {
           blur: true,
           blurResize: 100,
           format: "webp",
           quality: 100,
         });
+        const options = queryToOptions(id);
+
+        const mergeOptions = mergeConfig(pluginConfig, options, false);
+
+        service.process(id, mergeOptions);
+
         return `export default ${JSON.stringify(image)}`;
       },
     },

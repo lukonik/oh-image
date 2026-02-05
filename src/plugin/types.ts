@@ -8,16 +8,16 @@ export interface ProcessedImage {
   srcSets: string[];
 }
 
-export interface OhImageConfig {
-  format?: keyof FormatEnum;
-  quality?: number;
-  blur?: boolean | number;
-  blurResize?: number;
+export interface OhImagePluginConfig {
+  cacheDir: string;
+  distDir: string;
+  prefix: string;
 }
 
-export interface OhImagePluginConfig extends OhImageConfig {
-  cacheDir?: string;
-  cachePrefix?: string;
-  blurFormat: keyof FormatEnum;
-  distDir?: string;
+export interface OhImageOptions {
+  size?: number;
+  width?: number;
+  height?: number;
+  format?: keyof FormatEnum;
+  blur?: boolean | number;
 }

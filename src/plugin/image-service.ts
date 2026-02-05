@@ -4,62 +4,58 @@ import { ImageDescriptor } from "./image-descriptor";
 import createImageNaming from "./image-naming";
 import createImageProcessor from "./image-processor";
 import createImageRegistry from "./image-registry";
+import type {
+  OhImageOptions,
+  OhImagePluginConfig,
+  ProcessedImage,
+} from "./types";
+import { getResizeOptions } from "./options-resolver";
 
-export default function createImageService() {
+export type ImageService = ReturnType<typeof createImageService>;
+
+export default function createImageService(
+  isBuild: boolean,
+  config: OhImagePluginConfig,
+) {
   const processor = createImageProcessor();
   const registry = createImageRegistry();
   const cache = createImageCache("");
-  const naming = createImageNaming("");
-
-  const generateSrcSets = () => {};
+  const srcPrefix = config.prefix;
+  //  isBuild ? config.distDir : config.cacheDir;
 
   return {
-    process: async (id: string) => {
+    process: async (id: string, options: OhImageOptions) => {
       const descriptor = ImageDescriptor.fromId(id);
-      const imageId = naming.image(descriptor.name);
+      const naming = createImageNaming(srcPrefix, descriptor.name);
       const metadata = await processor.metadata(descriptor.path);
+      const format = options.format ?? metadata.format;
+      const processedImage: ProcessedImage = {
+        width: metadata.width,
+        height: metadata.height,
+        src: `${naming.imageId}.${format}`,
+        srcSets: [],
+      };
       await pipeline(
-        processor.process(descriptor.path).toFormat("webp").stream(),
-        cache.put(imageId),
+        processor.process(descriptor.path, {
+          format: options.format,
+          resize: getResizeOptions(options),
+        }),
+        cache.put(naming.imageId),
       );
 
-      const blurId = naming.blur(imageId);
-      await pipeline(
-        processor
-          .process(descriptor.path)
-          .blur()
-          .resize(100)
-          .toFormat("webp")
-          .stream(),
-        cache.put(blurId),
-      );
+      if (options.blur) {
+        const blurId = naming.blurId();
+        await pipeline(
+          processor.process(descriptor.path, {
+            blur: options.blur,
+            format: "webp",
+          }),
+          cache.put(blurId),
+        );
+        processedImage.blur = blurId;
+      }
 
-      const breakpoints = [
-        16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920,
-      ];
-
-      const srcSets = breakpoints.map((b) => naming.srcSet(imageId, b));
-
-      await Promise.all(
-        breakpoints.map((b, i) =>
-          pipeline(
-            processor
-              .process(descriptor.path)
-              .resize(b)
-              .toFormat("webp")
-              .stream(),
-            cache.put(srcSets[i]!),
-          ),
-        ),
-      );
-
-      registry.add({
-        src: naming.withFormat(imageId, "webp"),
-        blur: naming.withFormat(blurId, "webp"),
-        srcSets: srcSets,
-        width: metadata.width || 0,
-        height: metadata.height || 0,
-      });
+      registry.add(processedImage);
     },
   };
 }

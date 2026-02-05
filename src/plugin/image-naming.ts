@@ -9,11 +9,12 @@ function genRandomString(length: number = 32) {
     .replace(/=/g, "");
 }
 
-export default function createImageNaming(prefix: string) {
+export default function createImageNaming(prefix: string, name: string) {
+  const imageId = `${prefix}-${name}-${genRandomString()}`;
+
   return {
-    image: (name: string) => `${prefix}-${name}-${genRandomString()}`,
-    blur: (imageId: string) => `${imageId}-blur`,
-    srcSet: (imageId: string, width: number) => `${imageId}-${width}w`,
-    withFormat: (id: string, format: string) => `${id}.${format}`,
+    imageId,
+    blurId: () => `${imageId}-blur`,
+    srcSetId: (width: number) => `${imageId}-${width}w`,
   };
 }
