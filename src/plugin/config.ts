@@ -1,6 +1,6 @@
 import { normalize, resolve } from "node:path";
 import type { ResolvedConfig } from "vite";
-import type { PluginConfig } from "./types";
+import type { ImageOptions, PluginConfig } from "./types";
 
 const CONFIG: PluginConfig = {
   cacheDir: "",
@@ -54,6 +54,18 @@ const getDistPath = () => {
   );
 };
 
+/** Returns the default image options from plugin config */
+const getDefaultImageOptions = (): ImageOptions => {
+  const options: ImageOptions = {};
+  if (CONFIG.breakpoints !== undefined) {
+    options.breakpoints = CONFIG.breakpoints;
+  }
+  if (CONFIG.blur !== undefined) {
+    options.blur = CONFIG.blur;
+  }
+  return options;
+};
+
 export {
   defineConfig,
   getConfigValue,
@@ -61,5 +73,6 @@ export {
   getImageUrlPath,
   getCachePath,
   getDistPath,
+  getDefaultImageOptions,
   isBuild,
 };

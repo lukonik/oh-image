@@ -1,16 +1,11 @@
 import type { FormatEnum } from "sharp";
 
-export interface ProcessedImage {
-  src: string;
-  blur?: string;
-  width: number;
-  height: number;
-  srcSets: string[];
-}
-
-export interface PluginConfig {
+export interface PluginConfig extends ImageOptions {
   cacheDir: string;
   distDir: string;
+}
+
+export interface ImageOptions {
   breakpoints?: number[];
   blur?: boolean;
 }

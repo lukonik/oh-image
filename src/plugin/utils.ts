@@ -1,4 +1,5 @@
 import { randomBytes } from "node:crypto";
+import type { ImageOptions } from "./types";
 
 export function mergeConfig<T>(base: T, ovverides: T) {
   return { ...base, ...ovverides };
@@ -11,4 +12,54 @@ export function getRandomString(length: number = 32) {
     .replace(/\+/g, "-")
     .replace(/\//g, "_")
     .replace(/=/g, "");
+}
+
+export interface ParsedImport {
+  filePath: string;
+  options: ImageOptions;
+  shouldProcess: boolean;
+}
+
+/**
+ * Parses an import path with query parameters.
+ * Format: someimage.png?oh&blur=true&breakpoints=640,750,828
+ * The "oh" query param indicates the image should be processed.
+ */
+export function parseImageImport(id: string): ParsedImport {
+  const queryIndex = id.indexOf("?");
+
+  if (queryIndex === -1) {
+    return { filePath: id, options: {}, shouldProcess: false };
+  }
+
+  const filePath = id.slice(0, queryIndex);
+  const queryString = id.slice(queryIndex + 1);
+
+  const params = new URLSearchParams(queryString);
+
+  // Check if "oh" is the first param (indicates processing is needed)
+  const shouldProcess = queryString.startsWith("oh");
+
+  if (!shouldProcess) {
+    return { filePath, options: {}, shouldProcess: false };
+  }
+
+  const options: ImageOptions = {};
+
+  // Parse blur option
+  const blurParam = params.get("blur");
+  if (blurParam !== null) {
+    options.blur = blurParam === "" || blurParam === "true";
+  }
+
+  // Parse breakpoints option (comma-separated numbers)
+  const breakpointsParam = params.get("breakpoints");
+  if (breakpointsParam) {
+    options.breakpoints = breakpointsParam
+      .split(",")
+      .map((s) => parseInt(s.trim(), 10))
+      .filter((n) => !isNaN(n));
+  }
+
+  return { filePath, options, shouldProcess };
 }

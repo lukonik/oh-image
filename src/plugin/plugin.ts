@@ -1,7 +1,8 @@
-import { defineConfig, getDistPath } from "./config";
+import { defineConfig, getDefaultImageOptions, getDistPath } from "./config";
 import { isFileSupported, SUPPORTED_IMAGE_FORMATS } from "./resolver";
 import { create, getImage, writeToDist } from "./service";
 import { clearDist } from "./cache";
+import { parseImageImport } from "./utils";
 import type { Plugin } from "vite";
 import type { PluginConfig } from "./types";
 
@@ -36,7 +37,16 @@ export function ohImage(options?: Partial<PluginConfig>) {
         id: SUPPORTED_IMAGE_FORMATS,
       },
       async handler(id) {
-        const image = await create(id, {});
+        const { filePath, options, shouldProcess } = parseImageImport(id);
+
+        // Only process if ?oh query param is present
+        if (!shouldProcess) {
+          return null; // Let Vite handle it normally
+        }
+
+        // Merge with default options (query params override defaults)
+        const mergedOptions = { ...getDefaultImageOptions(), ...options };
+        const image = await create(filePath, mergedOptions);
         return `export default ${JSON.stringify(image)}`;
       },
     },
