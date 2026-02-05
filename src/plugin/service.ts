@@ -5,15 +5,7 @@ import { getRandomString } from "./utils";
 import type { FormatEnum } from "sharp";
 import { getImageUrlPath, getCachePath } from "./config";
 import { read, write } from "./cache";
-
-interface ServiceImage {
-  width: number;
-  height: number;
-  blurUrl?: string;
-  srcSets: string[];
-  src: string;
-  format: keyof FormatEnum;
-}
+import type { ImageSrc } from "./types";
 
 interface ServiceOptions {
   breakpoints?: number[] | undefined;
@@ -44,7 +36,7 @@ const create = async (id: string, options: ServiceOptions) => {
   const height = options.height ?? originalMetadata.height;
   const format = options.format ?? "webp";
 
-  const serviceImage: ServiceImage = {
+  const serviceImage: ImageSrc = {
     height,
     src,
     width,

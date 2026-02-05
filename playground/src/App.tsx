@@ -1,5 +1,5 @@
 import { useState } from "react";
-import image1 from "./image-1.png";
+import image1 from "./image-1.png?oh&breakpoints=''";
 console.log("IMAGE IS ", image1)
 function Image({
   src,
