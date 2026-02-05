@@ -39,7 +39,7 @@ export function App() {
   console.log(image1);
   return (
     <div style={{ width: "600px" }}>
-      <img src={image1.src} />
+      {/* <img src={image1.src} /> */}
       <Image
         src={image1.src}
         blurUrl={image1.blur}

@@ -25,7 +25,7 @@ export default function createImageProcessor() {
         image = image.toFormat(options.format, options.formatOptions);
       }
 
-      return image;
+      return image.toBuffer();
     },
   };
 }

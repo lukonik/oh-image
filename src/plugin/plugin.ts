@@ -1,14 +1,16 @@
 import { mergeConfig, type Plugin } from "vite";
 import { isFileSupported, SUPPORTED_IMAGE_FORMATS } from "./resolver";
-import { pipeline } from "node:stream/promises";
+import { resolve } from "node:path";
 import type { OhImagePluginConfig } from "./types";
 import createImageService, { type ImageService } from "./image-service";
 import { queryToOptions } from "./options-resolver";
 
 const DEFAULT_CONFIGS: OhImagePluginConfig = {
-  cacheDir: "/node_modules/.cache/oh-image",
+  cacheDir: ".cache/oh-image",
   distDir: "oh-image",
   prefix: "oh-image",
+  blur: true,
+  breakpoints: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
 };
 
 export function ohImage(options?: Partial<OhImagePluginConfig>) {
@@ -21,8 +23,12 @@ export function ohImage(options?: Partial<OhImagePluginConfig>) {
 
   return {
     name: "oh-image",
-    async configResolved() {
-      service = await createImageService(pluginConfig);
+    async configResolved(config) {
+      const resolvedConfig = {
+        ...pluginConfig,
+        cacheDir: resolve(config.root, pluginConfig.cacheDir),
+      };
+      service = createImageService(resolvedConfig);
     },
     enforce: "pre",
     async buildStart() {
@@ -40,10 +46,11 @@ export function ohImage(options?: Partial<OhImagePluginConfig>) {
           return next();
         }
         try {
-          const { stream, format } = await service.getImageStream(url);
+          const { data, format } = await service.getImage(url);
           res.setHeader("Content-Type", `image/${format}`);
-          await pipeline(stream, res);
-        } catch {
+          res.end(data);
+        } catch(err) {
+          console.error(err)
           next();
         }
       });
@@ -57,7 +64,7 @@ export function ohImage(options?: Partial<OhImagePluginConfig>) {
 
         const mergeOptions = mergeConfig(pluginConfig, options, false);
 
-        const image = await service.process(id, mergeOptions);
+        const image = await service.create(id, mergeOptions);
 
         return `export default ${JSON.stringify(image)}`;
       },
