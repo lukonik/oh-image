@@ -2,8 +2,10 @@ import { useState, type CSSProperties, type ImgHTMLAttributes } from "react";
 import { preload } from "react-dom";
 import type { ImageSrc } from "../plugin/types";
 
-export interface ImageProps
-  extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> {
+export interface ImageProps extends Omit<
+  ImgHTMLAttributes<HTMLImageElement>,
+  "src"
+> {
   src: ImageSrc | string;
   alt?: string;
   loading?: "eager" | "lazy";
@@ -82,7 +84,7 @@ export function Image({
       decoding={priority ? "sync" : "async"}
       fetchPriority={priority ? "high" : "auto"}
       onLoad={() => setIsLoaded(true)}
-      style={imgStyle}
+      style={{ ...imgStyle, width: "100%", height: "auto" }}
       {...rest}
     />
   );
