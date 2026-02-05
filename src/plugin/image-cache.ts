@@ -1,4 +1,4 @@
-import { get, put } from "cacache";
+import { get, put, rm } from "cacache";
 
 export default function createImageCache(cacheDir: string) {
   return {
@@ -7,6 +7,9 @@ export default function createImageCache(cacheDir: string) {
     },
     put(key: string) {
       return put.stream(cacheDir, key);
+    },
+    deleteAll() {
+      rm.all(cacheDir);
     },
   };
 }

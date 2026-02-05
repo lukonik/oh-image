@@ -1,6 +1,5 @@
 import { mergeConfig, type Plugin } from "vite";
 import { isFileSupported, SUPPORTED_IMAGE_FORMATS } from "./resolver";
-import { ImageStorage } from "./image-storage";
 import { pipeline } from "node:stream/promises";
 import type { OhImagePluginConfig } from "./types";
 import createImageService, { type ImageService } from "./image-service";
@@ -20,26 +19,29 @@ export function ohImage(options?: Partial<OhImagePluginConfig>) {
   ) as OhImagePluginConfig;
   let service!: ImageService;
 
-  let storage!: ImageStorage;
   return {
     name: "oh-image",
-    configResolved(config) {
-      service = createImageService(config.command === "build", pluginConfig);
+    configResolved() {
+      service = createImageService(pluginConfig);
     },
     enforce: "pre",
     async buildStart() {
-      await storage.clearCache();
+      await service.reset();
     },
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         const url = req.url;
-        if (!url || !isFileSupported(url) || !storage.isStorageUrl(url)) {
+        if (
+          !url ||
+          !isFileSupported(url) ||
+          url.includes(pluginConfig.prefix)
+        ) {
           return next();
         }
 
         try {
-          const { stream, ext } = storage.getImageStream(url);
-          res.setHeader("Content-Type", `image/${ext}`);
+          const { stream, format } = await service.getImageStream(url);
+          res.setHeader("Content-Type", `image/${format}`);
           await pipeline(stream, res);
         } catch {
           next();

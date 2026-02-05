@@ -1,8 +1,6 @@
 import sharp, { type FormatEnum, type ResizeOptions } from "sharp";
 
-type ResizeParams = Parameters<sharp.Sharp["resize"]>[0];
 type BlurParams = Parameters<sharp.Sharp["blur"]>[0];
-type FormatParamsType = keyof FormatEnum;
 type FormatParamsOptions = Parameters<sharp.Sharp["toFormat"]>[1];
 
 interface ProcessOptions {

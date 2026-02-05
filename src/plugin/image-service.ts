@@ -13,20 +13,15 @@ import { getResizeOptions } from "./options-resolver";
 
 export type ImageService = ReturnType<typeof createImageService>;
 
-export default function createImageService(
-  isBuild: boolean,
-  config: OhImagePluginConfig,
-) {
+export default function createImageService(config: OhImagePluginConfig) {
   const processor = createImageProcessor();
   const registry = createImageRegistry();
   const cache = createImageCache("");
-  const srcPrefix = config.prefix;
-  //  isBuild ? config.distDir : config.cacheDir;
 
   return {
     process: async (id: string, options: OhImageOptions) => {
       const descriptor = ImageDescriptor.fromId(id);
-      const naming = createImageNaming(srcPrefix, descriptor.name);
+      const naming = createImageNaming(config.prefix, descriptor.name);
       const metadata = await processor.metadata(descriptor.path);
       const format = options.format ?? metadata.format;
       const processedImage: ProcessedImage = {
@@ -56,6 +51,13 @@ export default function createImageService(
       }
 
       registry.add(processedImage);
+    },
+    getImageStream: async (id: string) => {
+      const metadata = await processor.metadata(id);
+      return { stream: await cache.getSream(id), format: metadata.format };
+    },
+    reset() {
+      return cache.deleteAll();
     },
   };
 }
