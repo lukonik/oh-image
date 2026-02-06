@@ -168,4 +168,13 @@ describe("Image", () => {
       backgroundImage: "url(/manual-blur)",
     });
   });
+
+  it("should update proper styles when fill is true", async () => {
+    const result = await render(<Image src="/" fill />);
+    await expect.element(result.getByRole("img")).toHaveStyle({
+      width: "100%",
+      height: "100%",
+      inset: "0",
+    });
+  });
 });

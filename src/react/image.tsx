@@ -15,6 +15,7 @@ export interface ImageProps extends Partial<
     | "width"
     | "srcset"
     | "className"
+    | "sizes"
   >
 > {
   asap?: boolean;
@@ -22,6 +23,7 @@ export interface ImageProps extends Partial<
   placeholderUrl?: string | undefined;
   placeholder?: boolean;
   style?: CSSProperties;
+  fill?: boolean;
 }
 
 function resolveOptions(props: ImageProps) {
@@ -50,6 +52,10 @@ function resolveOptions(props: ImageProps) {
     preload(resolved.src, { as: "image", fetchPriority: "high" });
   }
 
+  if (props.fill) {
+    resolved.sizes ||= "100vw";
+  }
+
   return resolved;
 }
 
@@ -70,11 +76,24 @@ function getPlaceholderStyles(props: ImageProps) {
   return styles;
 }
 
+function getFillStyles(props: ImageProps) {
+  if (!props.fill) {
+    return {};
+  }
+  return {
+    width: "100%",
+    height: "100%",
+    inset: "0",
+  } satisfies Partial<CSSProperties>;
+}
+
 export function Image(props: ImageProps) {
   const options = resolveOptions(props);
   const placeholderStyles = getPlaceholderStyles(options);
+  const fillStyles = getFillStyles(options);
   const styles = {
     ...placeholderStyles,
+    ...fillStyles,
     ...props.style,
   };
   return (
@@ -88,6 +107,7 @@ export function Image(props: ImageProps) {
       alt={options.alt}
       loading={options.loading}
       decoding={options.decoding}
+      sizes={options.sizes}
       fetchPriority={options.fetchPriority ?? "auto"}
     />
   );
