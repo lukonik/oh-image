@@ -8,7 +8,7 @@ import { read, write } from "./cache";
 import type { ImageSrc } from "./types";
 
 interface ServiceOptions {
-  breakpoints?: number[] | undefined;
+  bps?: number[] | undefined;
   blur?: boolean | undefined;
   width?: number | undefined;
   height?: number | undefined;
@@ -64,8 +64,8 @@ const create = async (id: string, options: ServiceOptions) => {
     });
   }
 
-  if (options.breakpoints) {
-    for (const breakpoint of options.breakpoints) {
+  if (options.bps) {
+    for (const breakpoint of options.bps) {
       const srcSetFilename = `${getRandomString()}-${breakpoint}w${ext}`;
       const srcSetUrl = createImageUrl(srcSetFilename);
       serviceImage.srcSets.push(srcSetUrl);

@@ -5,11 +5,11 @@ export interface PluginConfig extends ImageOptions {
 }
 
 export interface ImageOptions {
-  breakpoints?: number[];
+  bps?: number[];
   placeholder?: boolean;
   width?: number;
   height?: number;
-  format?: keyof FormatEnum;
+  format?: keyof FormatEnum | null;
 }
 
 export interface ImageSrcSet {

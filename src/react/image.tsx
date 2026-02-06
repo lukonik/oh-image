@@ -33,8 +33,10 @@ function resolveOptions(props: ImageProps) {
     resolved.src = src.src;
     resolved.width ??= src.width;
     resolved.height ??= src.height;
-    resolved.srcset ??= src.srcSets.join(",");
-    resolved.blurUrl ??= src.blurUrl;
+    resolved.srcset ??= src.srcSets
+      .map((set) => `${set.src} ${set.width}`)
+      .join(", ");
+    resolved.blurUrl ??= src.placeholderUrl;
   } else {
     resolved.src = src;
   }
@@ -68,10 +70,14 @@ function getPlaceholderStyles(props: ImageProps) {
 export function Image(props: ImageProps) {
   const options = resolveOptions(props);
   const placeholderStyles = getPlaceholderStyles(props);
-
+  const styles = {
+    ...placeholderStyles,
+    width: "100%",
+    height: "auto",
+  };
   return (
     <img
-      style={placeholderStyles}
+      style={styles}
       src={options.src}
       width={options.width}
       height={options.height}

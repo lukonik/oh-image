@@ -7,20 +7,20 @@ import {
   SUPPORTED_IMAGE_FORMATS,
 } from "./utils";
 import { createLogger, type Plugin } from "vite";
-import type { ImageOptions, ImageSrc, PluginConfig } from "./types";
+import type { ImageSrc, PluginConfig } from "./types";
 import type { FormatEnum } from "sharp";
 import { basename, extname, join, parse } from "node:path";
 import sharp from "sharp";
 
 const DEFAULT_CONFIGS: PluginConfig = {
   distDir: "oh-image",
-  breakpoints: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+  bps: [16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920],
   format: "webp",
 };
 
 interface ImageEntry {
-  width?: number;
-  height?: number;
+  width?: number | undefined;
+  height?: number | undefined;
   format?: keyof FormatEnum;
   origin: string;
   blur?: number | boolean;
@@ -31,10 +31,7 @@ const BUILD_DIR = "/@oh-images/";
 
 const logger = createLogger();
 
-async function processImage(
-  path: string,
-  options: Omit<ImageOptions, "placeholder"> & { blur?: number | boolean },
-) {
+async function processImage(path: string, options: ImageEntry) {
   let processed = await sharp(path);
 
   if (options.width || options.height) {
@@ -61,6 +58,7 @@ export function ohImage() {
   let outDir!: string;
   let cacheDir!: string;
   const imageEntries = new Map<string, ImageEntry>();
+  const config = { ...DEFAULT_CONFIGS };
 
   /**
    * used for dev server to match url to path
@@ -140,11 +138,23 @@ export function ohImage() {
         if (!parsed.shouldProcess) {
           return null;
         }
-
         const origin = parsed.path; // origin is the actual file path
         const { name, ext } = parse(parsed.path);
-        const { width, height } = await sharp(parsed.path).metadata();
-        const format = ext.slice(1) as keyof FormatEnum;
+        const metadata = await sharp(parsed.path).metadata();
+
+        const bps =
+          parsed.options?.bps === undefined ? config.bps : parsed.options.bps;
+        let format =
+          parsed.options?.format === undefined
+            ? config.format
+            : parsed.options.format;
+
+        if (!format) {
+          format = ext.slice(1) as keyof FormatEnum;
+        }
+
+        const width = parsed.options?.width;
+        const height = parsed.options?.height;
 
         const mainIdentifier = genIdentifier(name, format, "main");
         const mainEntry: ImageEntry = {
@@ -157,8 +167,8 @@ export function ohImage() {
         imageEntries.set(mainIdentifier, mainEntry);
 
         const src: ImageSrc = {
-          width,
-          height,
+          width: metadata.width,
+          height: metadata.height,
           src: mainIdentifier,
           srcSets: [],
         };
@@ -177,8 +187,8 @@ export function ohImage() {
           src.placeholderUrl = mainIdentifier;
         }
 
-        if (parsed.options?.breakpoints) {
-          for (const breakpoint of parsed.options.breakpoints) {
+        if (bps) {
+          for (const breakpoint of bps) {
             const srcSetIdentifier = genIdentifier(
               name,
               format,
@@ -193,7 +203,7 @@ export function ohImage() {
             imageEntries.set(srcSetIdentifier, srcSetEntry);
             src.srcSets.push({
               src: srcSetIdentifier,
-              width: `${breakpoint}px`,
+              width: `${breakpoint}w`,
             });
           }
         }

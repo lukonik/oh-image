@@ -5,7 +5,7 @@ import type { ImageOptions, PluginConfig } from "./types";
 const CONFIG: PluginConfig = {
   cacheDir: "",
   distDir: "oh-image",
-  breakpoints: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+  bps: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
   blur: true,
   format: "webp",
 };
@@ -58,8 +58,8 @@ const getDistPath = () => {
 /** Returns the default image options from plugin config */
 const getDefaultImageOptions = (): ImageOptions => {
   const options: ImageOptions = {};
-  if (CONFIG.breakpoints !== undefined) {
-    options.breakpoints = CONFIG.breakpoints;
+  if (CONFIG.bps !== undefined) {
+    options.bps = CONFIG.bps;
   }
   if (CONFIG.blur !== undefined) {
     options.blur = CONFIG.blur;
