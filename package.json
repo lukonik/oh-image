@@ -64,11 +64,6 @@
     "vitest-browser-react": "^2.0.2"
   },
   "dependencies": {
-    "@types/cacache": "^20.0.0",
-    "@types/fs-extra": "^11.0.4",
-    "cacache": "^20.0.3",
-    "fs-extra": "^11.3.3",
-    "minipass": "^7.1.2",
     "query-string": "^9.3.1",
     "sharp": "^0.34.5"
   }
