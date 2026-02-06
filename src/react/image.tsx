@@ -18,7 +18,7 @@ export interface ImageProps extends Partial<
 > {
   asap?: boolean;
   src: ImageSrcType;
-  blurUrl?: string | undefined;
+  placeholderUrl?: string | undefined;
   placeholder?: boolean;
 }
 
@@ -36,7 +36,7 @@ function resolveOptions(props: ImageProps) {
     resolved.srcset ??= src.srcSets
       .map((set) => `${set.src} ${set.width}`)
       .join(", ");
-    resolved.blurUrl ??= src.placeholderUrl;
+    resolved.placeholderUrl ??= src.placeholderUrl;
   } else {
     resolved.src = src;
   }
@@ -55,25 +55,24 @@ function getPlaceholderStyles(props: ImageProps) {
   if (!props.placeholder) {
     return {};
   }
-  if (!props.blurUrl) {
+  if (!props.placeholderUrl) {
+    console.warn("Blur URL is required for placeholder");
     return {};
   }
 
   const styles: Partial<CSSProperties> = {
     backgroundPosition: "50% 50%",
     backgroundRepeat: "no-repeat",
-    backgroundImage: `url(${props.blurUrl})`,
+    backgroundImage: `url(${props.placeholderUrl})`,
   };
   return styles;
 }
 
 export function Image(props: ImageProps) {
   const options = resolveOptions(props);
-  const placeholderStyles = getPlaceholderStyles(props);
+  const placeholderStyles = getPlaceholderStyles(options);
   const styles = {
     ...placeholderStyles,
-    width: "100%",
-    height: "auto",
   };
   return (
     <img
@@ -85,7 +84,7 @@ export function Image(props: ImageProps) {
       alt={options.alt}
       loading={options.loading}
       decoding={options.decoding}
-      fetchPriority={options.fetchPriority}
+      fetchPriority={options.fetchPriority ?? "auto"}
     />
   );
 }
