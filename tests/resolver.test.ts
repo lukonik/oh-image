@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isFileSupported } from "../src/plugin/resolver";
+import { isFileSupported } from "../src/plugin/utils";
 
 describe("resolver", () => {
   describe("isFileSupported", () => {
@@ -21,11 +21,11 @@ describe("resolver", () => {
         expect(isFileSupported("test-image" + type)).toBe(false);
       });
     }
-    assertIsNotSupported(".txt")
-    assertIsNotSupported(".pdf")
-    assertIsNotSupported(".doc")
-    assertIsNotSupported(".docx")
-    assertIsNotSupported(".xls")
-    assertIsNotSupported(".xlsx")
+    assertIsNotSupported(".txt");
+    assertIsNotSupported(".pdf");
+    assertIsNotSupported(".doc");
+    assertIsNotSupported(".docx");
+    assertIsNotSupported(".xls");
+    assertIsNotSupported(".xlsx");
   });
 });

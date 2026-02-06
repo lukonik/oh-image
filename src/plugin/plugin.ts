@@ -1,15 +1,62 @@
-import { defineConfig, getDefaultImageOptions, getDistPath } from "./config";
-import { isFileSupported, SUPPORTED_IMAGE_FORMATS } from "./resolver";
-import { create, getImage, writeToDist } from "./service";
-import { clearDist } from "./cache";
-import type { Plugin } from "vite";
-import type { ImageOptions, PluginConfig } from "./types";
-import { parseFromId } from "./query-parser";
+import { defineConfig } from "./config";
+import { isFileSupported, SUPPORTED_IMAGE_FORMATS } from "./utils";
+import type { Plugin, ResolvedConfig } from "vite";
+import type { PluginConfig } from "./types";
+import type { FormatEnum } from "sharp";
+import { basename, join, resolve } from "node:path";
+
+const DEFAULT_CONFIGS: PluginConfig = {
+  cacheDir: "",
+  distDir: "oh-image",
+  breakpoints: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+  blur: true,
+  format: "webp",
+};
+
+interface ImageEntry {
+  width?: number;
+  height?: number;
+  format?: keyof FormatEnum;
+}
+
+const DEV_SERVER_PREFIX = "/@oh-images/";
+const DIST_ASSETS_PREFIX = "/oh-images/";
+
+/**
+ * returns path to resolve the file
+ * @param uri id or url
+ * @returns
+ */
+export function pathToImage(uri: string, isBuild: boolean) {
+  // uri, can be URL (dev server) or id from import
+  // take basename (file name + ext) and use it as unique identifier
+  const fileId = basename(uri);
+
+  // depending on it is build or dev, the file path would be from either cache, or from dist folder
+  const rootPath = isBuild ? `${DIST_ASSETS_PREFIX}` : `${DEV_SERVER_PREFIX}`;
+
+  // join path to get final full path
+  const path = join(rootPath, fileId);
+
+  // if it is dev add resolve path, to be able to get file propelry from file system
+  if (!isBuild) {
+    return resolve(path);
+  }
+  // if not return existing path, because server will handle mapping
+  return path;
+}
 
 export function ohImage(options?: Partial<PluginConfig>) {
+  const config = { ...DEFAULT_CONFIGS, options };
+  let resolvedConfig: ResolvedConfig;
+  let isBuild = false;
+  const imageEntries = new Map<string, ImageEntry>();
+
   return {
     name: "oh-image",
     configResolved(config) {
+      resolvedConfig = config;
+      isBuild = resolvedConfig.command === "build";
       defineConfig(config, options);
     },
     enforce: "pre",
@@ -17,41 +64,25 @@ export function ohImage(options?: Partial<PluginConfig>) {
       server.middlewares.use(async (req, res, next) => {
         const url = req.url;
 
-        // Only handle our virtual path /@oh-image/*
-        if (!url?.startsWith("/@oh-image/") || !isFileSupported(url)) {
+        if (!url?.startsWith(DEV_SERVER_PREFIX) || !isFileSupported(url)) {
           return next();
         }
 
-        try {
-          const { data, format } = await getImage(url);
-          res.setHeader("Content-Type", `image/${format}`);
-          res.end(data);
-        } catch (err) {
-          console.error("[oh-image]", err);
-          next();
-        }
+        // try {
+        //   const file = await res.setHeader("Content-Type", `image/${format}`);
+        //   res.end(data);
+        // } catch (err) {
+        //   console.error("[oh-image]", err);
+        //   next();
+        // }
       });
     },
     load: {
       filter: {
         id: SUPPORTED_IMAGE_FORMATS,
       },
-      async handler(id) {
-        const queryOptions = parseFromId(id) as ImageOptions | null;
-        if (queryOptions === null || !("oh" in queryOptions)) {
-          return null;
-        }
-
-        const mergedOptions = { ...getDefaultImageOptions(), ...queryOptions };
-        const image = await create(filePath, mergedOptions);
-        return `export default ${JSON.stringify(image)}`;
-      },
+      async handler(id) {},
     },
-    async writeBundle() {
-      const distPath = getDistPath();
-      await clearDist();
-      const count = await writeToDist(distPath);
-      console.log(`[oh-image] Wrote ${count} images to ${distPath}`);
-    },
+    async writeBundle() {},
   } satisfies Plugin;
 }

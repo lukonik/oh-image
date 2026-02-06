@@ -9,8 +9,11 @@ export default defineConfig({
   plugins: [ohImage(), react()],
   test: {
     root: ".",
+    // Default to Node environment
+    environment: "node",
+    // Browser config (enable with @vitest-environment browser in test files)
     browser: {
-      enabled: true,
+      enabled: false, // Not enabled by default
       provider: playwright(),
       instances: [{ browser: "chromium" }],
       headless: true,
