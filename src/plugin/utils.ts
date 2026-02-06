@@ -1,6 +1,8 @@
 import { randomBytes } from "node:crypto";
-import { readFile } from "node:fs/promises";
-import { extname } from "node:path";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { dirname, extname } from "node:path";
+import queryString from "query-string";
+import type { ImageOptions } from "./types";
 
 export const SUPPORTED_IMAGE_FORMATS =
   /\.(jpe?g|png|webp|avif|gif|tiff?|svg)(\?.*)?$/i;
@@ -37,5 +39,43 @@ export async function readFileSafe(path: string) {
     return await readFile(path);
   } catch {
     return null;
+  }
+}
+
+export async function saveFileSafe(path: string, data: Buffer) {
+  // 1. Extract the directory path (e.g., "folder/subfolder")
+  const dir = dirname(path);
+
+  try {
+    // 2. Ensure the directory exists
+    await mkdir(dir, { recursive: true });
+
+    // 3. Write the file
+    await writeFile(path, data);
+    console.log(`Successfully saved to ${path}`);
+  } catch (err) {
+    console.error("Failed to save file:", err);
+  }
+}
+
+export function parseQuery(uri: string): {
+  shouldProcess: boolean;
+  path: string;
+  options?: ImageOptions;
+} {
+  const [path, query] = uri.split("?");
+  if (!query || !path) {
+    return { shouldProcess: false, path: "" };
+  }
+  const parsed = queryString.parse(query, {
+    parseBooleans: true,
+    parseNumbers: true,
+    arrayFormat: "comma",
+  });
+
+  if ("oh" in parsed) {
+    return { shouldProcess: true, options: parsed, path: path };
+  } else {
+    return { shouldProcess: false, path: path };
   }
 }
