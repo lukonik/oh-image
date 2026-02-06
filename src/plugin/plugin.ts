@@ -6,6 +6,7 @@ import {
   saveFileSafe,
 } from "./utils";
 import { createLogger, type Plugin } from "vite";
+import pLimit from "p-limit";
 import type { ImageEntry, ImageSrc, PluginConfig } from "./types";
 import type { FormatEnum } from "sharp";
 import { basename, extname, join, parse } from "node:path";
@@ -90,19 +91,18 @@ export function ohImage(options?: Partial<PluginConfig>) {
         const ext = extname(url).slice(1); // pad to get only ext
         const image = await readFileSafe(path);
 
-        if (image) {
-          res.setHeader("Content-Type", `image/${ext}`);
-          res.end(image);
-          return;
-        }
-
         // if image is not found, we need to find origin process it and save it in cache
         // because images are lazy loaded
-
         const imageEntry = imageEntries.get(url);
         if (!imageEntry) {
           logger.warn("Image entry not found with id: " + url);
           next();
+          return;
+        }
+
+        if (image) {
+          res.setHeader("Content-Type", `image/${ext}`);
+          res.end(image);
           return;
         }
 
@@ -192,17 +192,22 @@ export function ohImage(options?: Partial<PluginConfig>) {
           }
 
           return `export default ${JSON.stringify(src)};`;
-        } catch(err) {
-          logger.error(`Couldn't load image with id: ${id} error:${err}`)
+        } catch (err) {
+          logger.error(`Couldn't load image with id: ${id} error:${err}`);
+          return null;
         }
       },
     },
     async writeBundle() {
-      for (const [key, value] of imageEntries) {
-        const processed = await processImage(value.origin, value);
-        const outputPath = join(outDir, key);
-        await saveFileSafe(outputPath, processed);
-      }
+      const limit = pLimit(30);
+      const tasks = Array.from(imageEntries, ([key, value]) =>
+        limit(async () => {
+          const processed = await processImage(value.origin, value);
+          const outputPath = join(outDir, key);
+          await saveFileSafe(outputPath, processed);
+        }),
+      );
+      await Promise.all(tasks);
     },
   } satisfies Plugin;
 }
