@@ -118,81 +118,83 @@ export function ohImage(options?: Partial<PluginConfig>) {
         id: SUPPORTED_IMAGE_FORMATS,
       },
       async handler(id) {
-        const parsed = queryToOptions(PROCESS_KEY, id);
-        if (!parsed.shouldProcess) {
-          return null;
-        }
-        const origin = parsed.path; // origin is the actual file path
-        const { name, ext } = parse(parsed.path);
-        const metadata = await sharp(parsed.path).metadata();
+        try {
+          const parsed = queryToOptions(PROCESS_KEY, id);
+          if (!parsed.shouldProcess) {
+            return null;
+          }
+          const origin = parsed.path; // origin is the actual file path
+          const { name, ext } = parse(parsed.path);
+          const metadata = await sharp(parsed.path).metadata();
 
-        const mergedOptions = {
-          ...config,
-          ...parsed.options,
-        };
+          const mergedOptions = {
+            ...config,
+            ...parsed.options,
+          };
 
-        // format can't b
-        const format =
-          mergedOptions.format ?? (ext.slice(1) as keyof FormatEnum);
+          const format =
+            mergedOptions.format ?? (ext.slice(1) as keyof FormatEnum);
 
-        const mainIdentifier = genIdentifier(name, format, "main");
-        const mainEntry: ImageEntry = {
-          width: mergedOptions.width,
-          height: mergedOptions.height,
-          blur: mergedOptions.blur,
-          format: mergedOptions.format, // here format can be null as long as
-          // there is format in name
-          origin: origin,
-        };
-        imageEntries.set(mainIdentifier, mainEntry);
-
-        const src: ImageSrc = {
-          width: metadata.width,
-          height: metadata.height,
-          src: mainIdentifier,
-          srcSets: [],
-        };
-
-        // if placeholder is specified as placeholder as well
-        if (parsed.options?.placeholder) {
-          const mainIdentifier = genIdentifier(
-            name,
-            mergedOptions.placeholderF,
-            "placeholder",
-          );
-          const placeholderEntry: ImageEntry = {
-            width: mergedOptions.placeholderW,
-            height: mergedOptions.placeholderH,
-            format: mergedOptions.placeholderF,
-            blur: mergedOptions.placeholderB,
+          const mainIdentifier = genIdentifier(name, format, "main");
+          const mainEntry: ImageEntry = {
+            width: mergedOptions.width,
+            height: mergedOptions.height,
+            blur: mergedOptions.blur,
+            format: mergedOptions.format, // here format can be null as long as
+            // there is format in name
             origin: origin,
           };
-          imageEntries.set(mainIdentifier, placeholderEntry);
-          src.placeholderUrl = mainIdentifier;
-        }
+          imageEntries.set(mainIdentifier, mainEntry);
 
-        if (mergedOptions.bps) {
-          for (const breakpoint of mergedOptions.bps) {
-            const srcSetIdentifier = genIdentifier(
+          const src: ImageSrc = {
+            width: metadata.width,
+            height: metadata.height,
+            src: mainIdentifier,
+            srcSets: [],
+          };
+
+          // if placeholder is specified as placeholder as well
+          if (parsed.options?.placeholder) {
+            const placeholderIdentifier = genIdentifier(
               name,
-              mergedOptions.srcSetsF,
-              `breakpoint-${breakpoint}`,
+              mergedOptions.placeholderF,
+              "placeholder",
             );
-            const srcSetEntry: ImageEntry = {
-              width: breakpoint,
-              height: breakpoint,
-              format: format,
+            const placeholderEntry: ImageEntry = {
+              width: mergedOptions.placeholderW,
+              height: mergedOptions.placeholderH,
+              format: mergedOptions.placeholderF,
+              blur: mergedOptions.placeholderB,
               origin: origin,
             };
-            imageEntries.set(srcSetIdentifier, srcSetEntry);
-            src.srcSets.push({
-              src: srcSetIdentifier,
-              width: `${breakpoint}w`,
-            });
+            imageEntries.set(placeholderIdentifier, placeholderEntry);
+            src.placeholderUrl = mainIdentifier;
           }
-        }
 
-        return `export default ${JSON.stringify(src)};`;
+          if (mergedOptions.bps) {
+            for (const breakpoint of mergedOptions.bps) {
+              const srcSetIdentifier = genIdentifier(
+                name,
+                mergedOptions.srcSetsF,
+                `breakpoint-${breakpoint}`,
+              );
+              const srcSetEntry: ImageEntry = {
+                width: breakpoint,
+                format: mergedOptions.srcSetsF,
+                origin: origin,
+              };
+              imageEntries.set(srcSetIdentifier, srcSetEntry);
+              src.srcSets.push({
+                src: srcSetIdentifier,
+                width: `${breakpoint}w`,
+              });
+            }
+          }
+
+          return `export default ${JSON.stringify(src)};`;
+        } catch(err) {
+          logger.error(`Couldn't load image with id: ${id} error:${err}`)
+        }
       },
     },
     async writeBundle() {
