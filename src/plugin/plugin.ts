@@ -1,9 +1,13 @@
 import { defineConfig } from "./config";
-import { isFileSupported, SUPPORTED_IMAGE_FORMATS } from "./utils";
-import type { Plugin, ResolvedConfig } from "vite";
+import {
+  isFileSupported,
+  readFileSafe,
+  SUPPORTED_IMAGE_FORMATS,
+} from "./utils";
+import { createLogger, type Plugin, type ResolvedConfig } from "vite";
 import type { PluginConfig } from "./types";
 import type { FormatEnum } from "sharp";
-import { basename, join, resolve } from "node:path";
+import { basename, extname, join, resolve } from "node:path";
 
 const DEFAULT_CONFIGS: PluginConfig = {
   cacheDir: "",
@@ -21,6 +25,8 @@ interface ImageEntry {
 
 const DEV_SERVER_PREFIX = "/@oh-images/";
 const DIST_ASSETS_PREFIX = "/oh-images/";
+
+const logger = createLogger();
 
 /**
  * returns path to resolve the file
@@ -68,13 +74,15 @@ export function ohImage(options?: Partial<PluginConfig>) {
           return next();
         }
 
-        // try {
-        //   const file = await res.setHeader("Content-Type", `image/${format}`);
-        //   res.end(data);
-        // } catch (err) {
-        //   console.error("[oh-image]", err);
-        //   next();
-        // }
+        const path = pathToImage(url, false);
+        const ext = extname(url).slice(1); // pad to get only ext
+        const image = await readFileSafe(path);
+        if (!image) {
+          logger.warn("Image not found: " + path);
+        }
+
+        await res.setHeader("Content-Type", `image/${ext}`);
+        res.end(image);
       });
     },
     load: {

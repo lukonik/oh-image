@@ -1,4 +1,5 @@
 import { randomBytes } from "node:crypto";
+import { readFile } from "node:fs/promises";
 import { extname } from "node:path";
 
 export const SUPPORTED_IMAGE_FORMATS =
@@ -29,4 +30,12 @@ export function getRandomString(length: number = 32) {
     .replace(/\+/g, "-")
     .replace(/\//g, "_")
     .replace(/=/g, "");
+}
+
+export async function readFileSafe(path: string) {
+  try {
+    return await readFile(path);
+  } catch {
+    return null;
+  }
 }
