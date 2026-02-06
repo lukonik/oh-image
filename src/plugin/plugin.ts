@@ -26,12 +26,14 @@ interface ImageEntry {
 }
 
 const DEV_DIR = "/@oh-images/";
+const BUILD_DIR = "/@oh-images/";
 
 const logger = createLogger();
 
 export function ohImage() {
   let isBuild = false;
-  const assetsDir = "";
+  let assetsDir!: string;
+  let outDir!: string;
   let cacheDir!: string;
   const imageEntries = new Map<string, ImageEntry>();
 
@@ -57,7 +59,7 @@ export function ohImage() {
     }
 
     // for build the joined path is returned with DEV_SERVER_PREFIX and assets that server will handle properly
-    return join(assetsDir, uniqueFileId);
+    return join(assetsDir, BUILD_DIR, uniqueFileId);
   }
 
   return {
@@ -65,6 +67,9 @@ export function ohImage() {
     configResolved(viteConfig) {
       cacheDir = join(viteConfig.cacheDir, DEV_DIR);
       isBuild = viteConfig.command === "build";
+      assetsDir = viteConfig.build.assetsDir;
+      outDir = viteConfig.build.outDir;
+
       // isBuild = resolvedConfig.command === "build";
       // assetsDir = resolvedConfig.build.assetsDir;
       // defineConfig(config, options);
@@ -154,7 +159,11 @@ export function ohImage() {
       },
     },
     async writeBundle() {
-      console.log("HELLO " + imageEntries);
+      for (const [key, value] of imageEntries) {
+        const processed = await sharp(value.origin).resize(100).toBuffer();
+        const outputPath = join(outDir, key);
+        await saveFileSafe(outputPath, processed);
+      }
     },
   } satisfies Plugin;
 }

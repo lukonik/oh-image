@@ -28,6 +28,8 @@
     "build": "tsdown",
     "dev": "tsdown --watch",
     "play": "vite",
+    "play:build": "vite build",
+    "play:preview": "vite preview",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
     "release": "bumpp && pnpm publish",

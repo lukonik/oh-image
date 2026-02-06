@@ -1,7 +1,7 @@
 import { defineConfig } from "tsdown";
 
 export default defineConfig({
-  platform: "node",
+  platform: "neutral",
   entry: {
     plugin: "src/plugin/index.ts",
     react: "src/react/index.ts",
@@ -14,6 +14,5 @@ export default defineConfig({
     "node:crypto",
     "node:fs",
     "node:fs/promises",
-    "query-string",
   ],
 });
