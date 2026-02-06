@@ -4,6 +4,23 @@ import { Image } from "../../src/react/image";
 
 describe("Image", () => {
   beforeEach(() => {});
+
+  it("should be defined", () => {
+    expect(Image).toBeDefined();
+  });
+
+  it("should add className to image", async () => {
+    const result = await render(<Image src="/" className="test" />);
+    await expect.element(result.getByRole("img")).toHaveClass("test");
+  });
+
+  it("should add styles to image", async () => {
+    const result = await render(<Image src="/" style={{ width: "100px" }} />);
+    await expect
+      .element(result.getByRole("img"))
+      .toHaveStyle({ width: "100px" });
+  });
+
   it("should set alt attribute", async () => {
     const result = await render(<Image src="/" alt="alt image" />);
     await expect

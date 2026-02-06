@@ -14,12 +14,14 @@ export interface ImageProps extends Partial<
     | "height"
     | "width"
     | "srcset"
+    | "className"
   >
 > {
   asap?: boolean;
   src: ImageSrcType;
   placeholderUrl?: string | undefined;
   placeholder?: boolean;
+  style?: CSSProperties;
 }
 
 function resolveOptions(props: ImageProps) {
@@ -73,9 +75,11 @@ export function Image(props: ImageProps) {
   const placeholderStyles = getPlaceholderStyles(options);
   const styles = {
     ...placeholderStyles,
+    ...props.style,
   };
   return (
     <img
+      className={props.className}
       style={styles}
       src={options.src}
       width={options.width}
