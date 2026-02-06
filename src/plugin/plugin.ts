@@ -68,7 +68,7 @@ export function ohImage() {
       cacheDir = join(viteConfig.cacheDir, DEV_DIR);
       isBuild = viteConfig.command === "build";
       assetsDir = viteConfig.build.assetsDir;
-      outDir = viteConfig.build.outDir;
+      outDir = join(viteConfig.root, viteConfig.build.outDir);
 
       // isBuild = resolvedConfig.command === "build";
       // assetsDir = resolvedConfig.build.assetsDir;
