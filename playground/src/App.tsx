@@ -1,9 +1,11 @@
-import { MyButton } from '../../src'
-
+import storm from "./image-1.png?oh&placeholder=true";
+import { Image } from "../../src/react/index";
 export function App() {
+  console.log(storm);
   return (
-    <>
-      <MyButton type="primary" />
-    </>
-  )
+    <div>
+      <Image src={storm} />
+      <h1>HELO</h1>
+    </div>
+  );
 }

@@ -14,12 +14,10 @@
     "url": "https://github.com/author/library/issues"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./plugin": "./dist/plugin.js",
+    "./react": "./dist/react.js"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -30,6 +28,8 @@
     "build": "tsdown",
     "dev": "tsdown --watch",
     "play": "vite",
+    "play:build": "vite build",
+    "play:preview": "vite preview",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
     "release": "bumpp && pnpm publish",
@@ -62,5 +62,10 @@
     "vite": "^7.3.0",
     "vitest": "^4.0.16",
     "vitest-browser-react": "^2.0.2"
+  },
+  "dependencies": {
+    "p-limit": "^7.3.0",
+    "query-string": "^9.3.1",
+    "sharp": "^0.34.5"
   }
 }
