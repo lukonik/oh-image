@@ -12,10 +12,15 @@ export interface ImageOptions {
   format?: keyof FormatEnum;
 }
 
+export interface ImageSrcSet {
+  width: string;
+  src: string;
+}
+
 export interface ImageSrc {
   width: number;
   height: number;
   placeholderUrl?: string;
-  srcSets: string[];
+  srcSets: ImageSrcSet[];
   src: string;
 }

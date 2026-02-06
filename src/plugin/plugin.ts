@@ -7,7 +7,7 @@ import {
   SUPPORTED_IMAGE_FORMATS,
 } from "./utils";
 import { createLogger, type Plugin } from "vite";
-import type { ImageSrc, PluginConfig } from "./types";
+import type { ImageOptions, ImageSrc, PluginConfig } from "./types";
 import type { FormatEnum } from "sharp";
 import { basename, extname, join, parse } from "node:path";
 import sharp from "sharp";
@@ -23,12 +23,37 @@ interface ImageEntry {
   height?: number;
   format?: keyof FormatEnum;
   origin: string;
+  blur?: number | boolean;
 }
 
 const DEV_DIR = "/@oh-images/";
 const BUILD_DIR = "/@oh-images/";
 
 const logger = createLogger();
+
+async function processImage(
+  path: string,
+  options: Omit<ImageOptions, "placeholder"> & { blur?: number | boolean },
+) {
+  let processed = await sharp(path);
+
+  if (options.width || options.height) {
+    processed = processed.resize({
+      width: options.width,
+      height: options.height,
+    });
+  }
+
+  if (options.format) {
+    processed = processed.toFormat(options.format);
+  }
+
+  if (options.blur) {
+    processed = processed.blur(options.blur);
+  }
+
+  return processed.toBuffer();
+}
 
 export function ohImage() {
   let isBuild = false;
@@ -69,10 +94,6 @@ export function ohImage() {
       isBuild = viteConfig.command === "build";
       assetsDir = viteConfig.build.assetsDir;
       outDir = join(viteConfig.root, viteConfig.build.outDir);
-
-      // isBuild = resolvedConfig.command === "build";
-      // assetsDir = resolvedConfig.build.assetsDir;
-      // defineConfig(config, options);
     },
     enforce: "pre",
     configureServer(server) {
@@ -103,7 +124,7 @@ export function ohImage() {
           return;
         }
 
-        const processed = await sharp(imageEntry.origin).resize(100).toBuffer();
+        const processed = await processImage(imageEntry.origin, imageEntry);
 
         await saveFileSafe(path, processed);
         res.setHeader("Content-Type", `image/${ext}`);
@@ -144,15 +165,37 @@ export function ohImage() {
 
         // if placeholder is specified as placeholder as well
         if (parsed.options?.placeholder) {
-          const mainIdentifier = genIdentifier(name, format, "placeholder");
+          const mainIdentifier = genIdentifier(name, "webp", "placeholder");
           const placeholderEntry: ImageEntry = {
             width: 100,
             height: 100,
-            format: format,
+            format: "webp",
             origin: origin,
+            blur: true,
           };
           imageEntries.set(mainIdentifier, placeholderEntry);
           src.placeholderUrl = mainIdentifier;
+        }
+
+        if (parsed.options?.breakpoints) {
+          for (const breakpoint of parsed.options.breakpoints) {
+            const srcSetIdentifier = genIdentifier(
+              name,
+              format,
+              `breakpoint-${breakpoint}`,
+            );
+            const srcSetEntry: ImageEntry = {
+              width: breakpoint,
+              height: breakpoint,
+              format: format,
+              origin: origin,
+            };
+            imageEntries.set(srcSetIdentifier, srcSetEntry);
+            src.srcSets.push({
+              src: srcSetIdentifier,
+              width: `${breakpoint}px`,
+            });
+          }
         }
 
         return `export default ${JSON.stringify(src)};`;
@@ -160,7 +203,7 @@ export function ohImage() {
     },
     async writeBundle() {
       for (const [key, value] of imageEntries) {
-        const processed = await sharp(value.origin).resize(100).toBuffer();
+        const processed = await processImage(value.origin, value);
         const outputPath = join(outDir, key);
         await saveFileSafe(outputPath, processed);
       }
