@@ -1,64 +1,48 @@
 import {
   getRandomString,
-  isFileSupported,
-  parseQuery,
+  queryToOptions,
+  processImage,
   readFileSafe,
   saveFileSafe,
-  SUPPORTED_IMAGE_FORMATS,
 } from "./utils";
 import { createLogger, type Plugin } from "vite";
-import type { ImageSrc, PluginConfig } from "./types";
+import type { ImageEntry, ImageSrc, PluginConfig } from "./types";
 import type { FormatEnum } from "sharp";
 import { basename, extname, join, parse } from "node:path";
 import sharp from "sharp";
+
+const PROCESS_KEY = "oh";
 
 const DEFAULT_CONFIGS: PluginConfig = {
   distDir: "oh-image",
   bps: [16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920],
   format: "webp",
+  blur: false,
+  width: null,
+  height: null,
+  placeholder: false,
+  placeholderH: 100,
+  placeholderW: 100,
+  placeholderB: true,
+  placeholderF: "webp",
+  srcSetsF: "webp",
 };
 
-interface ImageEntry {
-  width?: number | undefined;
-  height?: number | undefined;
-  format?: keyof FormatEnum;
-  origin: string;
-  blur?: number | boolean;
-}
+export const SUPPORTED_IMAGE_FORMATS =
+  /\.(jpe?g|png|webp|avif|gif|tiff?|svg)(\?.*)?$/i;
 
 const DEV_DIR = "/@oh-images/";
 const BUILD_DIR = "/@oh-images/";
 
 const logger = createLogger();
 
-async function processImage(path: string, options: ImageEntry) {
-  let processed = await sharp(path);
-
-  if (options.width || options.height) {
-    processed = processed.resize({
-      width: options.width,
-      height: options.height,
-    });
-  }
-
-  if (options.format) {
-    processed = processed.toFormat(options.format);
-  }
-
-  if (options.blur) {
-    processed = processed.blur(options.blur);
-  }
-
-  return processed.toBuffer();
-}
-
-export function ohImage() {
+export function ohImage(options?: Partial<PluginConfig>) {
   let isBuild = false;
   let assetsDir!: string;
   let outDir!: string;
   let cacheDir!: string;
   const imageEntries = new Map<string, ImageEntry>();
-  const config = { ...DEFAULT_CONFIGS };
+  const config = { ...DEFAULT_CONFIGS, ...options };
 
   /**
    * used for dev server to match url to path
@@ -98,7 +82,7 @@ export function ohImage() {
       server.middlewares.use(async (req, res, next) => {
         const url = req.url;
 
-        if (!url?.includes(DEV_DIR) || !isFileSupported(url)) {
+        if (!url?.includes(DEV_DIR) || !SUPPORTED_IMAGE_FORMATS.test(url)) {
           return next();
         }
 
@@ -134,7 +118,7 @@ export function ohImage() {
         id: SUPPORTED_IMAGE_FORMATS,
       },
       async handler(id) {
-        const parsed = parseQuery(id);
+        const parsed = queryToOptions(PROCESS_KEY, id);
         if (!parsed.shouldProcess) {
           return null;
         }
@@ -142,28 +126,24 @@ export function ohImage() {
         const { name, ext } = parse(parsed.path);
         const metadata = await sharp(parsed.path).metadata();
 
-        const bps =
-          parsed.options?.bps === undefined ? config.bps : parsed.options.bps;
-        let format =
-          parsed.options?.format === undefined
-            ? config.format
-            : parsed.options.format;
+        const mergedOptions = {
+          ...config,
+          ...parsed.options,
+        };
 
-        if (!format) {
-          format = ext.slice(1) as keyof FormatEnum;
-        }
-
-        const width = parsed.options?.width;
-        const height = parsed.options?.height;
+        // format can't b
+        const format =
+          mergedOptions.format ?? (ext.slice(1) as keyof FormatEnum);
 
         const mainIdentifier = genIdentifier(name, format, "main");
         const mainEntry: ImageEntry = {
-          width,
-          height,
-          format: format,
+          width: mergedOptions.width,
+          height: mergedOptions.height,
+          blur: mergedOptions.blur,
+          format: mergedOptions.format, // here format can be null as long as
+          // there is format in name
           origin: origin,
         };
-
         imageEntries.set(mainIdentifier, mainEntry);
 
         const src: ImageSrc = {
@@ -175,23 +155,27 @@ export function ohImage() {
 
         // if placeholder is specified as placeholder as well
         if (parsed.options?.placeholder) {
-          const mainIdentifier = genIdentifier(name, "webp", "placeholder");
+          const mainIdentifier = genIdentifier(
+            name,
+            mergedOptions.placeholderF,
+            "placeholder",
+          );
           const placeholderEntry: ImageEntry = {
-            width: 100,
-            height: 100,
-            format: "webp",
+            width: mergedOptions.placeholderW,
+            height: mergedOptions.placeholderH,
+            format: mergedOptions.placeholderF,
+            blur: mergedOptions.placeholderB,
             origin: origin,
-            blur: true,
           };
           imageEntries.set(mainIdentifier, placeholderEntry);
           src.placeholderUrl = mainIdentifier;
         }
 
-        if (bps) {
-          for (const breakpoint of bps) {
+        if (mergedOptions.bps) {
+          for (const breakpoint of mergedOptions.bps) {
             const srcSetIdentifier = genIdentifier(
               name,
-              format,
+              mergedOptions.srcSetsF,
               `breakpoint-${breakpoint}`,
             );
             const srcSetEntry: ImageEntry = {

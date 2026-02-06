@@ -12,6 +12,12 @@ export default defineConfig({
     projects: [
       {
         test: {
+          include: ["tests/server/*.test.ts"],
+          environment: "node",
+        },
+      },
+      {
+        test: {
           include: ["tests/browser/*.test.{ts,tsx}"],
           // Browser tests configuration
           browser: {
