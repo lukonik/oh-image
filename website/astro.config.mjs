@@ -7,13 +7,14 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'Oh-Image!',
+			title: 'Oh Image!',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
 			sidebar: [
 				{
 					label: 'Guides',
 					items: [
 						// Each item here is one entry in the navigation menu.
+						{ label: 'Introduction', slug: 'guides/introduction' },
 						{ label: 'Example Guide', slug: 'guides/example' },
 					],
 				},
