@@ -8,6 +8,8 @@
     "build": "pnpm -r build",
     "dev": "pnpm --filter oh-image dev",
     "play": "pnpm --filter oh-image play",
+    "demo": "pnpm --filter demo dev",
+    "website": "pnpm --filter website dev",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
     "prepare": "husky"
