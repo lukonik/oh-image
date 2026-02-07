@@ -15,8 +15,14 @@
   },
   "exports": {
     "./package.json": "./package.json",
-    "./plugin": "./dist/plugin.js",
-    "./react": "./dist/react.js"
+    "./plugin": {
+      "types": "./dist/plugin.d.ts",
+      "default": "./dist/plugin.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "default": "./dist/react.js"
+    }
   },
   "files": [
     "dist"
