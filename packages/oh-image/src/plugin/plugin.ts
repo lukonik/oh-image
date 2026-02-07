@@ -5,7 +5,7 @@ import {
   readFileSafe,
   saveFileSafe,
 } from "./utils";
-import { createLogger, type Plugin } from "vite";
+import { type Plugin } from "vite";
 import pLimit from "p-limit";
 import type { ImageEntry, ImageSrc, PluginConfig } from "./types";
 import type { FormatEnum } from "sharp";
@@ -34,8 +34,6 @@ export const SUPPORTED_IMAGE_FORMATS =
 
 const DEV_DIR = "/@oh-images/";
 const BUILD_DIR = "/@oh-images/";
-
-const logger = createLogger();
 
 export function ohImage(options?: Partial<PluginConfig>) {
   let isBuild = false;
@@ -95,7 +93,7 @@ export function ohImage(options?: Partial<PluginConfig>) {
         // because images are lazy loaded
         const imageEntry = imageEntries.get(url);
         if (!imageEntry) {
-          logger.warn("Image entry not found with id: " + url);
+          console.warn("Image entry not found with id: " + url);
           next();
           return;
         }
@@ -193,7 +191,7 @@ export function ohImage(options?: Partial<PluginConfig>) {
 
           return `export default ${JSON.stringify(src)};`;
         } catch (err) {
-          logger.error(`Couldn't load image with id: ${id} error:${err}`);
+          console.error(`Couldn't load image with id: ${id} error:${err}`);
           return null;
         }
       },
