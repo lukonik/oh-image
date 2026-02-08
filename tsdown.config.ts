@@ -6,6 +6,7 @@ export default defineConfig({
     plugin: "src/plugin/index.ts",
     react: "src/react/index.ts",
   },
+  dts:true,
   external: [
     "react",
     "react-dom",
