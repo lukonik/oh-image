@@ -5,6 +5,8 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://github.com/lukonik",
+  base: "/oh-image",
   integrations: [
     starlight({
       title: "Oh Image!",
