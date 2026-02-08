@@ -8,11 +8,15 @@
     "build": "pnpm --filter oh-image build",
     "dev": "pnpm --filter oh-image dev",
     "play": "pnpm --filter oh-image play",
-    "demo": "pnpm --filter demo dev",
     "website": "pnpm --filter website dev",
     "test": "pnpm --filter oh-image test",
     "typecheck": "pnpm -r typecheck",
     "prepare": "husky"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "lightningcss"
+    ]
   },
   "devDependencies": {
     "@commitlint/cli": "^20.4.1",
