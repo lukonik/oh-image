@@ -9,7 +9,6 @@ export default defineConfig({
   external: [
     "react",
     "react-dom",
-    "cacache",
     "node:path",
     "node:crypto",
     "node:fs",
