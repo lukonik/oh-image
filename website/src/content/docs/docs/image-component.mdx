@@ -157,7 +157,12 @@ When `asap` is enabled, the component:
 1. Sets `loading="eager"` to disable lazy loading
 2. Sets `decoding="async"` for non-blocking decoding
 3. Sets `fetchPriority="high"` to prioritize the download
-4. Calls `preload()` from React DOM to start fetching immediately
+4. Calls `preload()` from React DOM to start fetching immediately (React 19+ only)
+
+:::note
+The `preload()` function is only available in React 19 and above. 
+When using React 18, the preload call will be skipped.
+:::
 
 ### When to use
 
