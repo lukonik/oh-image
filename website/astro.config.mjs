@@ -22,6 +22,8 @@ export default defineConfig({
           items: [
             // Each item here is one entry in the navigation menu.
             { label: "Introduction", slug: "docs/introduction" },
+            { label: "Installation", slug: "docs/installation" },
+            { label: "Usage", slug: "docs/usage" },
             { label: "Plugin", slug: "docs/plugin" },
             { label: "React component", slug: "docs/image-component" },
             { label: "Typescript", slug: "docs/typescript" },

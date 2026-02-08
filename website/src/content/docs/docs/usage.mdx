@@ -1,0 +1,61 @@
+---
+title: Usage
+description: How to use oh-image in your project
+---
+
+## Basic usage
+
+Import an image with the `?oh` query parameter and use it with the `<Image>` component:
+
+```tsx
+import { Image } from "@lonik/oh-image/react";
+import photo from "./assets/photo.jpg?oh";
+
+function App() {
+  return <Image src={photo} alt="A photo" />;
+}
+```
+
+## With placeholder
+
+Enable the blur-up placeholder effect for a smoother loading experience:
+
+```tsx
+import photo from "./assets/photo.jpg?oh&placeholder=true";
+
+<Image src={photo} alt="A photo" placeholder />
+```
+
+## Priority loading
+
+For above-the-fold images, use `asap` to load them immediately:
+
+```tsx
+<Image src={heroImage} alt="Hero" asap placeholder />
+```
+
+## Fill container
+
+Make an image fill its parent container:
+
+```tsx
+<div style={{ position: 'relative', width: '100%', height: 400 }}>
+  <Image src={banner} alt="Banner" fill />
+</div>
+```
+
+## Responsive sizing
+
+Specify how the image scales at different viewport sizes:
+
+```tsx
+<Image
+  src={photo}
+  alt="Photo"
+  sizes="(max-width: 768px) 100vw, 50vw"
+/>
+```
+
+## Image placement
+
+Place images in `src/assets/` or any source directory. Do not use the `public/` folder — Vite does not process files from there.
