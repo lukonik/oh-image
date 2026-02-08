@@ -1,0 +1,447 @@
+---
+title: React Component
+description: How to use the oh-image React component for optimized images
+---
+
+## Overview
+
+The `<Image>` component is a React component designed to render optimized images processed by the oh-image plugin. It handles responsive images, lazy loading, blur-up placeholders, and priority loading out of the box.
+
+```tsx
+import { Image } from "@lonik/oh-image/react";
+import photo from "./assets/photo.jpg?oh";
+
+function App() {
+  return <Image src={photo} alt="A photo" placeholder />;
+}
+```
+
+## Props
+
+The component accepts the following props:
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `src` | `string \| ImageSrc` | Yes | Image source URL or optimized image object |
+| `alt` | `string` | Yes | Alternative text for accessibility |
+| `placeholder` | `boolean` | No | Enable blur-up placeholder effect |
+| `placeholderUrl` | `string` | No | Custom placeholder image URL |
+| `asap` | `boolean` | No | Load image immediately with high priority |
+| `fill` | `boolean` | No | Make image fill its container |
+| `width` | `number` | No | Image width in pixels |
+| `height` | `number` | No | Image height in pixels |
+| `sizes` | `string` | No | Responsive sizes attribute |
+| `loading` | `"lazy" \| "eager"` | No | Loading strategy |
+| `decoding` | `"async" \| "sync" \| "auto"` | No | Decoding hint |
+| `fetchPriority` | `"high" \| "low" \| "auto"` | No | Fetch priority hint |
+| `className` | `string` | No | CSS class name |
+| `style` | `CSSProperties` | No | Inline styles |
+
+---
+
+## src
+
+The `src` prop accepts either a simple URL string or an `ImageSrc` object returned by the oh-image plugin.
+
+### Using with the plugin (recommended)
+
+When you import an image with the `?oh` query parameter, the plugin returns an `ImageSrc` object containing all the optimized variants:
+
+```tsx
+import heroImage from "./assets/hero.jpg?oh";
+
+// heroImage contains: { src, width, height, srcSets, placeholderUrl }
+<Image src={heroImage} alt="Hero" />
+```
+
+The component automatically extracts:
+- The main image URL
+- Original dimensions for proper aspect ratio
+- Responsive srcSet for different screen sizes
+- Placeholder URL for blur-up effect
+
+### Using with a plain URL
+
+You can also pass a regular URL string, though you lose the automatic responsive images:
+
+```tsx
+<Image src="/images/photo.jpg" alt="Photo" width={800} height={600} />
+```
+
+When using a plain URL, you should provide `width` and `height` manually to prevent layout shift.
+
+---
+
+## alt
+
+The `alt` prop provides alternative text for the image. This is essential for accessibility and SEO.
+
+```tsx
+<Image src={photo} alt="A golden retriever playing in the park" />
+```
+
+Always provide meaningful descriptions. Avoid generic text like "image" or "photo". If the image is purely decorative, use an empty string:
+
+```tsx
+<Image src={decorativePattern} alt="" />
+```
+
+---
+
+## placeholder
+
+The `placeholder` prop enables a blur-up loading effect. A low-resolution blurred version of the image is shown immediately, then replaced with the full image once loaded.
+
+```tsx
+<Image src={photo} alt="Photo" placeholder />
+```
+
+### How it works
+
+1. The plugin generates a small, blurred placeholder image during processing
+2. The component sets this as a CSS background image
+3. The full image loads on top
+4. The transition creates a smooth blur-up effect
+
+### Requirements
+
+For the placeholder to work, the image must be processed with placeholder generation enabled. This can be done:
+
+**Globally in plugin config:**
+```ts
+ohImage({
+  placeholder: true
+})
+```
+
+**Per-image via query parameter:**
+```ts
+import photo from "./photo.jpg?oh&placeholder=true";
+```
+
+If `placeholder` is set to `true` but no placeholder URL is available, a console warning will be displayed.
+
+---
+
+## placeholderUrl
+
+The `placeholderUrl` prop allows you to override the default placeholder image with a custom one.
+
+```tsx
+<Image
+  src={photo}
+  alt="Photo"
+  placeholder
+  placeholderUrl="/custom-placeholder.jpg"
+/>
+```
+
+This is useful when:
+- You want to use a custom loading image
+- You're using a plain URL for `src` but still want the blur-up effect
+- You need a specific placeholder that differs from the auto-generated one
+
+---
+
+## asap
+
+The `asap` prop (short for "as soon as possible") tells the browser to load the image immediately with the highest priority.
+
+```tsx
+<Image src={heroImage} alt="Hero banner" asap />
+```
+
+### What it does
+
+When `asap` is enabled, the component:
+1. Sets `loading="eager"` to disable lazy loading
+2. Sets `decoding="async"` for non-blocking decoding
+3. Sets `fetchPriority="high"` to prioritize the download
+4. Calls `preload()` from React DOM to start fetching immediately
+
+### When to use
+
+Use `asap` for above-the-fold images that are critical to the initial page experience:
+- Hero banners
+- Header logos
+- Product images on landing pages
+- Any image visible without scrolling
+
+```tsx
+// Good: Hero is visible immediately
+<Image src={heroImage} alt="Hero" asap />
+
+// Avoid: Gallery images below the fold should lazy load
+<Image src={galleryImage} alt="Gallery item" /> // Uses default lazy loading
+```
+
+---
+
+## fill
+
+The `fill` prop makes the image fill its parent container, similar to `object-fit: cover` with `background-image`.
+
+```tsx
+<div style={{ position: 'relative', width: '100%', height: 400 }}>
+  <Image src={banner} alt="Banner" fill />
+</div>
+```
+
+### What it does
+
+When `fill` is enabled:
+- Sets `width: 100%` and `height: 100%`
+- Sets `inset: 0` for absolute positioning
+- Automatically sets `sizes="100vw"` if not specified
+
+### Requirements
+
+The parent container must have:
+- `position: relative`, `absolute`, or `fixed`
+- Defined dimensions (width and height)
+
+### Example with aspect ratio
+
+```tsx
+<div style={{
+  position: 'relative',
+  width: '100%',
+  aspectRatio: '16/9'
+}}>
+  <Image src={video} alt="Video thumbnail" fill />
+</div>
+```
+
+---
+
+## width and height
+
+The `width` and `height` props specify the image dimensions in pixels.
+
+```tsx
+<Image src={photo} alt="Photo" width={800} height={600} />
+```
+
+### Automatic dimensions
+
+When using an `ImageSrc` object from the plugin, dimensions are automatically extracted:
+
+```tsx
+import photo from "./photo.jpg?oh";
+
+// No need to specify width/height - they're included in the import
+<Image src={photo} alt="Photo" />
+```
+
+### Why dimensions matter
+
+Providing dimensions helps the browser:
+- Reserve space before the image loads, preventing layout shift
+- Calculate the correct aspect ratio
+- Optimize rendering performance
+
+### Overriding dimensions
+
+You can override the automatic dimensions if needed:
+
+```tsx
+import photo from "./photo.jpg?oh"; // Original: 1920x1080
+
+// Display at a smaller size
+<Image src={photo} alt="Photo" width={640} height={360} />
+```
+
+---
+
+## sizes
+
+The `sizes` prop tells the browser how wide the image will be at different viewport sizes. This helps the browser select the most appropriate image from the srcSet.
+
+```tsx
+<Image
+  src={photo}
+  alt="Photo"
+  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+/>
+```
+
+### How it works
+
+The `sizes` attribute is a comma-separated list of media conditions and widths:
+- `(max-width: 768px) 100vw` — On mobile, the image is 100% of viewport width
+- `(max-width: 1200px) 50vw` — On tablet, the image is 50% of viewport width
+- `33vw` — On desktop, the image is 33% of viewport width
+
+### Common patterns
+
+**Full-width hero:**
+```tsx
+<Image src={hero} alt="Hero" sizes="100vw" />
+```
+
+**Two-column layout:**
+```tsx
+<Image src={photo} alt="Photo" sizes="(max-width: 768px) 100vw, 50vw" />
+```
+
+**Three-column grid:**
+```tsx
+<Image
+  src={photo}
+  alt="Photo"
+  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+/>
+```
+
+### Default behavior
+
+When using `fill`, the component automatically sets `sizes="100vw"` if not specified.
+
+---
+
+## loading
+
+The `loading` prop controls when the browser starts loading the image.
+
+```tsx
+<Image src={photo} alt="Photo" loading="lazy" />
+```
+
+### Options
+
+| Value | Behavior |
+|-------|----------|
+| `"lazy"` | Load when the image enters the viewport (default browser behavior) |
+| `"eager"` | Load immediately, regardless of viewport position |
+
+### Default behavior
+
+The component uses the browser's default loading behavior. For most images, the browser will lazy load them automatically.
+
+Use `loading="eager"` for critical above-the-fold images, or use the `asap` prop for even higher priority.
+
+---
+
+## decoding
+
+The `decoding` prop provides a hint to the browser about how to decode the image.
+
+```tsx
+<Image src={photo} alt="Photo" decoding="async" />
+```
+
+### Options
+
+| Value | Behavior |
+|-------|----------|
+| `"async"` | Decode asynchronously to avoid blocking other content |
+| `"sync"` | Decode synchronously (may block rendering) |
+| `"auto"` | Let the browser decide (default) |
+
+In most cases, `"async"` is preferred for better performance. The `asap` prop automatically sets this to `"async"`.
+
+---
+
+## fetchPriority
+
+The `fetchPriority` prop hints to the browser how important this image is relative to other resources.
+
+```tsx
+<Image src={heroImage} alt="Hero" fetchPriority="high" />
+```
+
+### Options
+
+| Value | Behavior |
+|-------|----------|
+| `"high"` | Fetch with high priority (for critical images) |
+| `"low"` | Fetch with low priority (for less important images) |
+| `"auto"` | Let the browser decide (default) |
+
+The `asap` prop automatically sets this to `"high"` and triggers a preload.
+
+---
+
+## className
+
+The `className` prop applies CSS classes to the image element.
+
+```tsx
+<Image src={photo} alt="Photo" className="rounded-lg shadow-md" />
+```
+
+Works with any CSS framework:
+
+```tsx
+// Tailwind CSS
+<Image src={photo} alt="Photo" className="w-full h-auto object-cover" />
+
+// CSS Modules
+<Image src={photo} alt="Photo" className={styles.heroImage} />
+```
+
+---
+
+## style
+
+The `style` prop applies inline CSS styles to the image element.
+
+```tsx
+<Image
+  src={photo}
+  alt="Photo"
+  style={{
+    borderRadius: '8px',
+    objectFit: 'cover'
+  }}
+/>
+```
+
+### Style merging
+
+The component merges styles in this order (later overrides earlier):
+1. Placeholder styles (background image for blur-up)
+2. Fill styles (if `fill` is enabled)
+3. Your custom `style` prop
+
+This means your styles take precedence over the component's internal styles.
+
+---
+
+## Complete example
+
+Here's an example combining multiple props:
+
+```tsx
+import { Image } from "@lonik/oh-image/react";
+import heroImage from "./assets/hero.jpg?oh&placeholder=true";
+import galleryImage from "./assets/gallery.jpg?oh&placeholder=true";
+
+function Page() {
+  return (
+    <div>
+      {/* Hero: loads immediately, full width */}
+      <div style={{ position: 'relative', height: 500 }}>
+        <Image
+          src={heroImage}
+          alt="Welcome to our site"
+          fill
+          asap
+          placeholder
+        />
+      </div>
+
+      {/* Gallery: lazy loads, responsive sizing */}
+      <div className="grid grid-cols-3 gap-4">
+        <Image
+          src={galleryImage}
+          alt="Gallery photo"
+          placeholder
+          sizes="(max-width: 768px) 100vw, 33vw"
+          className="rounded-lg"
+        />
+      </div>
+    </div>
+  );
+}
+```
