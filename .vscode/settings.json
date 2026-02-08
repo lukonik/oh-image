@@ -5,7 +5,14 @@
     "**/.hg": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
-    "node_modules": true
+    // "**/node_modules": true,
+    // "**/dist":true,
+    "**/__screenshots__": true
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never",
+    "source.removeUnusedImports": "always"
   },
   "debug.javascript.terminalOptions": {
     "resolveSourceMapLocations": [
