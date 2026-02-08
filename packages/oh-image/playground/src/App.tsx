@@ -4,7 +4,7 @@ export function App() {
   console.log(storm);
   return (
     <div>
-      <Image src={storm} />
+      <Image src={storm} placeholder asap />
       <h1>HELO</h1>
     </div>
   );

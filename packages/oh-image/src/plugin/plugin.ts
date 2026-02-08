@@ -15,7 +15,7 @@ import sharp from "sharp";
 const PROCESS_KEY = "oh";
 
 const DEFAULT_CONFIGS: PluginConfig = {
-  distDir: "oh-image",
+  distDir: "oh-images",
   bps: [16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920],
   format: "webp",
   blur: false,
@@ -33,7 +33,6 @@ export const SUPPORTED_IMAGE_FORMATS =
   /\.(jpe?g|png|webp|avif|gif|tiff?|svg)(\?.*)?$/i;
 
 const DEV_DIR = "/@oh-images/";
-const BUILD_DIR = "/@oh-images/";
 
 export function ohImage(options?: Partial<PluginConfig>) {
   let isBuild = false;
@@ -65,7 +64,7 @@ export function ohImage(options?: Partial<PluginConfig>) {
     }
 
     // for build the joined path is returned with DEV_SERVER_PREFIX and assets that server will handle properly
-    return join(assetsDir, BUILD_DIR, uniqueFileId);
+    return join(assetsDir, config.distDir, uniqueFileId);
   }
 
   return {
@@ -166,7 +165,7 @@ export function ohImage(options?: Partial<PluginConfig>) {
               origin: origin,
             };
             imageEntries.set(placeholderIdentifier, placeholderEntry);
-            src.placeholderUrl = mainIdentifier;
+            src.placeholderUrl = placeholderIdentifier;
           }
 
           if (mergedOptions.bps) {

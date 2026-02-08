@@ -48,6 +48,7 @@ function getPlaceholderStyles(props: ImageProps) {
     backgroundPosition: "50% 50%",
     backgroundRepeat: "no-repeat",
     backgroundImage: `url(${props.placeholderUrl})`,
+    backgroundSize: "cover",
   };
   return styles;
 }
