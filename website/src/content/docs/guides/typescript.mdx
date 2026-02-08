@@ -1,0 +1,39 @@
+---
+title: TypeScript
+description: TypeScript support and configuration for oh-image
+---
+
+oh-image is written in TypeScript, so you get full type safety and autocomplete out of the box.
+
+## Import type definitions
+
+When you import an image with the `?oh` query parameter, TypeScript needs to understand what type that import returns. Without proper configuration, you'll see an error like:
+
+```
+Cannot find module './image.jpg?oh' or its corresponding type declarations.
+```
+
+There are two ways to fix this:
+
+### Option 1: Using `vite-env.d.ts` (recommended)
+
+If your project has a `vite-env.d.ts` file (created by Vite's scaffolding), add a triple-slash reference:
+
+```ts
+/// <reference types="vite/client" />
+/// <reference types="@lonik/oh-image/client" />
+```
+
+### Option 2: Using the `types` array in tsconfig.json
+
+Add `@lonik/oh-image/client` to the `types` array in your `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "types": ["vite/client", "@lonik/oh-image/client"]
+  }
+}
+```
+
+**Note:** When you specify a `types` array, TypeScript only includes the types you list. Make sure to include other type definitions your project needs (like `vite/client`).

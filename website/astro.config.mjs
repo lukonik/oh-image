@@ -25,6 +25,7 @@ export default defineConfig({
             { label: "Example Guide", slug: "guides/example" },
             { label: "Plugin", slug: "guides/plugin" },
             { label: "React component", slug: "guides/image-component" },
+            { label: "Typescript", slug: "guides/typescript" },
           ],
         },
         {
