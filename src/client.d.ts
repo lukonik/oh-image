@@ -1,6 +1,4 @@
-import type { ImageSrc } from "@lonik/oh-image/plugin";
-
 declare module "*?oh" {
-  const imageSrc: ImageSrc;
+  const imageSrc: any;
   export default imageSrc;
 }
