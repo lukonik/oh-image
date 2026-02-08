@@ -13,6 +13,8 @@ export default defineConfig({
     "node:path",
     "node:crypto",
     "node:fs",
+    "p-limit",
     "node:fs/promises",
+    'query-string'
   ],
 });

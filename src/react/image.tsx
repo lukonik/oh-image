@@ -1,30 +1,6 @@
 import { preload } from "react-dom";
-import type { ImageSrc } from "../plugin/types";
 import type { CSSProperties } from "react";
-
-type ImageSrcType = string | ImageSrc;
-
-export interface ImageProps extends Partial<
-  Pick<
-    HTMLImageElement,
-    | "alt"
-    | "fetchPriority"
-    | "decoding"
-    | "loading"
-    | "height"
-    | "width"
-    | "srcset"
-    | "className"
-    | "sizes"
-  >
-> {
-  asap?: boolean;
-  src: ImageSrcType;
-  placeholderUrl?: string | undefined;
-  placeholder?: boolean;
-  style?: CSSProperties;
-  fill?: boolean;
-}
+import type { ImageProps } from "./types";
 
 function resolveOptions(props: ImageProps) {
   const { src, ...rest } = props;
@@ -72,6 +48,7 @@ function getPlaceholderStyles(props: ImageProps) {
     backgroundPosition: "50% 50%",
     backgroundRepeat: "no-repeat",
     backgroundImage: `url(${props.placeholderUrl})`,
+    backgroundSize: "cover",
   };
   return styles;
 }

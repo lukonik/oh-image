@@ -87,7 +87,7 @@ describe("Image", () => {
     });
   });
 
-  it("should do nothing when placeholder is true but blurUrl is not defined", async () => {
+  it("should do nothing when placeholder is true but placeholder is not defined", async () => {
     const result = await render(<Image src="/" placeholder />);
     const image = result.getByRole("img");
     expect(image).not.toHaveStyle({
