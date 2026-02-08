@@ -1,32 +1,41 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
-import starlight from '@astrojs/starlight';
-import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from "astro/config";
+import starlight from "@astrojs/starlight";
+import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-	integrations: [
-		starlight({
-			title: 'Oh Image!',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
-			sidebar: [
-				{
-					label: 'Guides',
-					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Introduction', slug: 'guides/introduction' },
-						{ label: 'Example Guide', slug: 'guides/example' },
-					],
-				},
-				{
-					label: 'Reference',
-					autogenerate: { directory: 'reference' },
-				},
-			],
-			customCss: ['./src/styles/global.css'],
-		}),
-	],
-	vite: {
-		plugins: [tailwindcss()],
-	},
+  integrations: [
+    starlight({
+      title: "Oh Image!",
+      plugins: [],
+      social: [
+        {
+          icon: "github",
+          label: "GitHub",
+          href: "https://github.com/withastro/starlight",
+        },
+      ],
+      sidebar: [
+        {
+          label: "Guides",
+          items: [
+            // Each item here is one entry in the navigation menu.
+            { label: "Introduction", slug: "guides/introduction" },
+            { label: "Example Guide", slug: "guides/example" },
+            { label: "Plugin", slug: "guides/plugin" },
+            { label: "React component", slug: "guides/image-component" },
+          ],
+        },
+        {
+          label: "Reference",
+          autogenerate: { directory: "reference" },
+        },
+      ],
+      customCss: ["./src/styles/global.css"],
+    }),
+  ],
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });

@@ -1,0 +1,75 @@
+---
+title: Introduction
+description: Oh Image Introduction page
+---
+
+import { PackageManagers } from "starlight-package-managers";
+
+<span className="project-title pr-1">Oh Image</span> is an image component
+library that consists of two parts:
+<br /> A React image component that gives you power on top of the img element to
+have responsive, fast, and optimized images with sensible defaults. <br />
+A Vite plugin that handles image optimization automatically.
+<br />
+Think of it as the Next.js Image component, but for the Vite ecosystem.
+
+## Installation
+
+Install the package with your favorite package manager:
+
+<PackageManagers type="add" pkg="@lonik/oh-image sharp" />
+
+The library depends on [sharp](https://sharp.pixelplumbing.com/) — a high-performance image optimization library.
+
+## Usage
+
+To use the library, import the oh-image plugin into your Vite config:
+
+```ts
+import { ohImage } from "@lonik/oh-image/plugin";
+...
+export default defineConfig({
+    plugins: [ohImage()],
+})
+```
+
+Now, to optimize an image, add the `?oh` suffix to the image import:
+
+```ts
+// ?oh tells the plugin to optimize this image
+import carImage from "./assets/car.png?oh";
+```
+
+:::note
+To optimize images, they must not be in the public directory. 
+Vite doesn't process the public directory — it simply copies files as-is — 
+so the oh-image plugin will skip processing even if `?oh` is in the suffix. 
+You can place your images anywhere else; we recommend using an assets directory.
+
+Example:
+
+```ts
+// This won't work because the image is served from public
+import carImage from "/car.png?oh";
+
+// This will work as expected
+import car2Image from "./assets/car.png?oh";
+
+// This will also work, including nested folders
+import car3Image from "./car.png?oh";
+```
+
+:::
+
+As a final step, use the `Image` component to render the optimized image:
+
+```tsx
+import { Image } from "@lonik/oh-image/react";
+import carImage from "./car.png?oh";
+
+function App() {
+  return <Image src={carImage} placeholder />;
+}
+```
+
+This renders an image component with sensible defaults, fully preconfigured srcSets for different breakpoints, and a placeholder image that displays quickly until the full image loads.

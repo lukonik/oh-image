@@ -1,0 +1,153 @@
+---
+title: The Plugin
+description: How the oh-image Vite plugin works under the hood
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## What is oh-image plugin?
+
+If you're building with Vite and want optimized images without switching to Next.js, oh-image is the solution.
+
+**oh-image** is a Vite plugin that provides automatic image optimization within the Vite ecosystem. It handles resizing, format conversion, responsive image generation, and blur-up placeholder creation.
+
+The package consists of two parts:
+- **The Plugin** (`@lonik/oh-image/plugin`) - Handles image processing: resizing, format conversion, and optimization
+- **The React Component** (`@lonik/oh-image/react`) - Provides an easy-to-use component for rendering optimized images
+
+## How it works
+
+The process is straightforward:
+
+### 1. Import an image with the `?oh` query parameter
+
+```ts
+import heroImage from "./assets/hero.png?oh";
+```
+
+The `?oh` suffix signals to the plugin that this image should be processed and optimized.
+
+### 2. The plugin processes the image
+
+When the plugin encounters the `?oh` parameter, it:
+- Reads the image metadata (dimensions, format, etc.)
+- Generates responsive versions at configured breakpoints
+- Returns an object containing all the necessary URLs
+
+### 3. Use the image in your component
+
+```tsx
+<Image src={heroImage} alt="Hero banner" placeholder />
+```
+
+The component automatically handles responsive images, lazy loading, and blur-up effects.
+
+## Dev vs Build mode
+
+The plugin behaves differently depending on whether you're in development or building for production.
+
+<Tabs>
+  <TabItem label="Dev Mode">
+    **Lazy processing** - Images are only optimized when they are requested. This keeps the dev server responsive.
+
+    When a page with an optimized image loads:
+    1. The browser requests the image
+    2. The plugin intercepts the request
+    3. The image is processed on-the-fly
+    4. The result is cached for subsequent requests
+
+    This approach is ideal for development since you don't need to wait for all images to process on every server restart.
+  </TabItem>
+  <TabItem label="Build Mode">
+    **Eager processing** - All images are processed during the build step before deployment.
+
+    The process:
+    1. Vite builds your application
+    2. The plugin processes all registered images
+    3. Optimized images are output to `assets/oh-images/`
+    4. Files are ready to be served from your CDN
+
+    The plugin uses parallel processing (up to 30 images concurrently) to keep build times reasonable.
+  </TabItem>
+</Tabs>
+
+| Aspect | Dev | Build |
+|--------|-----|-------|
+| When images are processed | When first requested | During build |
+| Where they're stored | Vite cache directory | `dist/assets/oh-images/` |
+| Speed priority | Fast iteration | Optimized output |
+
+## Image placement
+
+Images should **not** be placed in the `public/` folder, as Vite does not process files from that directory.
+
+Instead, place images in `src/assets/` or any other directory within your source folder.
+
+## Config options
+
+### Plugin config
+
+Pass options when you initialize the plugin:
+
+```ts
+ohImage({
+  // Your options here
+})
+```
+
+Here's what you can configure:
+
+| Option | Type | Default | What it does |
+|--------|------|---------|--------------|
+| `distDir` | `string` | `"oh-images"` | Folder name for processed images in your build |
+| `bps` | `number[]` | `[16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920]` | Breakpoints for responsive images (in pixels) |
+| `format` | `string` | `"webp"` | Output format for main images |
+| `blur` | `number \| boolean` | `false` | Apply blur effect to images |
+| `width` | `number \| null` | `null` | Resize width (null = keep original) |
+| `height` | `number \| null` | `null` | Resize height (null = keep original) |
+| `placeholder` | `boolean` | `false` | Generate blur placeholders by default |
+| `placeholderW` | `number` | `100` | Placeholder width in pixels |
+| `placeholderH` | `number` | `100` | Placeholder height in pixels |
+| `placeholderB` | `boolean \| number` | `true` | Blur amount for placeholder |
+| `placeholderF` | `string` | `"webp"` | Placeholder format |
+| `srcSetsF` | `string` | `"webp"` | Format for responsive srcSet images |
+
+### Example config
+
+```ts
+export default defineConfig({
+  plugins: [
+    ohImage({
+      bps: [640, 1024, 1920],      // Fewer breakpoints for smaller builds
+      format: "avif",              // AVIF for better compression
+      placeholder: true,           // Generate placeholders by default
+    })
+  ]
+});
+```
+
+### Per-image overrides
+
+Configuration can also be applied on a per-image basis using query parameters:
+
+```ts
+// Enable placeholder just for this image
+import hero from "./hero.jpg?oh&placeholder=true";
+
+// Use AVIF format and add blur
+import banner from "./banner.jpg?oh&format=avif&blur=5";
+
+// Custom breakpoints for this specific image
+import photo from "./photo.jpg?oh&bps=640,1080";
+
+// Resize to specific dimensions
+import thumb from "./thumb.jpg?oh&width=400&height=300";
+```
+
+## Supported formats
+
+**Input:** `.jpg`, `.jpeg`, `.png`, `.webp`, `.avif`, `.gif`, `.tiff`, `.svg`
+
+**Output:** Any format Sharp supports - `webp`, `avif`, `png`, `jpg`, `gif`, etc.
+
+WebP is the default due to its good compression and wide browser support. AVIF offers better compression but has slightly less browser support.
