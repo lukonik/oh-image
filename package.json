@@ -64,10 +64,10 @@
     "typescript-eslint": "^8.54.0",
     "vite": "^7.3.0",
     "vitest": "^4.0.16",
-    "vitest-browser-react": "^2.0.2"
+    "vitest-browser-react": "^2.0.2",
+    "@commitlint/config-conventional": "^20.4.1"
   },
   "dependencies": {
-    "@commitlint/config-conventional": "^20.4.1",
     "p-limit": "^7.3.0",
     "query-string": "^9.3.1"
   }

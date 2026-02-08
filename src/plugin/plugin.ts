@@ -1,18 +1,16 @@
+import { basename, extname, join, parse } from "node:path";
+import type { ImageEntry, ImageSrc, PluginConfig } from "./types";
 import {
   getRandomString,
-  queryToOptions,
   processImage,
+  queryToOptions,
   readFileSafe,
   saveFileSafe,
 } from "./utils";
-import { type Plugin } from "vite";
-import pLimit from "p-limit";
-import type { ImageEntry, ImageSrc, PluginConfig } from "./types";
 import type { FormatEnum } from "sharp";
-import { basename, extname, join, parse } from "node:path";
+import type { Plugin } from "vite";
+import pLimit from "p-limit";
 import sharp from "sharp";
-
-const PROCESS_KEY = "oh";
 
 const DEFAULT_CONFIGS: PluginConfig = {
   distDir: "oh-images",
@@ -28,6 +26,7 @@ const DEFAULT_CONFIGS: PluginConfig = {
   placeholderF: "webp",
   srcSetsF: "webp",
 };
+const PROCESS_KEY = "oh";
 
 export const SUPPORTED_IMAGE_FORMATS =
   /\.(jpe?g|png|webp|avif|gif|tiff?|svg)(\?.*)?$/i;
