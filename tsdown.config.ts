@@ -1,4 +1,5 @@
 import { defineConfig } from "tsdown";
+import { copyFileSync } from "node:fs";
 
 export default defineConfig({
   platform: "neutral",
@@ -6,7 +7,7 @@ export default defineConfig({
     plugin: "src/plugin/index.ts",
     react: "src/react/index.ts",
   },
-  dts:true,
+  dts: true,
   external: [
     "react",
     "react-dom",
@@ -15,6 +16,9 @@ export default defineConfig({
     "node:fs",
     "p-limit",
     "node:fs/promises",
-    'query-string'
+    "query-string",
   ],
+  onSuccess: () => {
+    copyFileSync("src/client.d.ts", "dist/client.d.ts");
+  },
 });

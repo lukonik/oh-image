@@ -22,6 +22,9 @@
     "./react": {
       "types": "./dist/react.d.ts",
       "default": "./dist/react.js"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts"
     }
   },
   "files": [
