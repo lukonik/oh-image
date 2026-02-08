@@ -1,6 +1,12 @@
-import { preload } from "react-dom";
+import * as ReactDOM from "react-dom";
 import type { CSSProperties } from "react";
 import type { ImageProps } from "./types";
+// preload is only available in React 19+
+const preload =
+  "preload" in ReactDOM &&
+  typeof (ReactDOM as { preload?: unknown }).preload === "function"
+    ? (ReactDOM as { preload: (href: string, options: { as: string; fetchPriority: string }) => void }).preload
+    : null;
 
 function resolveOptions(props: ImageProps) {
   const { src, ...rest } = props;
@@ -8,7 +14,6 @@ function resolveOptions(props: ImageProps) {
     src: string;
     srcset?: string;
   };
-
   if (typeof src === "object") {
     resolved.src = src.src;
     resolved.width ??= src.width;
@@ -25,7 +30,9 @@ function resolveOptions(props: ImageProps) {
     resolved.decoding = "async";
     resolved.loading = "eager";
     resolved.fetchPriority = "high";
-    preload(resolved.src, { as: "image", fetchPriority: "high" });
+    if (preload) {
+      preload(resolved.src, { as: "image", fetchPriority: "high" });
+    }
   }
 
   if (props.fill) {
