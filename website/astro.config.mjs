@@ -18,19 +18,14 @@ export default defineConfig({
       ],
       sidebar: [
         {
-          label: "Guides",
+          label: "Docs",
           items: [
             // Each item here is one entry in the navigation menu.
-            { label: "Introduction", slug: "guides/introduction" },
-            { label: "Example Guide", slug: "guides/example" },
-            { label: "Plugin", slug: "guides/plugin" },
-            { label: "React component", slug: "guides/image-component" },
-            { label: "Typescript", slug: "guides/typescript" },
+            { label: "Introduction", slug: "docs/introduction" },
+            { label: "Plugin", slug: "docs/plugin" },
+            { label: "React component", slug: "docs/image-component" },
+            { label: "Typescript", slug: "docs/typescript" },
           ],
-        },
-        {
-          label: "Reference",
-          autogenerate: { directory: "reference" },
         },
       ],
       customCss: ["./src/styles/global.css"],
