@@ -1,26 +1,18 @@
 import type { ImgHTMLAttributes } from "react";
 
-/**
- * Image source type - can be either a simple URL string or a full ImageSrc object
- */
 type ImageSrcType = string | ImageSrc;
 
-/**
- * Optimized image source with multiple responsive variants
- */
 export interface ImageSrc {
-  /** Original image width in pixels */
   width: number;
-  /** Original image height in pixels */
+
   height: number;
-  /** Optional low-quality placeholder image URL for blur-up effect */
+
   placeholderUrl?: string;
-  /** Array of responsive image variants for different screen sizes */
+
   srcSets: string;
-  /** Primary image source URL */
+
   src: string;
 }
-
 
 export interface ImageProps extends Partial<
   Pick<

@@ -12,19 +12,15 @@ import type { Plugin } from "vite";
 import pLimit from "p-limit";
 import sharp from "sharp";
 
+const DEFAULT_IMAGE_FORMAT: keyof FormatEnum = "webp";
+const PLACEHOLDER_IMG_SIZE = 8;
+const PLACEHOLDER_BLUR_QUALITY = 70;
+
 const DEFAULT_CONFIGS: PluginConfig = {
   distDir: "oh-images",
   bps: [16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920],
   format: "webp",
-  blur: false,
-  width: null,
-  height: null,
   placeholder: false,
-  placeholderH: 100,
-  placeholderW: 100,
-  placeholderB: true,
-  placeholderF: "webp",
-  srcSetsF: "webp",
 };
 const PROCESS_KEY = "oh";
 
@@ -62,7 +58,7 @@ export function ohImage(options?: Partial<PluginConfig>) {
       return join(DEV_DIR, uniqueFileId);
     }
 
-    // for build the joined path is returned with DEV_SERVER_PREFIX and assets that server will handle properly
+    // for build the joined path is returned with DIST_DIR and assets that server will handle properly
     return join(assetsDir, config.distDir, uniqueFileId);
   }
 
@@ -135,7 +131,6 @@ export function ohImage(options?: Partial<PluginConfig>) {
           const mainEntry: ImageEntry = {
             width: mergedOptions.width,
             height: mergedOptions.height,
-            blur: mergedOptions.blur,
             format: mergedOptions.format, // here format can be null as long as
             // there is format in name
             origin: origin,
@@ -151,16 +146,37 @@ export function ohImage(options?: Partial<PluginConfig>) {
 
           // if placeholder is specified as placeholder as well
           if (parsed.options?.placeholder) {
+            let placeholderHeight: number = 0;
+            let placeholderWidth: number = 0;
+
+            // Shrink the image's largest dimension
+            if (metadata.width >= metadata.height) {
+              placeholderWidth = PLACEHOLDER_IMG_SIZE;
+              placeholderHeight = Math.max(
+                Math.round(
+                  (metadata.height / metadata.width) * PLACEHOLDER_IMG_SIZE,
+                ),
+                1,
+              );
+            } else {
+              placeholderWidth = Math.max(
+                Math.round(
+                  (metadata.width / metadata.height) * PLACEHOLDER_IMG_SIZE,
+                ),
+                1,
+              );
+              placeholderHeight = PLACEHOLDER_IMG_SIZE;
+            }
             const placeholderIdentifier = genIdentifier(
               name,
-              mergedOptions.placeholderF,
+              DEFAULT_IMAGE_FORMAT,
               "placeholder",
             );
             const placeholderEntry: ImageEntry = {
-              width: mergedOptions.placeholderW,
-              height: mergedOptions.placeholderH,
-              format: mergedOptions.placeholderF,
-              blur: mergedOptions.placeholderB,
+              width: placeholderWidth,
+              height: placeholderHeight,
+              format: DEFAULT_IMAGE_FORMAT,
+              blur: PLACEHOLDER_BLUR_QUALITY,
               origin: origin,
             };
             imageEntries.set(placeholderIdentifier, placeholderEntry);
@@ -172,12 +188,12 @@ export function ohImage(options?: Partial<PluginConfig>) {
             for (const breakpoint of mergedOptions.bps) {
               const srcSetIdentifier = genIdentifier(
                 name,
-                mergedOptions.srcSetsF,
+                DEFAULT_IMAGE_FORMAT,
                 `breakpoint-${breakpoint}`,
               );
               const srcSetEntry: ImageEntry = {
                 width: breakpoint,
-                format: mergedOptions.srcSetsF,
+                format: DEFAULT_IMAGE_FORMAT,
                 origin: origin,
               };
               imageEntries.set(srcSetIdentifier, srcSetEntry);
