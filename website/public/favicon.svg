@@ -1,1 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><path fill-rule="evenodd" d="M81 36 64 0 47 36l-1 2-9-10a6 6 0 0 0-9 9l10 10h-2L0 64l36 17h2L28 91a6 6 0 1 0 9 9l9-10 1 2 17 36 17-36v-2l9 10a6 6 0 1 0 9-9l-9-9 2-1 36-17-36-17-2-1 9-9a6 6 0 1 0-9-9l-9 10v-2Zm-17 2-2 5c-4 8-11 15-19 19l-5 2 5 2c8 4 15 11 19 19l2 5 2-5c4-8 11-15 19-19l5-2-5-2c-8-4-15-11-19-19l-2-5Z" clip-rule="evenodd"/><path d="M118 19a6 6 0 0 0-9-9l-3 3a6 6 0 1 0 9 9l3-3Zm-96 4c-2 2-6 2-9 0l-3-3a6 6 0 1 1 9-9l3 3c3 2 3 6 0 9Zm0 82c-2-2-6-2-9 0l-3 3a6 6 0 1 0 9 9l3-3c3-2 3-6 0-9Zm96 4a6 6 0 0 1-9 9l-3-3a6 6 0 1 1 9-9l3 3Z"/><style>path{fill:#000}@media (prefers-color-scheme:dark){path{fill:#fff}}</style></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4F46E5" />
+      <stop offset="100%" stop-color="#9333EA" />
+    </linearGradient>
+  </defs>
+
+  <!-- Main Background -->
+  <rect x="56" y="56" width="400" height="400" rx="60" fill="url(#bg-gradient)" />
+  
+  <!-- Inner Frame representing an Image -->
+  <rect x="106" y="106" width="300" height="300" rx="30" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.5)" stroke-width="20" />
+
+  <!-- Abstract Landscape / Image Icon -->
+  <mask id="mask-landscape">
+    <rect x="106" y="106" width="300" height="300" rx="30" fill="white" />
+  </mask>
+
+  <g mask="url(#mask-landscape)">
+    <!-- Sun -->
+    <circle cx="180" cy="180" r="35" fill="#FBBF24" />
+    
+    <!-- Mountains -->
+    <path d="M50 450 L200 250 L350 450 Z" fill="#E0E7FF" opacity="0.9" />
+    <path d="M250 450 L380 300 L550 450 Z" fill="#C7D2FE" opacity="0.9" />
+  </g>
+
+  <!-- Lightning Bolt for Optimization/Speed -->
+  <path d="M360 80 L320 200 H370 L310 350 L420 180 H360 L360 80Z" fill="#F59E0B" stroke="white" stroke-width="20" />
+
+</svg>
