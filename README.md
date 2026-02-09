@@ -1,4 +1,4 @@
-# Oh Image!
+# Oh Image
 
 The missing `<Image />` component for Vite and React.
 

@@ -9,7 +9,7 @@ export default defineConfig({
   base: "/oh-image",
   integrations: [
     starlight({
-      title: "Oh Image!",
+      title: "Oh Image",
       plugins: [],
       social: [
         {
