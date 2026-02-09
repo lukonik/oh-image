@@ -21,7 +21,7 @@ const DEFAULT_CONFIGS: PluginConfig = {
   distDir: "oh-images",
   bps: [16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920],
   format: "webp",
-  placeholder: false,
+  placeholder: true,
 };
 const PROCESS_KEY = "oh";
 

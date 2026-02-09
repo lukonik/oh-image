@@ -73,5 +73,14 @@
   "dependencies": {
     "p-limit": "^7.3.0",
     "query-string": "^9.3.1"
-  }
+  },
+  "keywords": [
+    "react",
+    "reactjs",
+    "react-components",
+    "react-component-library",
+    "vite",
+    "vitejs",
+    "vite-plugin"
+  ]
 }
