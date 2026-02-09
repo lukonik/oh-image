@@ -25,7 +25,7 @@ const DEFAULT_CONFIGS: PluginConfig = {
 const PROCESS_KEY = "oh";
 
 export const SUPPORTED_IMAGE_FORMATS =
-  /\.(jpe?g|png|webp|avif|gif|tiff?|svg)(\?.*)?$/i;
+  /\.(jpe?g|png|webp|avif|gif|svg)(\?.*)?$/i;
 
 const DEV_DIR = "/@oh-images/";
 
