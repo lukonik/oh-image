@@ -6,7 +6,6 @@ type ImageSrcType = string | ImageSrc;
 export interface ImageProps extends Partial<
   Pick<
     ImgHTMLAttributes<HTMLImageElement>,
-    | "alt"
     | "fetchPriority"
     | "decoding"
     | "loading"
@@ -18,6 +17,8 @@ export interface ImageProps extends Partial<
     | "style"
   >
 > {
+  /** Alternative text for the image, required for accessibility. Use an empty string for decorative images. */
+  alt: string;
   /** Configures the Image component to load the image immediately. */
   asap?: boolean;
 

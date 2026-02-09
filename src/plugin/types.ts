@@ -25,9 +25,6 @@ export interface ImageOptions {
   /** Output format for the main image (e.g., 'webp', 'avif', 'png') */
   format?: keyof FormatEnum | null;
 
-  /** Blur amount (true for default blur, or a number for sigma value) */
-  blur?: number | boolean;
-
   /** Whether to generate a placeholder image for lazy loading */
   placeholder?: boolean;
 
