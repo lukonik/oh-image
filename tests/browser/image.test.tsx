@@ -76,9 +76,7 @@ describe("Image", () => {
   });
 
   it("should display placeholder when placeholder is true", async () => {
-    const result = await render(
-      <Image src="/" placeholder placeholderUrl="/blur" />,
-    );
+    const result = await render(<Image src="/" placeholderUrl="/blur" />);
     const image = await result.getByRole("img");
     expect(image).toHaveStyle({
       backgroundPosition: "50% 50%",
@@ -87,32 +85,15 @@ describe("Image", () => {
     });
   });
 
-  it("should do nothing when placeholder is true but placeholder is not defined", async () => {
-    const result = await render(<Image src="/" placeholder />);
-    const image = result.getByRole("img");
-    expect(image).not.toHaveStyle({
-      backgroundPosition: "50% 50%",
-    });
-  });
-
   it("should take attributes from src when it is object", async () => {
     const src = {
       width: 500,
       height: 600,
       src: "/image.jpg",
-      srcSets: [
-        {
-          width: "50w",
-          src: "/image-50.jpg",
-        },
-        {
-          width: "100w",
-          src: "/image-100.jpg",
-        },
-      ],
+      srcSets: `/image-50.jpg 50w, /image-100.jpg 100w`,
       placeholderUrl: "/blur",
     };
-    const result = await render(<Image src={src} placeholder />);
+    const result = await render(<Image src={src} />);
 
     function attributeEquals(key: string, value: string) {
       expect(result.getByRole("img")).toHaveAttribute(key, value);
@@ -132,26 +113,16 @@ describe("Image", () => {
       width: 500,
       height: 600,
       src: "/image.jpg",
-      srcSets: [
-        {
-          width: "50w",
-          src: "/image-50.jpg",
-        },
-        {
-          width: "100w",
-          src: "/image-100.jpg",
-        },
-      ],
+      srcSets: `/image-50.jpg 50w, /image-100.jpg 100w`,
       placeholderUrl: "/blur",
     };
     const result = await render(
       <Image
         src={src}
         placeholderUrl="/manual-blur"
-        placeholder
         width={10}
         height={20}
-        srcset="image-1 0w"
+        srcSet="image-1 0w"
       />,
     );
 
