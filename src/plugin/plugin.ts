@@ -1,7 +1,7 @@
 import { basename, extname, join, parse } from "node:path";
 import type { ImageEntry, PluginConfig } from "./types";
 import {
-  getRandomString,
+  getFileHash,
   processImage,
   queryToOptions,
   readFileSafe,
@@ -51,9 +51,10 @@ export function ohImage(options?: Partial<PluginConfig>) {
     uri: string,
     format: keyof FormatEnum,
     prefix: string,
+    hash: string,
   ) {
     const fileId = basename(uri);
-    const uniqueFileId = `${prefix}-${getRandomString()}-${fileId}.${format}`;
+    const uniqueFileId = `${prefix}-${hash}-${fileId}.${format}`;
     // for dev server the identifier will be  the fileId, with prefix so server middleware identifies correct request
     if (!isBuild) {
       return join(DEV_DIR, uniqueFileId);
@@ -120,6 +121,8 @@ export function ohImage(options?: Partial<PluginConfig>) {
           const { name, ext } = parse(parsed.path);
           const metadata = await sharp(parsed.path).metadata();
 
+          const hash = await getFileHash(origin);
+
           const mergedOptions = {
             ...config,
             ...parsed.options,
@@ -128,7 +131,7 @@ export function ohImage(options?: Partial<PluginConfig>) {
           const format =
             mergedOptions.format ?? (ext.slice(1) as keyof FormatEnum);
 
-          const mainIdentifier = genIdentifier(name, format, "main");
+          const mainIdentifier = genIdentifier(name, format, "main", hash);
           const mainEntry: ImageEntry = {
             width: mergedOptions.width,
             height: mergedOptions.height,
@@ -172,6 +175,7 @@ export function ohImage(options?: Partial<PluginConfig>) {
               name,
               DEFAULT_IMAGE_FORMAT,
               "placeholder",
+              hash,
             );
             const placeholderEntry: ImageEntry = {
               width: placeholderWidth,
@@ -191,6 +195,7 @@ export function ohImage(options?: Partial<PluginConfig>) {
                 name,
                 DEFAULT_IMAGE_FORMAT,
                 `breakpoint-${breakpoint}`,
+                hash,
               );
               const srcSetEntry: ImageEntry = {
                 width: breakpoint,

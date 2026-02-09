@@ -1,4 +1,4 @@
-import { randomBytes } from "node:crypto";
+import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import queryString from "query-string";
@@ -13,13 +13,9 @@ export function stripQueryString(path: string): string {
   return queryIndex === -1 ? path : path.slice(0, queryIndex);
 }
 
-export function getRandomString(length: number = 32) {
-  return randomBytes(Math.ceil((length * 3) / 4))
-    .toString("base64")
-    .slice(0, length)
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=/g, "");
+export async function getFileHash(filePath: string): Promise<string> {
+  const content = await readFile(filePath);
+  return createHash("sha256").update(content).digest("hex").slice(0, 16);
 }
 
 export async function readFileSafe(path: string) {
