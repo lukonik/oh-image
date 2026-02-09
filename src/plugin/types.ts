@@ -13,8 +13,10 @@ export interface PluginConfig extends Required<ImageOptions> {
  * Represents a single image entry to be processed.
  * Used internally to track image transformations in the plugin.
  */
-export interface ImageEntry
-  extends Pick<ImageOptions, "width" | "height" | "format" | "blur"> {
+export interface ImageEntry extends Pick<
+  ImageOptions,
+  "width" | "height" | "format" | "blur"
+> {
   /** Absolute path to the original source image file */
   origin: string;
 }
@@ -49,17 +51,6 @@ export interface ImageOptions {
 }
 
 /**
- * Represents a single entry in the srcSet array.
- * Used for responsive image loading at different viewport widths.
- */
-export interface ImageSrcSet {
-  /** Width descriptor (e.g., '640w', '1080w') */
-  width: string;
-  /** URL or path to the image at this breakpoint */
-  src: string;
-}
-
-/**
  * The processed image source object returned by the plugin.
  * Contains all URLs and metadata needed for responsive image rendering.
  */
@@ -71,7 +62,7 @@ export interface ImageSrc {
   /** URL to the placeholder image (if placeholder was enabled) */
   placeholderUrl?: string;
   /** Array of responsive image sources at different breakpoints */
-  srcSets: ImageSrcSet[];
+  srcSets: string;
   /** URL to the main processed image */
   src: string;
 }

@@ -5,22 +5,27 @@ import type { ImageProps } from "./types";
 const preload =
   "preload" in ReactDOM &&
   typeof (ReactDOM as { preload?: unknown }).preload === "function"
-    ? (ReactDOM as { preload: (href: string, options: { as: string; fetchPriority: string }) => void }).preload
+    ? (
+        ReactDOM as {
+          preload: (
+            href: string,
+            options: { as: string; fetchPriority: string },
+          ) => void;
+        }
+      ).preload
     : null;
 
 function resolveOptions(props: ImageProps) {
   const { src, ...rest } = props;
   const resolved = { ...rest } as Omit<ImageProps, "src"> & {
     src: string;
-    srcset?: string;
+    srcSet?: string;
   };
   if (typeof src === "object") {
     resolved.src = src.src;
     resolved.width ??= src.width;
     resolved.height ??= src.height;
-    resolved.srcset ??= src.srcSets
-      .map((set) => `${set.src} ${set.width}`)
-      .join(", ");
+    resolved.srcSet ??= src.srcSets;
     resolved.placeholderUrl ??= src.placeholderUrl;
   } else {
     resolved.src = src;
@@ -43,11 +48,7 @@ function resolveOptions(props: ImageProps) {
 }
 
 function getPlaceholderStyles(props: ImageProps) {
-  if (!props.placeholder) {
-    return {};
-  }
   if (!props.placeholderUrl) {
-    console.warn("Blur URL is required for placeholder");
     return {};
   }
 
@@ -87,7 +88,7 @@ export function Image(props: ImageProps) {
       src={options.src}
       width={options.width}
       height={options.height}
-      srcSet={options.srcset}
+      srcSet={options.srcSet}
       alt={options.alt}
       loading={options.loading}
       decoding={options.decoding}

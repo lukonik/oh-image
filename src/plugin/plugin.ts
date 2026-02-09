@@ -146,7 +146,7 @@ export function ohImage(options?: Partial<PluginConfig>) {
             width: metadata.width,
             height: metadata.height,
             src: mainIdentifier,
-            srcSets: [],
+            srcSets: "",
           };
 
           // if placeholder is specified as placeholder as well
@@ -168,6 +168,7 @@ export function ohImage(options?: Partial<PluginConfig>) {
           }
 
           if (mergedOptions.bps) {
+            const srcSets: string[] = [];
             for (const breakpoint of mergedOptions.bps) {
               const srcSetIdentifier = genIdentifier(
                 name,
@@ -180,11 +181,9 @@ export function ohImage(options?: Partial<PluginConfig>) {
                 origin: origin,
               };
               imageEntries.set(srcSetIdentifier, srcSetEntry);
-              src.srcSets.push({
-                src: srcSetIdentifier,
-                width: `${breakpoint}w`,
-              });
+              srcSets.push(`${srcSetIdentifier} ${breakpoint}w`);
             }
+            src.srcSets = srcSets.join(", ");
           }
 
           return `export default ${JSON.stringify(src)};`;
