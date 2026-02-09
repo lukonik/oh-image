@@ -26,7 +26,7 @@ export default defineConfig({
             { label: "Introduction", slug: "docs/introduction" },
             { label: "Installation", slug: "docs/installation" },
             { label: "Usage", slug: "docs/usage" },
-            { label: "React component", slug: "docs/image-component" },
+            { label: "Image component", slug: "docs/image-component" },
             { label: "Plugin", slug: "docs/plugin" },
             { label: "Typescript", slug: "docs/typescript" },
           ],
