@@ -24,26 +24,19 @@ hero:
       icon: github
       variant: minimal
 ---
-
 import { Card, CardGrid } from "@astrojs/starlight/components";
 
-## Next steps
-
-<CardGrid stagger>
-  <Card title="Update content" icon="pencil">
-    Edit `src/content/docs/index.mdx` to see this page change.
+<CardGrid>
+  <Card title="React Image Component" icon="seti:image">
+    Drop-in `<Image />` component with automatic optimization, lazy loading, and responsive sizing.
   </Card>
-  <Card title="Change page layout" icon="document">
-    Delete `template: splash` in `src/content/docs/index.mdx` to display a
-    sidebar on this page.
+  <Card title="Vite Plugin" icon="seti:config">
+    A Vite plugin that handles image processing at build time, generating optimized formats and sizes automatically.
   </Card>
-  <Card title="Add new content" icon="add-document">
-    Add Markdown or MDX files to `src/content/docs` to create new pages.
+  <Card title="Works with any Vite app" icon="rocket">
+    Compatible with any React app powered by Vite, including TanStack Start, Remix, and more — zero configuration needed.
   </Card>
-  <Card title="Configure your site" icon="setting">
-    Edit your `sidebar` and other config in `astro.config.mjs`.
-  </Card>
-  <Card title="Read the docs" icon="open-book">
-    Learn more in [the Starlight Docs](https://starlight.astro.build/).
+  <Card title="TypeScript Support" icon="seti:typescript">
+    Written entirely in TypeScript. Enjoy full type support, autocompletion, and type-safe props out of the box.
   </Card>
 </CardGrid>
