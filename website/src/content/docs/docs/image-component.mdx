@@ -12,7 +12,7 @@ import { Image } from "@lonik/oh-image/react";
 import photo from "./assets/photo.jpg?oh";
 
 function App() {
-  return <Image src={photo} alt="A photo" placeholder />;
+  return <Image src={photo} alt="A photo" />;
 }
 ```
 
@@ -23,8 +23,7 @@ The component accepts the following props:
 | Prop | Type | Required | Description |
 |------|------|----------|-------------|
 | `src` | `string \| ImageSrc` | Yes | Image source URL or optimized image object |
-| `alt` | `string` | Yes | Alternative text for accessibility |
-| `placeholder` | `boolean` | No | Enable blur-up placeholder effect |
+| `alt` | `string` | No | Alternative text for accessibility |
 | `placeholderUrl` | `string` | No | Custom placeholder image URL |
 | `asap` | `boolean` | No | Load image immediately with high priority |
 | `fill` | `boolean` | No | Make image fill its container |
@@ -88,29 +87,25 @@ Always provide meaningful descriptions. Avoid generic text like "image" or "phot
 
 ---
 
-## placeholder
+## Placeholder
 
-The `placeholder` prop enables a blur-up loading effect. A low-resolution blurred version of the image is shown immediately, then replaced with the full image once loaded.
-
-```tsx
-<Image src={photo} alt="Photo" placeholder />
-```
+The component supports a blur-up loading effect. A low-resolution blurred version of the image is shown immediately as a CSS background, then replaced with the full image once loaded.
 
 ### How it works
 
 1. The plugin generates a small, blurred placeholder image during processing
-2. The component sets this as a CSS background image
+2. The component sets this as a CSS background image via `placeholderUrl`
 3. The full image loads on top
 4. The transition creates a smooth blur-up effect
 
-### Requirements
+### Enabling placeholders
 
-For the placeholder to work, the image must be processed with placeholder generation enabled. This can be done:
+Placeholder generation is enabled by default in the plugin. You can control it:
 
 **Globally in plugin config:**
 ```ts
 ohImage({
-  placeholder: true
+  placeholder: true // this is the default
 })
 ```
 
@@ -119,19 +114,18 @@ ohImage({
 import photo from "./photo.jpg?oh&placeholder=true";
 ```
 
-If `placeholder` is set to `true` but no placeholder URL is available, a console warning will be displayed.
+When placeholder generation is enabled, the `ImageSrc` object returned by the plugin will include a `placeholderUrl`, and the component will automatically use it.
 
 ---
 
 ## placeholderUrl
 
-The `placeholderUrl` prop allows you to override the default placeholder image with a custom one.
+The `placeholderUrl` prop allows you to override the auto-generated placeholder image with a custom one.
 
 ```tsx
 <Image
   src={photo}
   alt="Photo"
-  placeholder
   placeholderUrl="/custom-placeholder.jpg"
 />
 ```
@@ -419,8 +413,8 @@ Here's an example combining multiple props:
 
 ```tsx
 import { Image } from "@lonik/oh-image/react";
-import heroImage from "./assets/hero.jpg?oh&placeholder=true";
-import galleryImage from "./assets/gallery.jpg?oh&placeholder=true";
+import heroImage from "./assets/hero.jpg?oh";
+import galleryImage from "./assets/gallery.jpg?oh";
 
 function Page() {
   return (
@@ -432,7 +426,6 @@ function Page() {
           alt="Welcome to our site"
           fill
           asap
-          placeholder
         />
       </div>
 
@@ -441,7 +434,6 @@ function Page() {
         <Image
           src={galleryImage}
           alt="Gallery photo"
-          placeholder
           sizes="(max-width: 768px) 100vw, 33vw"
           className="rounded-lg"
         />

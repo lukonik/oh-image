@@ -15,7 +15,7 @@ export default defineConfig({
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/withastro/starlight",
+          href: "https://github.com/lukonik/oh-image",
         },
       ],
       sidebar: [
@@ -26,8 +26,8 @@ export default defineConfig({
             { label: "Introduction", slug: "docs/introduction" },
             { label: "Installation", slug: "docs/installation" },
             { label: "Usage", slug: "docs/usage" },
-            { label: "Plugin", slug: "docs/plugin" },
             { label: "React component", slug: "docs/image-component" },
+            { label: "Plugin", slug: "docs/plugin" },
             { label: "Typescript", slug: "docs/typescript" },
           ],
         },

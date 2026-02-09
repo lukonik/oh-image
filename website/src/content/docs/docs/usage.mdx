@@ -3,9 +3,35 @@ title: Usage
 description: How to use oh-image in your project
 ---
 
+## Register the Vite plugin
+
+Before using oh-image in your components, you need to register its Vite plugin. This is what enables oh-image to process, resize, and optimize your images at build time. Open your `vite.config.ts` and add `ohImage()` to the plugins array:
+
+```ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { ohImage } from "@lonik/oh-image/plugin";
+
+export default defineConfig({
+  plugins: [ohImage(), react()],
+});
+```
+
+That's it — the plugin uses sensible defaults out of the box, but you can customize it if needed:
+
+```ts
+ohImage({
+  format: "webp", // output format (default: "webp")
+  placeholder: true, // generate placeholders globally (default: true)
+  bps: [640, 828, 1200, 1920], // breakpoints for responsive srcset generation
+});
+```
+
+You can also override these settings on a per-image basis using query parameters — more on that below.
+
 ## Basic usage
 
-Import an image with the `?oh` query parameter and use it with the `<Image>` component:
+Import any image with the `?oh` query parameter and pass it to the `<Image>` component — oh-image takes care of the rest:
 
 ```tsx
 import { Image } from "@lonik/oh-image/react";
@@ -16,46 +42,70 @@ function App() {
 }
 ```
 
-## With placeholder
+Behind the scenes, oh-image transforms this into a fully optimized `<img>` element. Here's what the rendered output looks like:
 
-Enable the blur-up placeholder effect for a smoother loading experience:
-
-```tsx
-import photo from "./assets/photo.jpg?oh&placeholder=true";
-
-<Image src={photo} alt="A photo" placeholder />
-```
-
-## Priority loading
-
-For above-the-fold images, use `asap` to load them immediately:
-
-```tsx
-<Image src={heroImage} alt="Hero" asap placeholder />
-```
-
-## Fill container
-
-Make an image fill its parent container:
-
-```tsx
-<div style={{ position: 'relative', width: '100%', height: 400 }}>
-  <Image src={banner} alt="Banner" fill />
-</div>
-```
-
-## Responsive sizing
-
-Specify how the image scales at different viewport sizes:
-
-```tsx
-<Image
-  src={photo}
-  alt="Photo"
-  sizes="(max-width: 768px) 100vw, 50vw"
+```html
+<img
+  src="/assets/photo.800x600.webp"
+  srcset="
+    /assets/photo.640w.webp   640w,
+    /assets/photo.828w.webp   828w,
+    /assets/photo.1200w.webp 1200w,
+    /assets/photo.1920w.webp 1920w
+  "
+  width="800"
+  height="600"
+  alt="A photo"
+  fetchpriority="auto"
+  style="
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-image: url(data:image/webp;base64,…);
+    background-size: cover;
+  "
 />
 ```
 
-## Image placement
+A single `<img>` tag — no wrapper divs, no extra DOM nodes. The responsive `srcset` is generated automatically from your configured breakpoints, and the placeholder is applied as a CSS background image directly on the element, fading out once the full image loads.
 
-Place images in `src/assets/` or any source directory. Do not use the `public/` folder — Vite does not process files from there.
+## Per-image optimization with query parameters
+
+The global plugin config is a great starting point, but sometimes you need finer control over how a specific image is processed. You can customize optimization on a per-image basis by appending query parameters to the import path:
+
+```tsx
+// Convert to AVIF instead of the default format
+import hero from "./assets/hero.jpg?oh&format=avif";
+
+// Resize to a specific width and height
+import thumbnail from "./assets/photo.jpg?oh&width=400&height=300";
+
+// Disable placeholder with a custom blur amount
+import banner from "./assets/banner.jpg?oh&placeholder=false";
+
+// Use custom breakpoints for this image only
+import portrait from "./assets/portrait.jpg?oh&bps=640,1080";
+```
+
+## Image location
+
+Vite only processes files that are imported as modules. Images placed in the `public/` folder are served as-is and **are not processed by any Vite plugin**, including oh-image.
+
+For oh-image to process your images, they must be placed in the `src/assets/` folder (recommended) or any other directory inside `src/`:
+
+```
+my-app/
+├── public/
+│   └── logo.svg          ← served as-is, NOT optimized
+├── src/
+│   ├── assets/
+│   │   └── hero.jpg       ← ✅ processed by oh-image
+│   └── components/
+│       └── images/
+│           └── banner.png  ← ✅ also works from any src/ subdirectory
+```
+
+Then import them with the `?oh` query parameter as usual:
+
+```tsx
+import hero from "./assets/hero.jpg?oh";
+```

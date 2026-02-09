@@ -1,16 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" opacity="0.8">
   <defs>
     <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#4F46E5" />
       <stop offset="100%" stop-color="#9333EA" />
     </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
   </defs>
 
   <!-- Main Background -->
   <rect x="56" y="56" width="400" height="400" rx="60" fill="url(#bg-gradient)" />
   
   <!-- Inner Frame representing an Image -->
-  <rect x="106" y="106" width="300" height="300" rx="30" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.5)" stroke-width="20" />
+  <rect x="106" y="106" width="300" height="300" rx="30" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="4" />
 
   <!-- Abstract Landscape / Image Icon -->
   <mask id="mask-landscape">
@@ -27,6 +31,6 @@
   </g>
 
   <!-- Lightning Bolt for Optimization/Speed -->
-  <path d="M360 80 L320 200 H370 L310 350 L420 180 H360 L360 80Z" fill="#F59E0B" stroke="white" stroke-width="20" />
+  <path d="M360 80 L320 200 H370 L310 350 L420 180 H360 L360 80Z" fill="#F59E0B" stroke="white" stroke-width="4" filter="url(#glow)" />
 
 </svg>

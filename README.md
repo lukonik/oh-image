@@ -1,30 +1,40 @@
-# react-components-starter
+# Oh Image!
 
-A starter for creating a React component library.
+The missing `<Image />` component for Vite and React.
 
-## Development
+For full documentation, visit [docs](https://lukonik.github.io/oh-image).
 
-- Install dependencies:
-
-```bash
-npm install
-```
-
-- Run the playground:
+## Installation
 
 ```bash
-npm run play
+npm install @lonik/oh-image sharp --save
 ```
 
-- Run the unit tests:
+## Usage
 
-```bash
-npm run test
+### 1. Register the Vite plugin
+
+```ts
+// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { ohImage } from "@lonik/oh-image/plugin";
+
+export default defineConfig({
+  plugins: [react(), ohImage()],
+});
 ```
 
-- Build the library:
+### 2. Use the Image component
 
-```bash
-npm run build
+```tsx
+import { Image } from "@lonik/oh-image/react";
+import heroImg from "./hero.jpg?oh";
+
+function App() {
+  return <Image src={heroImg} alt="Hero" />;
+}
 ```
-# tsdown-template
+## License
+
+[MIT](./LICENSE)
