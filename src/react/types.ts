@@ -1,18 +1,7 @@
 import type { ImgHTMLAttributes } from "react";
+import type { ImageSrc } from "../client";
 
 type ImageSrcType = string | ImageSrc;
-
-export interface ImageSrc {
-  width: number;
-
-  height: number;
-
-  placeholderUrl?: string;
-
-  srcSets: string;
-
-  src: string;
-}
 
 export interface ImageProps extends Partial<
   Pick<

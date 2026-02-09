@@ -1,5 +1,5 @@
 import { basename, extname, join, parse } from "node:path";
-import type { ImageEntry, ImageSrc, PluginConfig } from "./types";
+import type { ImageEntry, PluginConfig } from "./types";
 import {
   getRandomString,
   processImage,
@@ -11,6 +11,7 @@ import type { FormatEnum } from "sharp";
 import type { Plugin } from "vite";
 import pLimit from "p-limit";
 import sharp from "sharp";
+import type { ImageSrc } from "../client";
 
 const DEFAULT_IMAGE_FORMAT: keyof FormatEnum = "webp";
 const PLACEHOLDER_IMG_SIZE = 8;
