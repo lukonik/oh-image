@@ -90,6 +90,31 @@ These are the default values used by the plugin when no configuration is provide
 | `placeholder` | `boolean`  | Inherits global | Whether to generate a placeholder image for lazy loading        |
 | `bps`         | `number[]` | Inherits global | Breakpoints — widths in pixels for responsive srcSet generation |
 
+### Nulling out an option
+
+Some import-level options (`width`, `height`, `format`) accept `null` to explicitly unset them — for example, to override a globally configured `format` and fall back to the original file's format.
+
+To pass `null` via a query parameter, include the key **without a value**:
+
+```ts
+// Set format to null — keeps the original file format instead of converting
+import photo from "./assets/photo.jpg?oh&format";
+
+// Set width to null — no width constraint applied
+import photo from "./assets/photo.jpg?oh&width";
+
+// Set height to null — no height constraint applied
+import photo from "./assets/photo.jpg?oh&height";
+
+// Set bps to null — disables responsive srcSet generation for this image
+import photo from "./assets/photo.jpg?oh&bps";
+
+// Null out all at once
+import photo from "./assets/photo.jpg?oh&format&width&height&bps";
+```
+
+A key with no `=` value is parsed as `null` by the query string parser.
+
 ## Build vs Dev mode
 
 The plugin behaves differently depending on whether you're in development or building for production.

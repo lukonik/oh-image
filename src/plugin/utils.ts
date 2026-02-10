@@ -58,6 +58,9 @@ export function queryToOptions(
     parseBooleans: true,
     parseNumbers: true,
     arrayFormat: "comma",
+    types: {
+      bps: "number[]",
+    },
   });
 
   if (processKey in parsed) {
