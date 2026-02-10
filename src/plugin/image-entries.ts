@@ -42,12 +42,12 @@ export function createImageEntries() {
         placeholderWidth = PLACEHOLDER_IMG_SIZE;
         placeholderHeight = Math.max(
           Math.round((main.height / main.width) * PLACEHOLDER_IMG_SIZE),
-          1,
+          10,
         );
       } else {
         placeholderWidth = Math.max(
           Math.round((main.width / main.height) * PLACEHOLDER_IMG_SIZE),
-          1,
+          10,
         );
         placeholderHeight = PLACEHOLDER_IMG_SIZE;
       }

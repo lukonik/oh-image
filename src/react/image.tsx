@@ -1,6 +1,7 @@
 import * as ReactDOM from "react-dom";
 import type { CSSProperties } from "react";
 import type { ImageProps } from "./types";
+import { useImgLoaded } from "./use-img-loaded";
 // preload is only available in React 19+
 const preload =
   "preload" in ReactDOM &&
@@ -74,7 +75,8 @@ function getFillStyles(props: ImageProps) {
 
 export function Image(props: ImageProps) {
   const options = resolveOptions(props);
-  const placeholderStyles = getPlaceholderStyles(options);
+  const [imgRef, isLoaded] = useImgLoaded(options.src);
+  const placeholderStyles = isLoaded ? {} : getPlaceholderStyles(options);
   const fillStyles = getFillStyles(options);
   const styles = {
     ...placeholderStyles,
@@ -83,6 +85,7 @@ export function Image(props: ImageProps) {
   };
   return (
     <img
+      ref={imgRef}
       className={props.className}
       style={styles}
       src={options.src}
