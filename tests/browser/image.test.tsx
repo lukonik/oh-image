@@ -1,91 +1,89 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { render } from "vitest-browser-react";
+import "@testing-library/jest-dom/vitest";
+import { cleanup, render } from "@testing-library/react";
+import { afterEach, describe, expect, it } from "vitest";
 import { Image } from "../../src/react/image";
 
 describe("Image", () => {
-  beforeEach(() => {});
+  afterEach(() => {
+    cleanup();
+  });
 
   it("should be defined", () => {
     expect(Image).toBeDefined();
   });
 
-  it("should add className to image", async () => {
-    const result = await render(<Image src="/" className="test" />);
-    await expect.element(result.getByRole("img")).toHaveClass("test");
+  it("should add className to image", () => {
+    const { getByRole } = render(
+      <Image alt="image" src="/" className="test" />,
+    );
+    expect(getByRole("img")).toHaveClass("test");
   });
 
-  it("should add styles to image", async () => {
-    const result = await render(<Image src="/" style={{ width: "100px" }} />);
-    await expect
-      .element(result.getByRole("img"))
-      .toHaveStyle({ width: "100px" });
+  it("should add styles to image", () => {
+    const { getByRole } = render(
+      <Image alt="image" src="/" style={{ width: "100px" }} />,
+    );
+    expect(getByRole("img")).toHaveStyle({ width: "100px" });
   });
 
-  it("should set alt attribute", async () => {
-    const result = await render(<Image src="/" alt="alt image" />);
-    await expect
-      .element(result.getByRole("img"))
-      .toHaveAttribute("alt", "alt image");
-  });
-  it("should set decoding attribute", async () => {
-    const result = await render(<Image src="/" decoding="async" />);
-    await expect
-      .element(result.getByRole("img"))
-      .toHaveAttribute("decoding", "async");
-  });
-  it("should set loading attribute", async () => {
-    const result = await render(<Image src="/" loading="lazy" />);
-    await expect
-      .element(result.getByRole("img"))
-      .toHaveAttribute("loading", "lazy");
-  });
-  it("should set width attribute", async () => {
-    const result = await render(<Image src="/" width={100} />);
-    await expect
-      .element(result.getByRole("img"))
-      .toHaveAttribute("width", "100");
-  });
-  it("should set height attribute", async () => {
-    const result = await render(<Image src="/" height={100} />);
-    await expect
-      .element(result.getByRole("img"))
-      .toHaveAttribute("height", "100");
-  });
-  it("should set fetchPriority attribute", async () => {
-    const result = await render(<Image src="/" fetchPriority="high" />);
-    await expect
-      .element(result.getByRole("img"))
-      .toHaveAttribute("fetchPriority", "high");
+  it("should set alt attribute", () => {
+    const { getByRole } = render(<Image src="/" alt="alt image" />);
+    expect(getByRole("img")).toHaveAttribute("alt", "alt image");
   });
 
-  it("should update attributes for fast load when asap is true", async () => {
-    const result = await render(<Image src="/" asap />);
-    await expect
-      .element(result.getByRole("img"))
-      .toHaveAttribute("decoding", "async");
-    await expect
-      .element(result.getByRole("img"))
-      .toHaveAttribute("loading", "eager");
-    await expect
-      .element(result.getByRole("img"))
-      .toHaveAttribute("fetchpriority", "high");
+  it("should set decoding attribute", () => {
+    const { getByRole } = render(
+      <Image alt="image" src="/" decoding="async" />,
+    );
+    expect(getByRole("img")).toHaveAttribute("decoding", "async");
+  });
+
+  it("should set loading attribute", () => {
+    const { getByRole } = render(<Image alt="image" src="/" loading="lazy" />);
+    expect(getByRole("img")).toHaveAttribute("loading", "lazy");
+  });
+
+  it("should set width attribute", () => {
+    const { getByRole } = render(<Image alt="image" src="/" width={100} />);
+    expect(getByRole("img")).toHaveAttribute("width", "100");
+  });
+
+  it("should set height attribute", () => {
+    const { getByRole } = render(<Image alt="image" src="/" height={100} />);
+    expect(getByRole("img")).toHaveAttribute("height", "100");
+  });
+
+  it("should set fetchPriority attribute", () => {
+    const { getByRole } = render(
+      <Image alt="image" src="/" fetchPriority="high" />,
+    );
+    expect(getByRole("img")).toHaveAttribute("fetchPriority", "high");
+  });
+
+  it("should update attributes for fast load when asap is true", () => {
+    const { getByRole } = render(<Image alt="image" src="/" asap />);
+    const img = getByRole("img");
+    expect(img).toHaveAttribute("decoding", "async");
+    expect(img).toHaveAttribute("loading", "eager");
+    expect(img).toHaveAttribute("fetchpriority", "high");
     const preload = document.head.querySelector(
       'link[rel="preload"][as="image"]',
     );
     expect(preload).toBeDefined();
   });
 
-  it("should display placeholder when placeholder is true", async () => {
-    const result = await render(<Image src="/" placeholderUrl="/blur" />);
-    const image = await result.getByRole("img");
-    expect(image).toHaveStyle({
+  it("should display placeholder when placeholder is true", () => {
+    const { getByRole } = render(
+      <Image alt="image" src="/" placeholderUrl="/blur" />,
+    );
+    expect(getByRole("img")).toHaveStyle({
       backgroundPosition: "50% 50%",
       backgroundRepeat: "no-repeat",
       backgroundImage: "url(/blur)",
     });
   });
 
-  it("should take attributes from src when it is object", async () => {
+  it("should take attributes from src when it is object", () => {
     const src = {
       width: 500,
       height: 600,
@@ -93,22 +91,22 @@ describe("Image", () => {
       srcSets: `/image-50.jpg 50w, /image-100.jpg 100w`,
       placeholderUrl: "/blur",
     };
-    const result = await render(<Image src={src} />);
+    const { getByRole } = render(<Image alt="image" src={src} />);
+    const img = getByRole("img");
 
-    function attributeEquals(key: string, value: string) {
-      expect(result.getByRole("img")).toHaveAttribute(key, value);
-    }
-
-    attributeEquals("width", "500");
-    attributeEquals("height", "600");
-    attributeEquals("src", "/image.jpg");
-    attributeEquals("srcset", "/image-50.jpg 50w, /image-100.jpg 100w");
-    expect(result.getByRole("img")).toHaveStyle({
+    expect(img).toHaveAttribute("width", "500");
+    expect(img).toHaveAttribute("height", "600");
+    expect(img).toHaveAttribute("src", "/image.jpg");
+    expect(img).toHaveAttribute(
+      "srcset",
+      "/image-50.jpg 50w, /image-100.jpg 100w",
+    );
+    expect(img).toHaveStyle({
       backgroundImage: "url(/blur)",
     });
   });
 
-  it("should override custom attributes even when src is an object", async () => {
+  it("should override custom attributes even when src is an object", () => {
     const src = {
       width: 500,
       height: 600,
@@ -116,8 +114,9 @@ describe("Image", () => {
       srcSets: `/image-50.jpg 50w, /image-100.jpg 100w`,
       placeholderUrl: "/blur",
     };
-    const result = await render(
+    const { getByRole } = render(
       <Image
+        alt="image"
         src={src}
         placeholderUrl="/manual-blur"
         width={10}
@@ -125,27 +124,24 @@ describe("Image", () => {
         srcSet="image-1 0w"
       />,
     );
+    const img = getByRole("img");
 
-    function attributeEquals(key: string, value: string) {
-      expect(result.getByRole("img")).toHaveAttribute(key, value);
-    }
-
-    attributeEquals("width", "10");
-    attributeEquals("height", "20");
-    attributeEquals("src", "/image.jpg");
-    attributeEquals("srcset", "image-1 0w");
-
-    expect(result.getByRole("img")).toHaveStyle({
+    expect(img).toHaveAttribute("width", "10");
+    expect(img).toHaveAttribute("height", "20");
+    expect(img).toHaveAttribute("src", "/image.jpg");
+    expect(img).toHaveAttribute("srcset", "image-1 0w");
+    expect(img).toHaveStyle({
       backgroundImage: "url(/manual-blur)",
     });
   });
 
-  it("should update proper styles when fill is true", async () => {
-    const result = await render(<Image src="/" fill />);
-    await expect.element(result.getByRole("img")).toHaveStyle({
+  it("should update proper styles when fill is true", () => {
+    const { getByRole } = render(<Image alt="image" src="/" fill />);
+    const img = getByRole("img");
+    expect(img).toHaveStyle({
       width: "100%",
       height: "100%",
-      inset: "0",
     });
+    expect(img.style.inset).toBe("0");
   });
 });
