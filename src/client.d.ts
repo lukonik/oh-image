@@ -15,3 +15,8 @@ declare module "*?oh" {
   const imageSrc: ImageSrc;
   export default imageSrc;
 }
+
+declare module "*?oh&*" {
+  const imageSrc: ImageSrc;
+  export default imageSrc;
+}

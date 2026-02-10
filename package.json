@@ -13,6 +13,7 @@
   "bugs": {
     "url": "https://github.com/lukonik/oh-image/issues"
   },
+  "types": "./dist/client.d.ts",
   "exports": {
     "./package.json": "./package.json",
     "./plugin": {
