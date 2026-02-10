@@ -23,7 +23,7 @@ function createId(
   return join(dirs.assetsDir, dirs.distDir, uniqueFileId);
 }
 
-export function createIdentifier(
+export function createImageIdentifier(
   name: string,
   hash: string,
   dirs: IdentifierDirs,

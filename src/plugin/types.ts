@@ -12,7 +12,7 @@ export interface ImageEntry {
   blur?: number | null;
   width?: number | null | undefined;
   height?: number | null | undefined;
-  format?: keyof FormatEnum | null;
+  format?: keyof FormatEnum | null | undefined;
 }
 
 export interface ImageOptions {

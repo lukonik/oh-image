@@ -1,5 +1,5 @@
 import { basename, extname, join, parse } from "node:path";
-import type { ImageEntry, PluginConfig } from "./types";
+import type { PluginConfig } from "./types";
 import {
   getFileHash,
   processImage,
@@ -7,15 +7,14 @@ import {
   readFileSafe,
   saveFileSafe,
 } from "./utils";
-import { createIdentifier } from "./create-identifier";
+import { createImageIdentifier } from "./create-image-identifier";
+import { createImageEntries } from "./image-entries";
 import type { FormatEnum } from "sharp";
 import type { Plugin } from "vite";
 import pLimit from "p-limit";
 import sharp from "sharp";
 
 const DEFAULT_IMAGE_FORMAT: keyof FormatEnum = "webp";
-const PLACEHOLDER_IMG_SIZE = 8;
-const PLACEHOLDER_BLUR_QUALITY = 70;
 
 const DEFAULT_CONFIGS: PluginConfig = {
   distDir: "oh-images",
@@ -35,7 +34,7 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
   let assetsDir!: string;
   let outDir!: string;
   let cacheDir!: string;
-  const imageEntries = new Map<string, ImageEntry>();
+  const imageEntries = createImageEntries();
   const config = { ...DEFAULT_CONFIGS, ...options };
 
   return {
@@ -104,7 +103,7 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
 
           const format =
             mergedOptions.format ?? (ext.slice(1) as keyof FormatEnum);
-          const identifier = createIdentifier(name, hash, {
+          const identifier = createImageIdentifier(name, hash, {
             isBuild,
             devDir: DEV_DIR,
             assetsDir,
@@ -112,13 +111,12 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
           });
 
           const mainIdentifier = identifier.main(format);
-          const mainEntry: ImageEntry = {
+          imageEntries.createMainEntry(mainIdentifier, {
             width: mergedOptions.width,
             height: mergedOptions.height,
             format: mergedOptions.format,
             origin: origin,
-          };
-          imageEntries.set(mainIdentifier, mainEntry);
+          });
 
           const src: ImageSrc = {
             width: metadata.width,
@@ -129,37 +127,14 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
 
           // if placeholder is specified as placeholder as well
           if (parsed.options?.placeholder) {
-            let placeholderHeight: number = 0;
-            let placeholderWidth: number = 0;
-
-            // Shrink the image's largest dimension
-            if (metadata.width >= metadata.height) {
-              placeholderWidth = PLACEHOLDER_IMG_SIZE;
-              placeholderHeight = Math.max(
-                Math.round(
-                  (metadata.height / metadata.width) * PLACEHOLDER_IMG_SIZE,
-                ),
-                1,
-              );
-            } else {
-              placeholderWidth = Math.max(
-                Math.round(
-                  (metadata.width / metadata.height) * PLACEHOLDER_IMG_SIZE,
-                ),
-                1,
-              );
-              placeholderHeight = PLACEHOLDER_IMG_SIZE;
-            }
             const placeholderIdentifier =
               identifier.placeholder(DEFAULT_IMAGE_FORMAT);
-            const placeholderEntry: ImageEntry = {
-              width: placeholderWidth,
-              height: placeholderHeight,
+            imageEntries.createPlaceholderEntry(placeholderIdentifier, {
+              width: metadata.width,
+              height: metadata.height,
               format: DEFAULT_IMAGE_FORMAT,
-              blur: PLACEHOLDER_BLUR_QUALITY,
               origin: origin,
-            };
-            imageEntries.set(placeholderIdentifier, placeholderEntry);
+            });
             src.placeholderUrl = placeholderIdentifier;
           }
 
@@ -170,12 +145,11 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
                 DEFAULT_IMAGE_FORMAT,
                 breakpoint,
               );
-              const srcSetEntry: ImageEntry = {
+              imageEntries.createSrcSetEntry(srcSetIdentifier, {
                 width: breakpoint,
                 format: DEFAULT_IMAGE_FORMAT,
                 origin: origin,
-              };
-              imageEntries.set(srcSetIdentifier, srcSetEntry);
+              });
               srcSets.push(`${srcSetIdentifier} ${breakpoint}w`);
             }
             src.srcSets = srcSets.join(", ");
@@ -190,7 +164,7 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
     },
     async writeBundle() {
       const limit = pLimit(30);
-      const tasks = Array.from(imageEntries, ([key, value]) =>
+      const tasks = Array.from(imageEntries.entries(), ([key, value]) =>
         limit(async () => {
           const processed = await processImage(value.origin, value);
           const outputPath = join(outDir, key);
