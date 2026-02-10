@@ -6,7 +6,7 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
     "**/node_modules": true,
-    "**/dist":true,
+    "**/dist": true,
     "**/__screenshots__": true
   },
   "editor.codeActionsOnSave": {
@@ -20,5 +20,7 @@
       "!**/node_modules/**",
       "**/node_modules/.vite-temp/**"
     ]
-  }
+  },
+  "conventionalCommits.gitmoji": false,
+  "conventionalCommits.promptScopes": false
 }
