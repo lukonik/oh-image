@@ -1,18 +1,14 @@
 import { basename, extname, join, parse } from "node:path";
 import type { PluginConfig } from "./types";
-import {
-  getFileHash,
-  processImage,
-  queryToOptions,
-  readFileSafe,
-  saveFileSafe,
-} from "./utils";
-import { createImageIdentifier } from "./create-image-identifier";
+import { queryToOptions } from "./utils";
+import { getFileHash, readFileSafe, saveFileSafe } from "./file-utils";
+import { createImageIdentifier } from "./image-identifier";
 import { createImageEntries } from "./image-entries";
 import type { FormatEnum } from "sharp";
 import type { Plugin } from "vite";
 import pLimit from "p-limit";
 import sharp from "sharp";
+import { processImage } from "./image-process";
 
 const DEFAULT_IMAGE_FORMAT: keyof FormatEnum = "webp";
 
