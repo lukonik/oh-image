@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-const sharpInstance = {
+export const sharpInstance = {
   resize: vi.fn().mockReturnThis(),
   toFormat: vi.fn().mockReturnThis(),
   blur: vi.fn().mockReturnThis(),
