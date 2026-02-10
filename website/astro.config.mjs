@@ -31,6 +31,13 @@ export default defineConfig({
             { label: "Typescript", slug: "docs/typescript" },
           ],
         },
+        {
+          label: "img theory",
+          badge: { text: "Coming Soon", variant: "tip" },
+          items: [
+            { label: "Introduction", slug: "img-theory/introduction" },
+          ],
+        },
       ],
       customCss: ["./src/styles/global.css"],
     }),
