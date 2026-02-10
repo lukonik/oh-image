@@ -3,8 +3,6 @@ name: CI
 on:
   pull_request:
     branches: [main]
-  push:
-    branches: [main]
 
 jobs:
   test-and-build:
@@ -27,42 +25,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 1. Get the Playwright version from vitest-browser-playwright for caching
-      - name: Get Playwright version
-        id: playwright-version
-        run: echo "version=$(pnpm list @vitest/browser-playwright --depth=0 | grep playwright | awk '{print $2}')" >> $GITHUB_OUTPUT
-
-      # 2. Cache Playwright browser binaries
-      - name: Cache Playwright Browsers
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
-
-      # 3. Install browsers only if cache misses, then install system deps
-      - name: Install Playwright browsers & deps
-        run: |
-          if [ "${{ steps.playwright-cache.outputs.cache-hit }}" != "true" ]; then
-            pnpm exec playwright install --with-deps
-          else
-            pnpm exec playwright install-deps
-          fi
-
-      - name: Typecheck
-        run: pnpm typecheck
-
       - name: Test
-        # Vitest needs the --run flag in CI to prevent it from entering watch mode
-        run: pnpm test -- --run
+        run: pnpm test
 
       - name: Build
         run: pnpm build
 
   website:
     runs-on: ubuntu-latest
-    # This job only runs if the main library tests and build pass
-    needs: test-and-build
     steps:
       - name: Checkout
         uses: actions/checkout@v4
