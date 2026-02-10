@@ -30,7 +30,7 @@ export const SUPPORTED_IMAGE_FORMATS =
 
 const DEV_DIR = "/@oh-images/";
 
-export function ohImage(options?: Partial<PluginConfig>) {
+export function ohImage(options?: Partial<PluginConfig>): Plugin {
   let isBuild = false;
   let assetsDir!: string;
   let outDir!: string;
@@ -226,5 +226,5 @@ export function ohImage(options?: Partial<PluginConfig>) {
       );
       await Promise.all(tasks);
     },
-  } satisfies Plugin;
+  };
 }
