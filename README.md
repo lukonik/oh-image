@@ -1,5 +1,7 @@
 # Oh Image
 
+[![npm](https://img.shields.io/npm/v/@lonik/oh-image)](https://www.npmjs.com/package/@lonik/oh-image)
+
 The missing `<Image />` component for Vite and React.
 
 For full documentation, visit [docs](https://lukonik.github.io/oh-image).

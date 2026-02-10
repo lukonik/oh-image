@@ -20,5 +20,6 @@ export default defineConfig({
   ],
   onSuccess: () => {
     copyFileSync("src/client.d.ts", "dist/client.d.ts");
+    copyFileSync("README.md", "dist/README.md");
   },
 });
