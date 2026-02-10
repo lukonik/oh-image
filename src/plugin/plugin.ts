@@ -23,7 +23,7 @@ const PROCESS_KEY = "oh";
 export const SUPPORTED_IMAGE_FORMATS =
   /\.(jpe?g|png|webp|avif|gif|svg)(\?.*)?$/i;
 
-const DEV_DIR = "/@oh-images/";
+export const DEV_DIR = "/@oh-images/";
 
 export function ohImage(options?: Partial<PluginConfig>): Plugin {
   let isBuild = false;
@@ -45,9 +45,8 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         const url = req.url;
-
         if (!url?.includes(DEV_DIR) || !SUPPORTED_IMAGE_FORMATS.test(url)) {
-          return next();
+          return next()
         }
         const fileId = basename(url);
         const path = join(cacheDir, fileId);
@@ -59,8 +58,7 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
         const imageEntry = imageEntries.get(url);
         if (!imageEntry) {
           console.warn("Image entry not found with id: " + url);
-          next();
-          return;
+          return  next();
         }
 
         if (image) {
