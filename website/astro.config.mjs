@@ -11,6 +11,38 @@ export default defineConfig({
     starlight({
       title: "Oh Image",
       plugins: [],
+      head: [
+        {
+          tag: "meta",
+          attrs: {
+            property: "og:image",
+            content: "https://lukonik.github.io/oh-image/oh-image-hero.svg",
+          },
+        },
+        {
+          tag: "meta",
+          attrs: { property: "og:image:type", content: "image/svg+xml" },
+        },
+        {
+          tag: "meta",
+          attrs: { property: "og:image:width", content: "512" },
+        },
+        {
+          tag: "meta",
+          attrs: { property: "og:image:height", content: "512" },
+        },
+        {
+          tag: "meta",
+          attrs: { name: "twitter:card", content: "summary" },
+        },
+        {
+          tag: "meta",
+          attrs: {
+            name: "twitter:image",
+            content: "https://lukonik.github.io/oh-image/oh-image-hero.svg",
+          },
+        },
+      ],
       social: [
         {
           icon: "github",
