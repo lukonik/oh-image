@@ -3,19 +3,13 @@ title: TypeScript
 description: TypeScript support and configuration for oh-image
 ---
 
-oh-image is written in TypeScript, so you get full type safety and autocomplete out of the box.
+oh-image is written in TypeScript, so you get full type safety and autocomplete out of the box when configuring the plugin or using the React component. However, there are some caveats when importing images with the `?oh` suffix.
 
-## Import type definitions
+## Adding type definitions for the import syntax
 
-When you import an image with the `?oh` query parameter, TypeScript needs to understand what type that import returns. Without proper configuration, you'll see an error like:
+To add the type definition for the `?oh` import syntax, use one of the following options:
 
-```
-Cannot find module './image.jpg?oh' or its corresponding type declarations.
-```
-
-There are two ways to fix this:
-
-### Option 1: Using `vite-env.d.ts` (recommended)
+### Option 1: Using `vite-env.d.ts`
 
 If your project has a `vite-env.d.ts` file (created by Vite's scaffolding), add a triple-slash reference:
 
@@ -37,3 +31,18 @@ Add `@lonik/oh-image/client` to the `types` array in your `tsconfig.json`:
 ```
 
 **Note:** When you specify a `types` array, TypeScript only includes the types you list. Make sure to include other type definitions your project needs (like `vite/client`).
+
+## Query parameters and TypeScript
+
+Unfortunately, TypeScript does not support double wildcard module augmentation. This means that while the base `?oh` suffix is fully typed, adding query parameters to it (e.g., `?oh&w=500`) will cause TypeScript to complain:
+
+```
+Cannot find module './image.jpg?oh&w=500' or its corresponding type declarations.
+```
+
+To work around this, you can and should add `@ts-expect-error` above the import. Everything will work as expected and your project will build successfully:
+
+```ts
+// @ts-expect-error - TypeScript doesn't support double wildcard module declarations
+import image from "./image.jpg?oh&w=500";
+```
