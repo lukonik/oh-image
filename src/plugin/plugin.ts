@@ -7,6 +7,7 @@ import {
   readFileSafe,
   saveFileSafe,
 } from "./utils";
+import { createIdentifier } from "./create-identifier";
 import type { FormatEnum } from "sharp";
 import type { Plugin } from "vite";
 import pLimit from "p-limit";
@@ -37,32 +38,6 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
   const imageEntries = new Map<string, ImageEntry>();
   const config = { ...DEFAULT_CONFIGS, ...options };
 
-  /**
-   * used for dev server to match url to path
-   * @param url
-   */
-  function urlToPath(url: string) {
-    const fileId = basename(url);
-    return join(cacheDir, fileId);
-  }
-
-  function genIdentifier(
-    uri: string,
-    format: keyof FormatEnum,
-    prefix: string,
-    hash: string,
-  ) {
-    const fileId = basename(uri);
-    const uniqueFileId = `${prefix}-${hash}-${fileId}.${format}`;
-    // for dev server the identifier will be  the fileId, with prefix so server middleware identifies correct request
-    if (!isBuild) {
-      return join(DEV_DIR, uniqueFileId);
-    }
-
-    // for build the joined path is returned with DIST_DIR and assets that server will handle properly
-    return join(assetsDir, config.distDir, uniqueFileId);
-  }
-
   return {
     name: "oh-image",
     configResolved(viteConfig) {
@@ -79,8 +54,8 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
         if (!url?.includes(DEV_DIR) || !SUPPORTED_IMAGE_FORMATS.test(url)) {
           return next();
         }
-
-        const path = urlToPath(url);
+        const fileId = basename(url);
+        const path = join(cacheDir, fileId);
         const ext = extname(url).slice(1); // pad to get only ext
         const image = await readFileSafe(path);
 
@@ -129,13 +104,18 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
 
           const format =
             mergedOptions.format ?? (ext.slice(1) as keyof FormatEnum);
+          const identifier = createIdentifier(name, hash, {
+            isBuild,
+            devDir: DEV_DIR,
+            assetsDir,
+            distDir: config.distDir,
+          });
 
-          const mainIdentifier = genIdentifier(name, format, "main", hash);
+          const mainIdentifier = identifier.main(format);
           const mainEntry: ImageEntry = {
             width: mergedOptions.width,
             height: mergedOptions.height,
-            format: mergedOptions.format, // here format can be null as long as
-            // there is format in name
+            format: mergedOptions.format,
             origin: origin,
           };
           imageEntries.set(mainIdentifier, mainEntry);
@@ -170,12 +150,8 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
               );
               placeholderHeight = PLACEHOLDER_IMG_SIZE;
             }
-            const placeholderIdentifier = genIdentifier(
-              name,
-              DEFAULT_IMAGE_FORMAT,
-              "placeholder",
-              hash,
-            );
+            const placeholderIdentifier =
+              identifier.placeholder(DEFAULT_IMAGE_FORMAT);
             const placeholderEntry: ImageEntry = {
               width: placeholderWidth,
               height: placeholderHeight,
@@ -190,11 +166,9 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
           if (mergedOptions.bps) {
             const srcSets: string[] = [];
             for (const breakpoint of mergedOptions.bps) {
-              const srcSetIdentifier = genIdentifier(
-                name,
+              const srcSetIdentifier = identifier.srcSet(
                 DEFAULT_IMAGE_FORMAT,
-                `breakpoint-${breakpoint}`,
-                hash,
+                breakpoint,
               );
               const srcSetEntry: ImageEntry = {
                 width: breakpoint,

@@ -70,6 +70,7 @@ export function queryToOptions(
   }
 }
 
+
 export async function processImage(
   path: string,
   options: Omit<ImageEntry, "origin">,
