@@ -73,41 +73,29 @@ These are the default values used by the plugin when no configuration is provide
 
 ## Global config options
 
-| Option        | Type       | Default                                                      | Description                                                   |
-| ------------- | ---------- | ------------------------------------------------------------ | ------------------------------------------------------------- |
-| `format`      | `string`   | `"webp"`                                                     | Output format for the image (e.g., `webp`, `avif`, `png`)     |
-| `placeholder` | `boolean`  | `true`                                                       | Whether to generate a placeholder image for lazy loading      |
-| `bps`         | `number[]` | `[16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920]`   | Breakpoints — widths in pixels for responsive srcSet generation |
-| `distDir`     | `string`   | `"oh-images"`                                                | Directory name where processed images are output during build |
+| Option        | Type       | Default                                                   | Description                                                     |
+| ------------- | ---------- | --------------------------------------------------------- | --------------------------------------------------------------- |
+| `format`      | `string`   | `"webp"`                                                  | Output format for the image (e.g., `webp`, `avif`, `png`)       |
+| `placeholder` | `boolean`  | `true`                                                    | Whether to generate a placeholder image for lazy loading        |
+| `bps`         | `number[]` | `[16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920]` | Breakpoints — widths in pixels for responsive srcSet generation |
+| `distDir`     | `string`   | `"oh-images"`                                             | Directory name where processed images are output during build   |
 
 ## Import-level options
 
-| Option        | Type                | Default     | Description                                                          |
-| ------------- | ------------------- | ----------- | -------------------------------------------------------------------- |
-| `format`      | `string`            | Inherits global | Output format for this image (e.g., `webp`, `avif`, `png`)      |
-| `width`       | `number`            | —           | Target width for the processed image in pixels                       |
-| `height`      | `number`            | —           | Target height for the processed image in pixels                      |
-| `placeholder` | `boolean`           | Inherits global | Whether to generate a placeholder image for lazy loading         |
-| `bps`         | `number[]`          | Inherits global | Breakpoints — widths in pixels for responsive srcSet generation  |
+| Option        | Type       | Default         | Description                                                     |
+| ------------- | ---------- | --------------- | --------------------------------------------------------------- |
+| `format`      | `string`   | Inherits global | Output format for this image (e.g., `webp`, `avif`, `png`)      |
+| `width`       | `number`   | —               | Target width for the processed image in pixels                  |
+| `height`      | `number`   | —               | Target height for the processed image in pixels                 |
+| `placeholder` | `boolean`  | Inherits global | Whether to generate a placeholder image for lazy loading        |
+| `bps`         | `number[]` | Inherits global | Breakpoints — widths in pixels for responsive srcSet generation |
 
-## Dev vs Build mode
+## Build vs Dev mode
 
 The plugin behaves differently depending on whether you're in development or building for production.
 
 <Tabs>
-  <TabItem label="Dev Mode">
-    **Lazy processing** — Images are only optimized when they are requested. This keeps the dev server responsive.
-
-    When a page with an optimized image loads:
-    1. The browser requests the image
-    2. The plugin intercepts the request
-    3. The image is processed on-the-fly
-    4. The result is cached for subsequent requests
-
-    This approach is ideal for development since you don't need to wait for all images to process on every server restart.
-
-  </TabItem>
-  <TabItem label="Build Mode">
+<TabItem label="Build Mode">
     **Eager processing** — All images are processed during the build step before deployment.
 
     The process:
@@ -118,6 +106,17 @@ The plugin behaves differently depending on whether you're in development or bui
 
     The plugin uses parallel processing (up to 30 images concurrently) to keep build times reasonable.
 
+  </TabItem>
+  <TabItem label="Dev Mode">
+    **Lazy processing** — Images are only optimized when they are requested. This keeps the dev server responsive.
+
+    When a page with an optimized image loads:
+    1. The browser requests the image
+    2. The plugin intercepts the request
+    3. The image is processed on-the-fly
+    4. The result is cached for subsequent requests
+
+    This approach is ideal for development since you don't need to wait for all images to process on every server restart.
   </TabItem>
 </Tabs>
 
