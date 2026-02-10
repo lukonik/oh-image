@@ -25,7 +25,6 @@ type DecodingOption = "async" | "auto" | "sync" | undefined;
 type FetchPriorityOption = "high" | "low" | "auto" | undefined;
 
 export function App() {
-  const [showPlaceholder, setShowPlaceholder] = useState(true);
   const [showAsap, setShowAsap] = useState(false);
   const [showFill, setShowFill] = useState(false);
   const [loading, setLoading] = useState<LoadingOption>("lazy");
@@ -44,14 +43,6 @@ export function App() {
       <section className="controls">
         <h2>Interactive Controls</h2>
         <div className="control-grid">
-          <label>
-            <input
-              type="checkbox"
-              checked={showPlaceholder}
-              onChange={(e) => setShowPlaceholder(e.target.checked)}
-            />
-            placeholder
-          </label>
           <label>
             <input
               type="checkbox"
@@ -101,7 +92,7 @@ export function App() {
               value={fetchPriority ?? ""}
               onChange={(e) =>
                 setFetchPriority(
-                  (e.target.value || undefined) as FetchPriorityOption
+                  (e.target.value || undefined) as FetchPriorityOption,
                 )
               }
             >
@@ -121,7 +112,6 @@ export function App() {
             <Image
               src={naturePlaceholder}
               alt="Interactive demo image"
-              placeholder={showPlaceholder}
               asap={showAsap}
               fill={showFill}
               loading={loading}
@@ -133,7 +123,6 @@ export function App() {
             {`<Image
   src={naturePlaceholder}
   alt="Interactive demo image"
-  placeholder={${showPlaceholder}}
   asap={${showAsap}}
   fill={${showFill}}
   loading="${loading ?? "default"}"
@@ -157,17 +146,13 @@ export function App() {
 
           <div className="demo-card">
             <h3>With Placeholder</h3>
-            <Image
-              src={naturePlaceholder}
-              alt="Nature - placeholder"
-              placeholder
-            />
+            <Image src={naturePlaceholder} alt="Nature - placeholder" />
             <code>import img from "./nature.jpg?oh&placeholder=true"</code>
           </div>
 
           <div className="demo-card">
             <h3>Placeholder + Blur</h3>
-            <Image src={natureBlur} alt="Nature - blur" placeholder />
+            <Image src={natureBlur} alt="Nature - blur" />
             <code>
               import img from "./nature.jpg?oh&placeholder=true&blur=10"
             </code>
@@ -175,13 +160,13 @@ export function App() {
 
           <div className="demo-card">
             <h3>Mountain</h3>
-            <Image src={mountainImage} alt="Mountain" placeholder />
+            <Image src={mountainImage} alt="Mountain" />
             <code>import img from "./mountain.jpg?oh&placeholder=true"</code>
           </div>
 
           <div className="demo-card">
             <h3>City</h3>
-            <Image src={cityImage} alt="City" placeholder />
+            <Image src={cityImage} alt="City" />
             <code>import img from "./city.jpg?oh&placeholder=true"</code>
           </div>
 
@@ -190,10 +175,9 @@ export function App() {
             <Image
               src={naturePlaceholder}
               alt="Nature - asap"
-              placeholder
               asap
             />
-            <code>{"<Image src={img} placeholder asap />"}</code>
+            <code>{"<Image src={img} asap />"}</code>
           </div>
         </div>
       </section>
@@ -207,21 +191,21 @@ export function App() {
           <div className="fill-card">
             <h3>Square Container</h3>
             <div className="fill-container square">
-              <Image src={oceanImage} alt="Fill square" placeholder fill />
+              <Image src={oceanImage} alt="Fill square" fill />
             </div>
           </div>
 
           <div className="fill-card">
             <h3>Wide Container</h3>
             <div className="fill-container wide">
-              <Image src={forestImage} alt="Fill wide" placeholder fill />
+              <Image src={forestImage} alt="Fill wide" fill />
             </div>
           </div>
 
           <div className="fill-card">
             <h3>Tall Container</h3>
             <div className="fill-container tall">
-              <Image src={mountainImage} alt="Fill tall" placeholder fill />
+              <Image src={mountainImage} alt="Fill tall" fill />
             </div>
           </div>
         </div>
@@ -259,7 +243,6 @@ export function App() {
             <Image
               src={naturePlaceholder}
               alt="With custom class"
-              placeholder
               className="custom-rounded"
             />
             <code>className="custom-rounded"</code>
@@ -270,7 +253,6 @@ export function App() {
             <Image
               src={oceanImage}
               alt="With custom style"
-              placeholder
               style={{
                 border: "4px solid #646cff",
                 borderRadius: "16px",
@@ -285,7 +267,6 @@ export function App() {
             <Image
               src={cityImage}
               alt="Grayscale"
-              placeholder
               style={{ filter: "grayscale(100%)" }}
             />
             <code>style={"{filter: 'grayscale(100%)'}"}</code>
