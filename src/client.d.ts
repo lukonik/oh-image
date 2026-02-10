@@ -1,4 +1,4 @@
-export interface ImageSrc {
+interface ImageSrc {
   /** Original width of the source image in pixels */
   width: number;
   /** Original height of the source image in pixels */
@@ -12,11 +12,6 @@ export interface ImageSrc {
 }
 
 declare module "*?oh" {
-  const imageSrc: ImageSrc;
-  export default imageSrc;
-}
-
-declare module "*?oh&*" {
-  const imageSrc: ImageSrc;
+  const imageSrc: any;
   export default imageSrc;
 }

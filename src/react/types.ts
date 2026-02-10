@@ -1,5 +1,4 @@
 import type { ImgHTMLAttributes } from "react";
-import type { ImageSrc } from "../client";
 
 type ImageSrcType = string | ImageSrc;
 

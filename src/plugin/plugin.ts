@@ -11,7 +11,6 @@ import type { FormatEnum } from "sharp";
 import type { Plugin } from "vite";
 import pLimit from "p-limit";
 import sharp from "sharp";
-import type { ImageSrc } from "../client";
 
 const DEFAULT_IMAGE_FORMAT: keyof FormatEnum = "webp";
 const PLACEHOLDER_IMG_SIZE = 8;
