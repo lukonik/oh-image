@@ -25,7 +25,6 @@ export async function saveFileSafe(path: string, data: Buffer) {
 
     // 3. Write the file
     await writeFile(path, data);
-    console.log(`Successfully saved to ${path}`);
   } catch (err) {
     console.error("Failed to save file:", err);
   }

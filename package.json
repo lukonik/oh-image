@@ -73,6 +73,7 @@
   },
   "dependencies": {
     "@types/supertest": "^6.0.3",
+    "memfs": "^4.56.10",
     "p-limit": "^7.3.0",
     "query-string": "^9.3.1",
     "supertest": "^7.2.2"
