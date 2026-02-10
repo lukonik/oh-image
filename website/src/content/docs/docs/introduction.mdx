@@ -1,5 +1,5 @@
 ---
-title: Introduction | oh-image
+title: Introduction
 description: Introduction for oh-image
 ---
 
@@ -28,8 +28,21 @@ import { Image } from "@lonik/oh-image/react"
 function App() {
     return <Image src={carImage} alt="a red car on an open road" />
 }
+
+// Will output:
+// <img
+//   src="car.png"
+//   srcset="car-640w.png 640w, car-960w.png 960w, ..."
+//   width="1920"
+//   height="1080"
+//   alt="a red car on an open road"
+//   style="background-image: url(data:image/...); background-size: cover; ..."
+//   fetchpriority="auto"
+// />
 ```
 
 This outputs a fully optimized `img` element — complete with a placeholder, automatically generated `srcset` attributes, and proper loading behavior out of the box.
 
 If you've used the Next.js Image component before, oh-image offers a similar experience without tying you to the Next.js framework.
+
+Because oh-image is built on top of Vite, it works with any app that uses Vite as its underlying engine — including TanStack Start, Remix, and any other Vite-powered framework.
