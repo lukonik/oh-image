@@ -100,9 +100,36 @@ The parent must have `position: relative/absolute/fixed` and defined dimensions:
 
 ---
 
+## loading
+
+Controls when the browser fetches the image. The value is derived automatically from other props, but can be overridden explicitly.
+
+| Variant | `loading` value |
+| ------- | --------------- |
+| Default | `"lazy"` |
+| `asap` | `"eager"` |
+| Explicit `loading` prop (without `asap`) | provided value |
+
+```tsx
+{/* lazy — default */}
+<Image src={photo} alt="Photo" />
+
+{/* eager — set via asap */}
+<Image src={heroImage} alt="Hero" asap />
+
+{/* eager — set explicitly */}
+<Image src={photo} alt="Photo" loading="eager" />
+```
+
+---
+
 ## sizes
 
-Tells the browser how wide the image will be at different viewport sizes, so it can pick the right variant from the srcSet:
+Setting `sizes` correctly is important — it's what tells the browser how wide the image will actually be rendered, so it can pick the right variant from the srcSet without downloading a needlessly large one. In practice though, it's tedious to write and easy to get wrong.
+
+The `<Image>` component does its best to help: when it determines it's appropriate, it automatically prepends [`auto`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img#auto) to the `sizes` value. This lets the browser use the image's actual rendered size for source selection, which is more accurate than a hand-written static hint.
+
+If you need precise control over which source the browser picks at each breakpoint, pass your own `sizes`:
 
 ```tsx
 <Image

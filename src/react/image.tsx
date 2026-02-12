@@ -2,6 +2,8 @@ import * as ReactDOM from "react-dom";
 import type { CSSProperties } from "react";
 import type { ImageProps } from "./types";
 import { useImgLoaded } from "./use-img-loaded";
+import { resolveOptions } from "./prop-resolvers";
+import { assertProps } from "./prop-asserts";
 // preload is only available in React 19+
 const preload =
   "preload" in ReactDOM &&
@@ -15,38 +17,6 @@ const preload =
         }
       ).preload
     : null;
-
-function resolveOptions(props: ImageProps) {
-  const { src, ...rest } = props;
-  const resolved = { ...rest } as Omit<ImageProps, "src"> & {
-    src: string;
-    srcSet?: string;
-  };
-  if (typeof src === "object") {
-    resolved.src = src.src;
-    resolved.width ??= src.width;
-    resolved.height ??= src.height;
-    resolved.srcSet ??= src.srcSets;
-    resolved.placeholderUrl ??= src.placeholderUrl;
-  } else {
-    resolved.src = src;
-  }
-
-  if (props.asap) {
-    resolved.decoding = "async";
-    resolved.loading = "eager";
-    resolved.fetchPriority = "high";
-    if (preload) {
-      preload(resolved.src, { as: "image", fetchPriority: "high" });
-    }
-  }
-
-  if (props.fill) {
-    resolved.sizes ||= "100vw";
-  }
-
-  return resolved;
-}
 
 function getPlaceholderStyles(props: ImageProps) {
   if (!props.placeholderUrl) {
@@ -74,6 +44,7 @@ function getFillStyles(props: ImageProps) {
 }
 
 export function Image(props: ImageProps) {
+  assertProps(props);
   const options = resolveOptions(props);
   const [imgRef, isLoaded] = useImgLoaded(options.src);
   const placeholderStyles = isLoaded ? {} : getPlaceholderStyles(options);
@@ -83,6 +54,11 @@ export function Image(props: ImageProps) {
     ...fillStyles,
     ...props.style,
   };
+
+  if (preload && options.asap) {
+    preload(options.src, { as: "image", fetchPriority: "high" });
+  }
+
   return (
     <img
       ref={imgRef}
