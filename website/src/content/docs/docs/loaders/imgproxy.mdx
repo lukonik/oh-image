@@ -1,0 +1,93 @@
+---
+title: Imgproxy Loader
+description: Using imgproxy with oh-image
+---
+
+The `useImgproxyLoader` hook creates a loader function compatible with [imgproxy](https://imgproxy.net/), a fast and secure standalone server for resizing and converting images.
+
+## Usage
+
+### 1. Per-Component Usage
+
+You can use the hook directly within a component to create a loader for a specific image.
+
+```tsx
+import { Image, useImgproxyLoader } from "@lonik/oh-image/react";
+
+function MyComponent() {
+  const loader = useImgproxyLoader({
+    path: "https://your-imgproxy-server.com",
+    format: "webp",
+    // placeholder: true, // Generate blurred placeholders (default: true)
+  });
+
+  return (
+    <Image
+      src="https://example.com/photo.jpg"
+      width={800}
+      height={600}
+      loader={loader}
+      alt="Processed with imgproxy"
+    />
+  );
+}
+```
+
+### 2. Global Configuration (Recommended)
+
+To avoid repeating configuration, use `ImgproxyLoaderProvider` to set defaults for your entire application or a specific subtree.
+
+```tsx
+import { ImgproxyLoaderProvider, Image, useImgproxyLoader } from "@lonik/oh-image/react";
+
+function App() {
+  return (
+    // Set global defaults for imgproxy images
+    <ImgproxyLoaderProvider 
+      path="https://img.my-cdn.com" 
+      format="webp" 
+      placeholder={true}
+    >
+      <Gallery />
+    </ImgproxyLoaderProvider>
+  );
+}
+
+function Gallery() {
+  // Uses the globally configured loader automatically
+  const loader = useImgproxyLoader(); 
+  
+  return (
+    <Image
+      src="https://example.com/art.jpg"
+      width={400}
+      height={300}
+      loader={loader}
+      alt="Gallery Item"
+    />
+  );
+}
+```
+
+## Configuration Options
+
+The `ImgproxyLoaderProvider` and `useImgproxyLoader` hook accept the same options object:
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `path` | `string` | **Required** | The absolute URL of your imgproxy server (e.g., `https://img.example.com`). |
+| `format` | `string` | `'webp'` | The output format for the image. |
+| `placeholder` | `boolean` | `true` | Whether to generate a low-quality placeholder for lazy loading. |
+| `placeholderParams` | `Record<string, string>` | `{ quality: "1" }` | Transformation parameters for the placeholder image. |
+| `params` | `Record<string, string>` | `undefined` | Additional imgproxy processing options (e.g., `{ gravity: 'no' }`). |
+| `paramsSeparator` | `string` | `'/'` | Separator for processing options. |
+| `breakpoints` | `number[]` | `undefined` | Custom breakpoints for responsive `srcSet` generation. |
+
+## URL Structure
+
+This loader generates URLs in the following format:
+`{path}/{options}/plain/{src}`
+
+Where `{options}` is a slash-separated list of processing instructions (e.g., `format:webp/width:800`).
+
+**Note:** If your imgproxy server requires a URL prefix like `/insecure`, include it in the `path` option (e.g., `https://img.example.com/insecure`).

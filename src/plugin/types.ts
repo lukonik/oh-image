@@ -1,7 +1,7 @@
 import type { FormatEnum } from "sharp";
 
 export interface PluginConfig extends Required<
-  Pick<ImageOptions, "placeholder" | "bps" | "format">
+  Pick<ImageOptions, "placeholder" | "breakpoints" | "format">
 > {
   /** Directory name where processed images will be output during build */
   distDir: string;
@@ -9,10 +9,20 @@ export interface PluginConfig extends Required<
 
 export interface ImageEntry {
   origin: string;
-  blur?: number | null;
   width?: number | null | undefined;
   height?: number | null | undefined;
   format?: keyof FormatEnum | null | undefined;
+  // Transfroms
+  blur?: number | null | undefined;
+  flip?: boolean | null | undefined;
+  flop?: boolean | null | undefined;
+  rotate?: number | null | undefined;
+  sharpen?: number | null | undefined;
+  median?: number | null | undefined;
+  gamma?: number | null | undefined;
+  negate?: boolean | null | undefined;
+  normalize?: boolean | null | undefined;
+  threshold?: number | null | undefined;
 }
 
 export interface ImageOptions {
@@ -29,6 +39,36 @@ export interface ImageOptions {
   placeholder?: boolean;
 
   /** Breakpoints array - widths in pixels for responsive srcSet generation */
-  bps?: number[];
+  breakpoints?: number[];
+
+  /** Blur the image */
+  blur?: number | null;
+
+  /** Flip the image vertically */
+  flip?: boolean | null;
+
+  /** Flop the image horizontally */
+  flop?: boolean | null;
+
+  /** Rotate the image */
+  rotate?: number | null;
+
+  /** Sharpen the image */
+  sharpen?: number | null;
+
+  /** Apply median filter */
+  median?: number | null;
+
+  /** Apply gamma correction */
+  gamma?: number | null;
+
+  /** Negate the image */
+  negate?: boolean | null;
+
+  /** Normalize the image */
+  normalize?: boolean | null;
+
+  /** Apply threshold */
+  threshold?: number | null;
 }
 

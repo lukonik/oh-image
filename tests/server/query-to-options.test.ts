@@ -52,10 +52,10 @@ describe("queryToOptions", () => {
   it("should return array when comma separated values are provided", () => {
     const { options } = queryToOptions(
       PROCESS_KEY,
-      "/test/image.png?oh&bps=16,48,96",
+      "/test/image.png?oh&breakpoints=16,48,96",
     );
     expect(options).toMatchObject({
-      bps: [16, 48, 96],
+      breakpoints: [16, 48, 96],
     });
   });
 });

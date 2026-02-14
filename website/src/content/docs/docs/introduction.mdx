@@ -3,46 +3,29 @@ title: Introduction
 description: Introduction for oh-image
 ---
 
-<span className="project-title pr-1">Oh Image</span> is a feature-rich React
-image component paired with a Vite optimizer plugin that handles image optimization
-for you automatically.
+<span className="project-title pr-1">Oh Image</span> is a tiny but powerful
+image component for React. It is highly optimized and includes all the features
+you would need for production-grade applications. The feature list includes:
 
-Loading images on the web used to be simple — just set the `src` attribute and move on.
-Today, best practices demand much more: meaningful `alt` text, multiple image variants for different viewport sizes, responsive sizing,
-performance-tuned attributes for faster loads, placeholder previews while the full image loads, and the list goes on.
-Keeping up with all of this and configuring it correctly is a real burden — and manually
-generating multiple versions of every image only makes it worse.
+- Automatically generating `srcSets`.
+- Using sensible defaults for `sizes` attributes for different aspect ratios.
+- Proper assertions to prevent you from using performance-killing attributes together, such as `loading="lazy"` with `fetchingpriority="high"`.
+- A single attribute, `"asap"`, that configures images (like headlines) to load them as soon as possible.
+- A custom Vite plugin that automatically transforms images, generating `srcSets` versions on-the-fly in Dev mode and generating them as static assets during build-time.
+- Different loaders that will fetch images from your favorite CDN:
+  - `imgproxy`
+  - `cloudflare`
+  - `cloudinary`
+  - A custom loader for your specific CDN.
+  - More CDNs to come...
+- Adding an optimized placeholder image while the main image is loading.
+- Global and local configuration for every piece of functionality.
 
-oh-image takes care of all of this for you. It provides two core pieces:
+You can think of Oh-Image as a Next.js image component, but without Next.js.
 
-1. A **React component** that ships with built-in support for responsive images, lazy loading, placeholders, and more — often configurable with a single prop.
-2. A **Vite optimizer plugin** that automatically resizes your images, generates placeholders, and produces responsive variants at build time.
-
-Each piece works on its own, but the real power comes from using them together.
-Here's what that looks like:
-
-```tsx
-import carImage from "./assets/car.png?oh"
-import { Image } from "@lonik/oh-image/react"
-
-function App() {
-    return <Image src={carImage} alt="a red car on an open road" />
-}
-
-// Will output:
-// <img
-//   src="car.png"
-//   srcset="car-640w.png 640w, car-960w.png 960w, ..."
-//   width="1920"
-//   height="1080"
-//   alt="a red car on an open road"
-//   style="background-image: url(data:image/...); background-size: cover; ..."
-//   fetchpriority="auto"
-// />
-```
-
-This outputs a fully optimized `img` element — complete with a placeholder, automatically generated `srcset` attributes, and proper loading behavior out of the box.
-
-If you've used the Next.js Image component before, oh-image offers a similar experience without tying you to the Next.js framework.
-
-Because oh-image is built on top of Vite, it works with any app that uses Vite as its underlying engine — including TanStack Start, Remix, and any other Vite-powered framework.
+If you are used to creating `<img>` tags with only `src` and `alt` attributes,
+you might question why you should use this library. Although you will still get benefits even with such small requirements
+(like automatically generating optimized images for you or easily fetching them from your favorite CDN),
+the real power comes when you understand how images work on the web. I strongly recommend you read [Web.dev Images](https://web.dev/learn/images)—it is an
+excellent guide you can read in your free time, and it will give you the knowledge and confidence to use this library instead of a simple `<img>` tag
+that needs to perform optimally across all different devices

@@ -1,0 +1,69 @@
+---
+title: Custom Loader
+description: How to create a custom image loader
+---
+
+If the built-in loaders don't fit your needs, you can easily create your own.
+
+## What is a Loader?
+
+A loader is just a function that takes image options (like `src` and `width`) and returns a URL string.
+
+```typescript
+type ImageLoader = (options: {
+  src: string;
+  width?: number;
+  height?: number;
+  isPlaceholder?: boolean;
+}) => string;
+```
+
+## Example
+
+Here is a simple loader for a service that resizes images via query parameters.
+
+```tsx
+const myLoader = ({ src, width, isPlaceholder }) => {
+  const url = new URL(src, "https://my-cdn.com");
+
+  if (width) url.searchParams.set("w", width);
+  if (isPlaceholder) url.searchParams.set("blur", "10");
+
+  return url.toString();
+};
+```
+
+## Loader Options
+
+The loader function receives an object with the following properties:
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `src` | `string` | The source path or URL of the image. |
+| `width` | `number` | The requested width for the image. |
+| `height` | `number` | The requested height for the image. |
+| `isPlaceholder` | `boolean` | `true` if this request is for a low-quality placeholder. |
+
+## Usage
+
+You can use your loader on a single image or set it globally.
+
+### Single Component
+
+Pass it directly to the `Image` component.
+
+```tsx
+<Image src="photo.jpg" loader={myLoader} />
+```
+
+### Global Configuration (Recommended)
+
+Wrap your app in `ImageProvider` to use the loader everywhere.
+
+```tsx
+import { ImageProvider } from "@lonik/oh-image/react";
+
+<ImageProvider loader={myLoader}>
+  <App />
+</ImageProvider>
+```
