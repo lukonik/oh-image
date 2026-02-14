@@ -56,18 +56,20 @@ export default defineConfig({
           items: [
             // Each item here is one entry in the navigation menu.
             { label: "Introduction", slug: "docs/introduction" },
-            { label: "Installation", slug: "docs/installation" },
-            { label: "Usage", slug: "docs/usage" },
+            { label: "Get Started", slug: "docs/get-started" },
             { label: "Image component", slug: "docs/image-component" },
             { label: "Plugin", slug: "docs/plugin" },
             { label: "Typescript", slug: "docs/typescript" },
           ],
         },
         {
-          label: "img theory",
-          badge: { text: "Coming Soon", variant: "tip" },
+          label: "Loaders",
           items: [
-            { label: "Introduction", slug: "img-theory/introduction" },
+            { label: "Overview", slug: "docs/loaders/overview" },
+            { label: "Imgproxy", slug: "docs/loaders/imgproxy" },
+            { label: "Cloudflare", slug: "docs/loaders/cloudflare" },
+            { label: "Cloudinary", slug: "docs/loaders/cloudinary" },
+            { label: "Custom Loader", slug: "docs/loaders/custom-loader" },
           ],
         },
       ],

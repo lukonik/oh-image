@@ -14,7 +14,7 @@ const DEFAULT_IMAGE_FORMAT: keyof FormatEnum = "webp";
 
 const DEFAULT_CONFIGS: PluginConfig = {
   distDir: "oh-images",
-  bps: [16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920],
+  breakpoints: [16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920],
   format: "webp",
   placeholder: true,
 };
@@ -110,6 +110,16 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
             height: mergedOptions.height,
             format: mergedOptions.format,
             origin: origin,
+            blur: mergedOptions.blur,
+            flip: mergedOptions.flip,
+            flop: mergedOptions.flop,
+            rotate: mergedOptions.rotate,
+            sharpen: mergedOptions.sharpen,
+            median: mergedOptions.median,
+            gamma: mergedOptions.gamma,
+            negate: mergedOptions.negate,
+            normalize: mergedOptions.normalize,
+            threshold: mergedOptions.threshold,
           });
 
           const src: ImageSrc = {
@@ -120,21 +130,30 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
           };
 
           // if placeholder is specified as placeholder as well
-          if (parsed.options?.placeholder) {
+          if (mergedOptions.placeholder) {
             const placeholderIdentifier =
               identifier.placeholder(DEFAULT_IMAGE_FORMAT);
             imageEntries.createPlaceholderEntry(placeholderIdentifier, {
-              width: metadata.width,
-              height: metadata.height,
+              width: metadata.width!,
+              height: metadata.height!,
               format: DEFAULT_IMAGE_FORMAT,
               origin: origin,
+              flip: mergedOptions.flip,
+              flop: mergedOptions.flop,
+              rotate: mergedOptions.rotate,
+              sharpen: mergedOptions.sharpen,
+              median: mergedOptions.median,
+              gamma: mergedOptions.gamma,
+              negate: mergedOptions.negate,
+              normalize: mergedOptions.normalize,
+              threshold: mergedOptions.threshold,
             });
             src.placeholderUrl = placeholderIdentifier;
           }
 
-          if (mergedOptions.bps) {
+          if (mergedOptions.breakpoints) {
             const srcSets: string[] = [];
-            for (const breakpoint of mergedOptions.bps) {
+            for (const breakpoint of mergedOptions.breakpoints) {
               const srcSetIdentifier = identifier.srcSet(
                 DEFAULT_IMAGE_FORMAT,
                 breakpoint,
@@ -143,6 +162,16 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
                 width: breakpoint,
                 format: DEFAULT_IMAGE_FORMAT,
                 origin: origin,
+                blur: mergedOptions.blur,
+                flip: mergedOptions.flip,
+                flop: mergedOptions.flop,
+                rotate: mergedOptions.rotate,
+                sharpen: mergedOptions.sharpen,
+                median: mergedOptions.median,
+                gamma: mergedOptions.gamma,
+                negate: mergedOptions.negate,
+                normalize: mergedOptions.normalize,
+                threshold: mergedOptions.threshold,
               });
               srcSets.push(`${srcSetIdentifier} ${breakpoint}w`);
             }

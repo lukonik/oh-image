@@ -1,0 +1,98 @@
+---
+title: Get Started
+description: Get Started with oh-image in your project
+---
+
+import { PackageManagers } from "starlight-package-managers";
+
+## Installation
+
+Install the necessary packages using your preferred package manager:
+
+<PackageManagers type="add" pkg="@lonik/oh-image sharp" />
+
+Now, you can use the `Image` component directly in your React application:
+
+```jsx
+import { Image } from "@lonik/oh-image/react";
+...
+<Image asap src="hero.png" alt="hero image" />;
+```
+
+---
+
+## Vite Plugin Integration
+
+`oh-image` includes a Vite plugin that automatically optimizes static images. To get started, add the `ohImage` plugin to your `plugins` array in `vite.config.js`.
+
+```ts
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
+import { ohImage } from "@lonik/oh-image/plugin"
+
+export default defineConfig({
+    ...
+  plugins: [ohImage(), react()],
+  ...
+});
+```
+
+### How it Works
+
+For the plugin to process your images, you must import the asset as a module and append the `?oh` suffix to the import path:
+
+```jsx
+// Proper import with the 'oh' suffix
+import hero from "./hero.png?oh";
+
+// Pass the imported object to the src prop
+<Image src={hero} alt="hero image" />;
+```
+
+### Important Considerations
+
+- **Module Imports:** Notice that the image is passed as an **object**, not a string. This allows the Vite plugin to intercept and process the file.
+- **Asset Location:** Images must reside **outside** of the `public` folder. Vite does not process files in `public` (it simply copies them to the `dist` folder), so the `ohImage` plugin will skip them. It is recommended to store your images in an `assets` folder.
+- **Automated Features:** Beyond standard optimization, the plugin automatically generates various `srcSet` variants and a placeholder image.
+
+---
+
+## Loaders
+
+Image CDNs are essential for modern web performance. `oh-image` features built-in functionality to serve images via CDN both easily and optimally.
+
+The `Image` component accepts a `loader` prop. When provided, this function automatically generates image URLs based on specific parameters like width, height, and format.
+
+### Example: Cloudinary Integration
+
+If you are using Cloudinary, you can set up a loader like this:
+
+```jsx
+const loader = useCloudinary({
+  path: "https://res.cloudinary.com/example",
+});
+
+<Image loader={loader} src="hero.png" width={600} height={1200} />;
+```
+
+The loader will automatically generate the `src` attribute, resulting in a URL similar to:
+`https://res.cloudinary.com/example/image/upload/f_auto,w_600,h_1200/hero.png`
+
+The `Image` component also uses the loader to generate all `srcSet` variants and the low-resolution placeholder.
+
+### Global Configuration
+
+- **Default Options:** Loaders can be configured globally to use default settings when using loader hooks.
+- **Default Loaders:** You can configure the `Image` component to use a specific loader by default, removing the need to pass the `loader` prop to every instance.
+
+### Supported CDNs
+
+We provide built-in loaders for popular services, with more being added regularly:
+
+- **Cloudinary**
+- **Cloudflare**
+- **imgproxy**
+
+If you use a different service, you can easily [create a custom loader](https://www.google.com/search?q=%23).
+
+---

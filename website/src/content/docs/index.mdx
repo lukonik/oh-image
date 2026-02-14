@@ -6,17 +6,13 @@ hero:
   title: |
     The Missing &lt;Image /&gt; Component for
     <span
-      class="font-black text-transparent
-        bg-clip-text bg-gradient-to-b
-        from-accent-700 to-accent-400
-        dark:from-accent-500 dark:to-accent-200"
-    >
-      Vite and React
+      class="font-black  text-rose-600"    >
+      React
     </span>
   image:
     file: ../../assets/oh-image-hero.svg
   actions:
-    - text: Get Started
+    - text: Introduction
       link: /oh-image/docs/introduction/
       icon: right-arrow
     - text: Star on GitHub
@@ -24,19 +20,38 @@ hero:
       icon: github
       variant: minimal
 ---
+
 import { Card, CardGrid } from "@astrojs/starlight/components";
 
-<CardGrid>
+## Features
+
+<CardGrid stagger>
   <Card title="React Image Component" icon="seti:image">
-    Drop-in `<Image />` component with automatic optimization, lazy loading, and responsive sizing.
+    Drop-in `<Image />` component with automatic optimization, lazy loading, and
+    responsive sizing.
   </Card>
   <Card title="Vite Plugin" icon="seti:config">
-    A Vite plugin that handles image processing at build time, generating optimized formats and sizes automatically.
+    A Vite plugin that handles image processing at build time, generating
+    optimized formats and sizes automatically.
   </Card>
   <Card title="Works with any Vite app" icon="rocket">
-    Compatible with any React app powered by Vite, including TanStack Start, Remix, and more — zero configuration needed.
+    Compatible with any React app powered by Vite, including TanStack Start,
+    Remix, and more — zero configuration needed.
   </Card>
   <Card title="TypeScript Support" icon="seti:typescript">
-    Written entirely in TypeScript. Enjoy full type support, autocompletion, and type-safe props out of the box.
+    Written entirely in TypeScript. Enjoy full type support, autocompletion, and
+    type-safe props out of the box.
+  </Card>
+  <Card title="Loaders" icon="puzzle">
+    Built-in support for Cloudinary, Cloudflare, and Imgproxy, or bring your own
+    custom loader.
+  </Card>
+  <Card title="Placeholder Generation" icon="image">
+    Automatically generates low-quality blurred placeholders to prevent layout
+    shifts and improve UX.
+  </Card>
+  <Card title="Automatic srcSet" icon="list-format">
+    Generates multiple resolutions for your images to ensure the best quality on
+    any device.
   </Card>
 </CardGrid>

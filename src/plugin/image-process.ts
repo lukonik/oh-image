@@ -21,5 +21,41 @@ export async function processImage(
     processed = processed.blur(options.blur);
   }
 
+  if (options.flip) {
+    processed = processed.flip();
+  }
+
+  if (options.flop) {
+    processed = processed.flop();
+  }
+
+  if (options.rotate) {
+    processed = processed.rotate(options.rotate);
+  }
+
+  if (options.sharpen) {
+    processed = processed.sharpen(options.sharpen);
+  }
+
+  if (options.median) {
+    processed = processed.median(options.median);
+  }
+
+  if (options.gamma) {
+    processed = processed.gamma(options.gamma);
+  }
+
+  if (options.negate) {
+    processed = processed.negate();
+  }
+
+  if (options.normalize) {
+    processed = processed.normalize();
+  }
+
+  if (options.threshold) {
+    processed = processed.threshold(options.threshold);
+  }
+
   return await processed.toBuffer();
 }

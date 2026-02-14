@@ -26,7 +26,17 @@ export function queryToOptions(
     parseNumbers: true,
     arrayFormat: "comma",
     types: {
-      bps: "number[]",
+      breakpoints: "number[]",
+      blur: "number",
+      flip: "boolean",
+      flop: "boolean",
+      rotate: "number",
+      sharpen: "number",
+      median: "number",
+      gamma: "number",
+      negate: "boolean",
+      normalize: "boolean",
+      threshold: "number",
     },
   });
 

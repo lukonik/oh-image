@@ -1,6 +1,15 @@
 import type { ImgHTMLAttributes } from "react";
 
-type ImageSrcType = string | ImageSrc;
+export interface ImageLoaderOptions {
+  src: string;
+  width?: number | null | undefined;
+  height?: number | null | undefined;
+  isPlaceholder?: boolean;
+}
+
+export type ImageLoader = (options: ImageLoaderOptions) => string;
+
+export type ImageSrcType = string | ImageSrc;
 
 export interface ImageProps extends Partial<
   Pick<
@@ -8,8 +17,6 @@ export interface ImageProps extends Partial<
     | "fetchPriority"
     | "decoding"
     | "loading"
-    | "height"
-    | "width"
     | "srcSet"
     | "className"
     | "sizes"
@@ -32,4 +39,12 @@ export interface ImageProps extends Partial<
    * styles such that the image fills its containing element.
    */
   fill?: boolean;
+
+  loader?: ImageLoader | null;
+
+  width?: number | undefined;
+
+  height?: number | undefined;
+
+  breakpoints?: number[];
 }

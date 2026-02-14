@@ -11,6 +11,10 @@
     "types": ["vite/client"],
     "declaration": true,
     "emitDeclarationOnly": true,
+    "paths": {
+      "@lonik/oh-image/react": ["./src/react/index.ts"],
+      "@lonik/oh-image/plugin": ["./src/plugin/index.ts"]
+    },
     "verbatimModuleSyntax": true
   },
   "include": ["src"]

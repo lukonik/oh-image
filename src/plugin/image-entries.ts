@@ -22,17 +22,23 @@ export function createImageEntries() {
         height: entry.height,
         format: entry.format,
         origin: entry.origin,
+        // Transforms
+        blur: entry.blur,
+        flip: entry.flip,
+        flop: entry.flop,
+        rotate: entry.rotate,
+        sharpen: entry.sharpen,
+        median: entry.median,
+        gamma: entry.gamma,
+        negate: entry.negate,
+        normalize: entry.normalize,
+        threshold: entry.threshold,
       };
       this.set(identifier, mainEntry);
     },
     createPlaceholderEntry(
       identifier: string,
-      main: {
-        width: number;
-        height: number;
-        origin: string;
-        format: keyof FormatEnum;
-      },
+      main: ImageEntry & { width: number; height: number; format: keyof FormatEnum },
     ) {
       let placeholderHeight: number = 0;
       let placeholderWidth: number = 0;
@@ -58,6 +64,16 @@ export function createImageEntries() {
         format: main.format,
         blur: PLACEHOLDER_BLUR_QUALITY,
         origin: main.origin,
+        // Transforms
+        flip: main.flip,
+        flop: main.flop,
+        rotate: main.rotate,
+        sharpen: main.sharpen,
+        median: main.median,
+        gamma: main.gamma,
+        negate: main.negate,
+        normalize: main.normalize,
+        threshold: main.threshold,
       };
       this.set(identifier, placeholderEntry);
     },
