@@ -2,6 +2,12 @@ import type { ImageProps } from "./types";
 
 export function assertProps(prop: ImageProps) {
   try {
+    if (prop.asap !== undefined) {
+      console.warn(
+        "The `asap` prop is deprecated and will be removed in a future version. Please use `priority` instead.",
+      );
+    }
+
     assertLoadingProp(prop);
     assertDecodingProp(prop);
     assertFetchPriorityProp(prop);
@@ -25,22 +31,22 @@ export function assert(
 
 export function assertLoadingProp(prop: ImageProps) {
   assert(
-    () => prop.loading && prop.asap,
-    `Do not use \`loading\` on a asap image — asap images are always eagerly loaded.`,
+    () => prop.loading && (prop.priority || prop.asap),
+    `Do not use \`loading\` on a priority image — priority images are always eagerly loaded.`,
   );
 }
 
 export function assertDecodingProp(prop: ImageProps) {
   assert(
-    () => prop.decoding && prop.asap,
-    `Do not use \`decoding\` on a asap image — asap images always use async decoding.`,
+    () => prop.decoding && (prop.priority || prop.asap),
+    `Do not use \`decoding\` on a priority image — priority images always use async decoding.`,
   );
 }
 
 export function assertFetchPriorityProp(prop: ImageProps) {
   assert(
-    () => prop.fetchPriority && prop.asap,
-    `Do not use \`fetchPriority\` on a asap image — asap images always use high fetch priority.`,
+    () => prop.fetchPriority && (prop.priority || prop.asap),
+    `Do not use \`fetchPriority\` on a priority image — priority images always use high fetch priority.`,
   );
 }
 
