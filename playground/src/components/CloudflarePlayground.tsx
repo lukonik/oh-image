@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Image } from "../../../src/react/image";
 import {
+  Image,
   CloudflareLoaderProvider,
   useCloudflareLoader,
-} from "../../../src/react/loaders/cloudflare-loader";
+} from "@lonik/oh-image/react";
 
 function CloudflareDemo() {
   const loader = useCloudflareLoader();
@@ -20,7 +20,12 @@ function CloudflareDemo() {
                     this might 404 or fail unless the user provides a valid path.
                     We are just demonstrating the wiring.
                  */}
-        <Image src="car.jpg" alt="Cloudflare Example" width={900} loader={loader} />
+        <Image
+          src="car.jpg"
+          alt="Cloudflare Example"
+          width={900}
+          loader={loader}
+        />
       </div>
       <div style={{ marginTop: "1rem" }}>
         <pre className="code-preview">
