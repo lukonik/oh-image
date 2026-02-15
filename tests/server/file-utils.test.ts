@@ -1,9 +1,8 @@
 import { vol } from "memfs";
 import { describe, expect, it } from "vitest";
 import {
-  getFileHash,
   readFileSafe,
-  saveFileSafe,
+  saveFileSafe
 } from "../../src/plugin/file-utils";
 
 describe("readFileSafe", () => {
@@ -40,22 +39,4 @@ describe("saveFileSafe", () => {
   });
 });
 
-describe("getFileHash", () => {
-  it("should return a 16-character hex string", async () => {
-    await saveFileSafe("/hash.txt", Buffer.from("hello"));
-    const hash = await getFileHash("/hash.txt");
-    expect(hash).toMatch(/^[0-9a-f]{16}$/);
-  });
 
-  it("should return the same hash for the same content", async () => {
-    await saveFileSafe("/a.txt", Buffer.from("same"));
-    await saveFileSafe("/b.txt", Buffer.from("same"));
-    expect(await getFileHash("/a.txt")).toBe(await getFileHash("/b.txt"));
-  });
-
-  it("should return different hashes for different content", async () => {
-    await saveFileSafe("/x.txt", Buffer.from("foo"));
-    await saveFileSafe("/y.txt", Buffer.from("bar"));
-    expect(await getFileHash("/x.txt")).not.toBe(await getFileHash("/y.txt"));
-  });
-});

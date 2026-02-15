@@ -58,7 +58,7 @@ describe("ohImage plugin", () => {
       const result = await loadHandler("test-image.jpg?oh&width=500");
       
       expect(sharp).toHaveBeenCalledWith("test-image.jpg");
-      expect(fileUtils.getFileHash).toHaveBeenCalledWith("test-image.jpg");
+      expect(fileUtils.getFileHash).toHaveBeenCalledWith("test-image.jpg", "oh&width=500");
       
       // Verify the returned code
       expect(result).toContain("export default");
