@@ -7,39 +7,30 @@ import { PackageManagers } from "starlight-package-managers";
 
 ## Installation
 
-Install the necessary packages using your preferred package manager:
+Start by installing the package and the `sharp` image processing library using your preferred package manager:
 
 <PackageManagers type="add" pkg="@lonik/oh-image sharp" />
 
-Now, you can use the `Image` component directly in your React application:
+## Setup
 
-```jsx
-import { Image } from "@lonik/oh-image/react";
-...
-<Image asap src="hero.png" alt="hero image" />;
-```
+To enable automatic image optimization, placeholders, and metadata generation, add the `ohImage` plugin to your Vite configuration.
 
----
-
-## Vite Plugin Integration
-
-`oh-image` includes a Vite plugin that automatically optimizes static images. To get started, add the `ohImage` plugin to your `plugins` array in `vite.config.js`.
+Open `vite.config.js` (or `vite.config.ts`) and add the plugin:
 
 ```ts
-import react from "@vitejs/plugin-react";
+// vite.config.ts
 import { defineConfig } from "vite";
-import { ohImage } from "@lonik/oh-image/plugin"
+import react from "@vitejs/plugin-react";
+import { ohImage } from "@lonik/oh-image/plugin";
 
 export default defineConfig({
-    ...
   plugins: [ohImage(), react()],
-  ...
 });
 ```
 
 ### How it Works
 
-For the plugin to process your images, you must import the asset as a module and append the `?oh` suffix to the import path:
+For the plugin to process your images, you must import the asset as a module and append the `?oh` suffix to the import path. The plugin automatically converts your images to optimized formats (like WebP/AVIF), generates responsive `srcSet` variants, and creates a low-quality placeholder for lazy loading—all out of the box.
 
 ```jsx
 // Proper import with the 'oh' suffix
@@ -49,11 +40,11 @@ import hero from "./hero.png?oh";
 <Image src={hero} alt="hero image" />;
 ```
 
-### Important Considerations
+:::note
+**Asset Location:** Images **must** reside inside your `src` directory (e.g., in an `assets` folder) to be processed. Files in the `public` folder are copied as-is by Vite and **will not** be optimized by this plugin.
 
-- **Module Imports:** Notice that the image is passed as an **object**, not a string. This allows the Vite plugin to intercept and process the file.
-- **Asset Location:** Images must reside **outside** of the `public` folder. Vite does not process files in `public` (it simply copies them to the `dist` folder), so the `ohImage` plugin will skip them. It is recommended to store your images in an `assets` folder.
-- **Automated Features:** Beyond standard optimization, the plugin automatically generates various `srcSet` variants and a placeholder image.
+**Module Imports:** Importing an image with the `?oh` suffix returns a structured object containing the optimization data, not just a string path.
+:::
 
 ---
 
@@ -79,20 +70,3 @@ The loader will automatically generate the `src` attribute, resulting in a URL s
 `https://res.cloudinary.com/example/image/upload/f_auto,w_600,h_1200/hero.png`
 
 The `Image` component also uses the loader to generate all `srcSet` variants and the low-resolution placeholder.
-
-### Global Configuration
-
-- **Default Options:** Loaders can be configured globally to use default settings when using loader hooks.
-- **Default Loaders:** You can configure the `Image` component to use a specific loader by default, removing the need to pass the `loader` prop to every instance.
-
-### Supported CDNs
-
-We provide built-in loaders for popular services, with more being added regularly:
-
-- **Cloudinary**
-- **Cloudflare**
-- **imgproxy**
-
-If you use a different service, you can easily [create a custom loader](https://www.google.com/search?q=%23).
-
----
