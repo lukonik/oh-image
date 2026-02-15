@@ -17,7 +17,7 @@ const ImgproxyContext = createContext<ImgproxyLoaderOptions>({
   placeholder: true,
   format: "webp",
   placeholderParams: {
-    quality: "1",
+    quality: "20",
   },
 });
 

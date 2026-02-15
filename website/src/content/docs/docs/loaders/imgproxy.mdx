@@ -78,7 +78,7 @@ The `ImgproxyLoaderProvider` and `useImgproxyLoader` hook accept the same option
 | `path` | `string` | **Required** | The absolute URL of your imgproxy server (e.g., `https://img.example.com`). |
 | `format` | `string` | `'webp'` | The output format for the image. |
 | `placeholder` | `boolean` | `true` | Whether to generate a low-quality placeholder for lazy loading. |
-| `placeholderParams` | `Record<string, string>` | `{ quality: "1" }` | Transformation parameters for the placeholder image. |
+| `placeholderParams` | `Record<string, string>` | `{ quality: "20" }` | Transformation parameters for the placeholder image. |
 | `params` | `Record<string, string>` | `undefined` | Additional imgproxy processing options (e.g., `{ gravity: 'no' }`). |
 | `paramsSeparator` | `string` | `'/'` | Separator for processing options. |
 | `breakpoints` | `number[]` | `undefined` | Custom breakpoints for responsive `srcSet` generation. |
