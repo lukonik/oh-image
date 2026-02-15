@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import {
   CloudflareLoaderProvider,
   useCloudflareContext,
-} from "../../src/react/loaders/cloudflare-context";
+} from "../../src/react";
 
 describe("useCloudflareContext", () => {
   afterEach(() => {

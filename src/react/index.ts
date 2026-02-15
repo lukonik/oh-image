@@ -6,16 +6,26 @@ export type {
   ImageLoader,
   ImageSrcType,
 } from "./types";
+
+export { ImageProvider, useImageContext } from "./image-context";
+
 export {
-  useCloudflareLoader,
-  CloudflareLoaderProvider,
-  useCloudflareContext,
-  type CloudflareLoaderOptions,
-} from "./loaders/cloudflare-loader";
-export {
+  type ImgproxyLoaderOptions,
+  useImgproxyContext,
   useImgproxyLoader,
   ImgproxyLoaderProvider,
-  useImgproxyContext,
-  type ImgproxyLoaderOptions,
 } from "./loaders/imgproxy-loader";
-export { ImageProvider, useImageContext } from "./image-context";
+
+export {
+  type CloudflareLoaderOptions,
+  useCloudflareContext,
+  useCloudflareLoader,
+  CloudflareLoaderProvider,
+} from "./loaders/cloudflare-loader";
+
+export {
+  type CloudinaryLoaderOptions,
+  useCloudinaryContext,
+  useCloudinaryLoader,
+  CloudinaryLoaderProvider,
+} from "./loaders/cloudinary-loader";
