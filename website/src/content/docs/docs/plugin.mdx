@@ -11,10 +11,10 @@ The `oh-image` Vite plugin handles all the image optimization for the library. I
 
 Unlike standard Vite image handling which returns a simple URL string, the `oh-image` plugin transforms your image imports into rich data objects. This allows for:
 
--   **Automatic Format Conversion**: Convert images to modern formats like WebP or AVIF.
--   **Responsive Images**: Automatically generate `srcSet` for different screen sizes.
--   **Lazy Loading Placeholders**: Create blurred low-quality placeholders (LQIP) for smooth loading experiences.
--   **On-the-fly Processing**: Resize, crop, rotate, and adjust images directly via import parameters.
+- **Automatic Format Conversion**: Convert images to modern formats like WebP or AVIF.
+- **Responsive Images**: Automatically generate `srcSet` for different screen sizes.
+- **Lazy Loading Placeholders**: Create blurred low-quality placeholders (LQIP) for smooth loading experiences.
+- **On-the-fly Processing**: Resize, crop, rotate, and adjust images directly via import parameters.
 
 ## Usage
 
@@ -36,7 +36,7 @@ export default defineConfig({
       format: "webp",
       placeholder: true,
     }),
-    react()
+    react(),
   ],
 });
 ```
@@ -78,7 +78,7 @@ You pass this directly to the `Image` component:
 import { Image } from "@lonik/oh-image/react";
 import myImage from "./assets/photo.jpg?oh";
 
-<Image src={myImage} alt="My Photo" />
+<Image src={myImage} alt="My Photo" />;
 ```
 
 ## Public Folder Restriction
@@ -97,7 +97,7 @@ You can configure image processing on a per-file basis using query parameters. A
 | :------------ | :--------- | :-------------------------------------------------------------------------- |
 | `width`       | `number`   | Resize image to this width (maintains aspect ratio if height is omitted).   |
 | `height`      | `number`   | Resize image to this height (maintains aspect ratio if width is omitted).   |
-| `format`      | `string`   | Output format (`webp`, `avif`, `png`, `jpg`). Overrides global setting.    |
+| `format`      | `string`   | Output format (`webp`, `avif`, `png`, `jpg`). Overrides global setting.     |
 | `placeholder` | `boolean`  | Generate a blurred placeholder? (`true`/`false`). Overrides global setting. |
 | `breakpoints` | `number[]` | Comma-separated list of widths for `srcSet`. Overrides global setting.      |
 
@@ -156,36 +156,36 @@ ohImage({
   breakpoints: [640, 768, 1024, 1280, 1536],
 
   // Output directory for build assets
-  distDir: "oh-images"
-})
+  distDir: "oh-images",
+});
 ```
 
 ### Global Options Reference
 
-| Option        | Type       | Default                                                   | Description                                                     |
-| :------------ | :--------- | :-------------------------------------------------------- | :-------------------------------------------------------------- |
-| `format`      | `string`   | `"webp"`                                                  | Default output format.                                          |
-| `placeholder` | `boolean`  | `true`                                                    | Generate placeholders by default.                               |
-| `breakpoints` | `number[]` | `[16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920]` | Default widths for `srcSet` generation.                         |
-| `distDir`     | `string`   | `"oh-images"`                                             | Folder name inside `dist/assets/` where images will be saved.   |
+| Option        | Type       | Default                                                   | Description                                                   |
+| :------------ | :--------- | :-------------------------------------------------------- | :------------------------------------------------------------ |
+| `format`      | `string`   | `"webp"`                                                  | Default output format.                                        |
+| `placeholder` | `boolean`  | `true`                                                    | Generate placeholders by default.                             |
+| `breakpoints` | `number[]` | `[16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920]` | Default widths for `srcSet` generation.                       |
+| `distDir`     | `string`   | `"oh-images"`                                             | Folder name inside `dist/assets/` where images will be saved. |
 
 ## Build vs Dev Mode
 
 The plugin operates differently depending on your environment to balance speed and performance.
 
 ### Development (Lazy Processing)
+
 In development, images are processed **lazily**.
+
 1.  When you import an image, the plugin returns a URL pointing to a virtual dev server path.
 2.  Processing (resizing, conversion) only happens when the browser actually requests that image.
 3.  The result is cached in `node_modules/.cache` to speed up subsequent reloads.
 
-**Benefit:** Fast server start-up, even with thousands of images.
-
 ### Production Build (Eager Processing)
+
 During `vite build`, images are processed **eagerly**.
+
 1.  The plugin scans your code for all `?oh` imports.
 2.  It processes all images and their generated variants (breakpoints, placeholders) in parallel.
 3.  Optimized files are written to the output directory (`dist/`).
 4.  Import paths are rewritten to point to these optimized assets.
-
-**Benefit:** Zero runtime overhead for users; maximum performance.
