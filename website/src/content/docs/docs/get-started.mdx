@@ -7,33 +7,24 @@ import { PackageManagers } from "starlight-package-managers";
 
 ## Installation
 
-Install the necessary packages using your preferred package manager:
+Start by installing the package and the `sharp` image processing library using your preferred package manager:
 
 <PackageManagers type="add" pkg="@lonik/oh-image sharp" />
 
-Now, you can use the `Image` component directly in your React application:
+## Setup
 
-```jsx
-import { Image } from "@lonik/oh-image/react";
-...
-<Image asap src="hero.png" alt="hero image" />;
-```
+To enable automatic image optimization, placeholders, and metadata generation, add the `ohImage` plugin to your Vite configuration.
 
----
-
-## Vite Plugin Integration
-
-`oh-image` includes a Vite plugin that automatically optimizes static images. To get started, add the `ohImage` plugin to your `plugins` array in `vite.config.js`.
+Open `vite.config.js` (or `vite.config.ts`) and add the plugin:
 
 ```ts
-import react from "@vitejs/plugin-react";
+// vite.config.ts
 import { defineConfig } from "vite";
-import { ohImage } from "@lonik/oh-image/plugin"
+import react from "@vitejs/plugin-react";
+import { ohImage } from "@lonik/oh-image/plugin";
 
 export default defineConfig({
-    ...
   plugins: [ohImage(), react()],
-  ...
 });
 ```
 
