@@ -46,20 +46,19 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
       server.middlewares.use(async (req, res, next) => {
         const url = req.url;
         if (!url?.includes(DEV_DIR) || !SUPPORTED_IMAGE_FORMATS.test(url)) {
-          return next()
+          return next();
         }
         const fileId = basename(url);
         const path = join(cacheDir, fileId);
         const ext = extname(url).slice(1); // pad to get only ext
-        const image = await readFileSafe(path);
-
         // if image is not found, we need to find origin process it and save it in cache
         // because images are lazy loaded
         const imageEntry = imageEntries.get(url);
         if (!imageEntry) {
           console.warn("Image entry not found with id: " + url);
-          return  next();
+          return next();
         }
+        const image = await readFileSafe(path);
 
         if (image) {
           res.setHeader("Content-Type", `image/${ext}`);
@@ -88,7 +87,7 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
           const { name, ext } = parse(parsed.path);
           const metadata = await sharp(parsed.path).metadata();
 
-          const hash = await getFileHash(origin);
+          const hash = await getFileHash(origin, parsed.queryString);
 
           const mergedOptions = {
             ...config,

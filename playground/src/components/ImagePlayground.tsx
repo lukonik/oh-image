@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Image } from "../../../src/react/image";
-import mountain from "../mountain.jpg?oh";
+import mountain from "../mountain.jpg?oh&breakpoints&placeholder=false";
 import type { ImageProps } from "../../../src/react/types";
 export function ImagePlayground() {
   const [props, setProps] = useState<Partial<ImageProps>>({

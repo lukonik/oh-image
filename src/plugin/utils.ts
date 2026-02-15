@@ -16,10 +16,11 @@ export function queryToOptions(
   shouldProcess: boolean;
   path: string;
   options?: Partial<ImageOptions>;
+  queryString: string;
 } {
   const [path, query] = uri.split("?");
   if (!query || !path) {
-    return { shouldProcess: false, path: "" };
+    return { shouldProcess: false, path: "", queryString: "" };
   }
   const parsed = queryString.parse(query, {
     parseBooleans: true,
@@ -41,8 +42,13 @@ export function queryToOptions(
   });
 
   if (processKey in parsed) {
-    return { shouldProcess: true, options: parsed, path: path };
+    return {
+      shouldProcess: true,
+      options: parsed,
+      path: path,
+      queryString: query,
+    };
   } else {
-    return { shouldProcess: false, path: path };
+    return { shouldProcess: false, path: path, queryString: query };
   }
 }

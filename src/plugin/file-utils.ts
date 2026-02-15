@@ -2,9 +2,16 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
-export async function getFileHash(filePath: string): Promise<string> {
+export async function getHash(value: string | Buffer) {
+  return createHash("sha256").update(value).digest("hex").slice(0, 16);
+}
+
+export async function getFileHash(
+  filePath: string,
+  queryString: string,
+): Promise<string> {
   const content = await readFile(filePath);
-  return createHash("sha256").update(content).digest("hex").slice(0, 16);
+  return `${await getHash(content)}-${await getHash(queryString)}`;
 }
 
 export async function readFileSafe(path: string) {
