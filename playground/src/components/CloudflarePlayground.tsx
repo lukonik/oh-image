@@ -3,7 +3,7 @@ import {
   Image,
   CloudflareLoaderProvider,
   useCloudflareLoader,
-} from "@lonik/oh-image/react";
+} from "../../../src/react";
 
 function CloudflareDemo() {
   const loader = useCloudflareLoader();
