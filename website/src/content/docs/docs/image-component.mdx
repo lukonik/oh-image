@@ -58,11 +58,11 @@ A boolean that causes the image to fill its parent container.
 - Sets `width: 100%`, `height: 100%`, and `inset: 0`.
 - Useful for background images or when you want the image to adapt entirely to a container's size.
 
-### `asap`
+### `priority`
 
 **Type**: `boolean` (optional)
 
-Short for "As Soon As Possible". Use this for critical images, such as the Largest Contentful Paint (LCP) element (e.g., hero images).
+ Use this for critical images, such as the Largest Contentful Paint (LCP) element (e.g., hero images).
 
 - Sets `loading="eager"`.
 - Sets `fetchPriority="high"`.
@@ -112,7 +112,7 @@ By default, the `Image` component tries to set the best possible size, but **thi
 
 The component also accepts standard `<img>` attributes:
 
-- `loading`: `"lazy" | "eager"` (Defaults to `"lazy"` unless `asap` is true).
+- `loading`: `"lazy" | "eager"` (Defaults to `"lazy"` unless `priority` is true).
 - `decoding`: `"async" | "auto" | "sync"`.
 - `fetchPriority`: `"high" | "low" | "auto"`.
 - `className`, `style`

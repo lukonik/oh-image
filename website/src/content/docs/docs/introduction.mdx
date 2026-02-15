@@ -10,7 +10,7 @@ you would need for production-grade applications. The feature list includes:
 - Automatically generating `srcSets`.
 - Using sensible defaults for `sizes` attributes for different aspect ratios.
 - Proper assertions to prevent you from using performance-killing attributes together, such as `loading="lazy"` with `fetchingpriority="high"`.
-- A single attribute, `"asap"`, that configures images (like headlines) to load them as soon as possible.
+- A single attribute, `"priority"`, that configures images (like headlines) to load them as soon as possible.
 - A custom Vite plugin that automatically transforms images, generating `srcSets` versions on-the-fly in Dev mode and generating them as static assets during build-time.
 - Different loaders that will fetch images from your favorite CDN:
   - `imgproxy`

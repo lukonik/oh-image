@@ -19,7 +19,7 @@ A React component library and Vite plugin for optimized image handling. This pro
     *   Exports a structured object containing `src`, `width`, `height`, `srcSet`, and `placeholderUrl` instead of a simple string.
 *   **React Component (`<Image />`):**
     *   Accepts the structured image object from the plugin.
-    *   **`asap` prop:** Enables eager loading, high fetch priority, and `link rel="preload"` (React 19+ compatible).
+    *   **`priority` prop:** Enables eager loading, high fetch priority, and `link rel="preload"` (React 19+ compatible).
     *   **`fill` prop:** Configures the image to fill its container (absolute positioning).
     *   **Placeholder:** Automatically applies a blurred background placeholder if available.
 
