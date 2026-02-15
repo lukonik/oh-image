@@ -8,7 +8,6 @@
     "module": "preserve",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "types": ["vite/client"],
     "declaration": true,
     "emitDeclarationOnly": true,
     "paths": {

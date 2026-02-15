@@ -23,9 +23,9 @@ const objectSrc = {
 const mockLoader = () => "http://cdn.example.com/image.jpg";
 
 describe("assertLoadingProp", () => {
-  it("throws when both loading and asap are set", () => {
+  it("throws when both loading and priority are set", () => {
     expect(() =>
-      assertLoadingProp(makeProps({ loading: "lazy", asap: true })),
+      assertLoadingProp(makeProps({ loading: "lazy", priority: true })),
     ).toThrow();
   });
 
@@ -35,15 +35,15 @@ describe("assertLoadingProp", () => {
     ).not.toThrow();
   });
 
-  it("does not throw when only asap is set", () => {
-    expect(() => assertLoadingProp(makeProps({ asap: true }))).not.toThrow();
+  it("does not throw when only priority is set", () => {
+    expect(() => assertLoadingProp(makeProps({ priority: true }))).not.toThrow();
   });
 });
 
 describe("assertDecodingProp", () => {
-  it("throws when both decoding and asap are set", () => {
+  it("throws when both decoding and priority are set", () => {
     expect(() =>
-      assertDecodingProp(makeProps({ decoding: "sync", asap: true })),
+      assertDecodingProp(makeProps({ decoding: "sync", priority: true })),
     ).toThrow();
   });
 
@@ -53,15 +53,15 @@ describe("assertDecodingProp", () => {
     ).not.toThrow();
   });
 
-  it("does not throw when only asap is set", () => {
-    expect(() => assertDecodingProp(makeProps({ asap: true }))).not.toThrow();
+  it("does not throw when only priority is set", () => {
+    expect(() => assertDecodingProp(makeProps({ priority: true }))).not.toThrow();
   });
 });
 
 describe("assertFetchPriorityProp", () => {
-  it("throws when both fetchPriority and asap are set", () => {
+  it("throws when both fetchPriority and priority are set", () => {
     expect(() =>
-      assertFetchPriorityProp(makeProps({ fetchPriority: "low", asap: true })),
+      assertFetchPriorityProp(makeProps({ fetchPriority: "low", priority: true })),
     ).toThrow();
   });
 
@@ -71,9 +71,9 @@ describe("assertFetchPriorityProp", () => {
     ).not.toThrow();
   });
 
-  it("does not throw when only asap is set", () => {
+  it("does not throw when only priority is set", () => {
     expect(() =>
-      assertFetchPriorityProp(makeProps({ asap: true })),
+      assertFetchPriorityProp(makeProps({ priority: true })),
     ).not.toThrow();
   });
 });

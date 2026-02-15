@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
 import {
-    resolveLoading,
-    resolveSizes,
-    resolveDecoding,
-    resolveFetchPriority,
-    resolveSrcSet,
-    resolveSrc,
-    resolveWidth,
-    resolveHeight,
-    resolvePlaceholderURL,
+  resolveLoading,
+  resolveSizes,
+  resolveDecoding,
+  resolveFetchPriority,
+  resolveSrcSet,
+  resolveSrc,
+  resolveWidth,
+  resolveHeight,
+  resolvePlaceholderURL,
 } from "../../src/react/prop-resolvers";
 import type { ImageProps } from "../../src/react/types";
 
@@ -21,16 +21,16 @@ describe("resolveLoading", () => {
     expect(resolveLoading(makeProps())).toBe("lazy");
   });
 
-  it("returns the provided loading value when not asap", () => {
+  it("returns the provided loading value when not priority", () => {
     expect(resolveLoading(makeProps({ loading: "eager" }))).toBe("eager");
   });
 
-  it("returns 'eager' when asap is true, ignoring loading prop", () => {
-    expect(resolveLoading(makeProps({ asap: true }))).toBe("eager");
+  it("returns 'eager' when priority is true, ignoring loading prop", () => {
+    expect(resolveLoading(makeProps({ priority: true }))).toBe("eager");
   });
 
-  it("returns 'eager' when asap is true even if loading is 'lazy'", () => {
-    expect(resolveLoading(makeProps({ asap: true, loading: "lazy" }))).toBe(
+  it("returns 'eager' when priority is true even if loading is 'lazy'", () => {
+    expect(resolveLoading(makeProps({ priority: true, loading: "lazy" }))).toBe(
       "eager"
     );
   });
@@ -83,9 +83,9 @@ describe("resolveSizes", () => {
     expect(resolveSizes(makeProps({ srcSet: "image.jpg 2x" }))).toBeUndefined();
   });
 
-  it("does not set sizes when asap is true, even with a valid width-descriptor srcSet", () => {
+  it("does not set sizes when priority is true, even with a valid width-descriptor srcSet", () => {
     expect(
-      resolveSizes(makeProps({ asap: true, srcSet: "200w, 400w" }))
+      resolveSizes(makeProps({ priority: true, srcSet: "200w, 400w" }))
     ).toBeUndefined();
   });
 });
@@ -102,25 +102,25 @@ const mockLoader = (opts: { src: string; width?: number | null; height?: number 
   `http://cdn.test/resize/${opts.width ?? "auto"}/${opts.src}`;
 
 describe("resolveDecoding", () => {
-  it("returns 'async' when asap is true", () => {
-    expect(resolveDecoding(makeProps({ asap: true }))).toBe("async");
+  it("returns 'async' when priority is true", () => {
+    expect(resolveDecoding(makeProps({ priority: true }))).toBe("async");
   });
 
-  it("returns the provided decoding value when not asap", () => {
+  it("returns the provided decoding value when not priority", () => {
     expect(resolveDecoding(makeProps({ decoding: "sync" }))).toBe("sync");
   });
 
-  it("returns undefined when no decoding and no asap", () => {
+  it("returns undefined when no decoding and no priority", () => {
     expect(resolveDecoding(makeProps())).toBeUndefined();
   });
 });
 
 describe("resolveFetchPriority", () => {
-  it("returns 'high' when asap is true", () => {
-    expect(resolveFetchPriority(makeProps({ asap: true }))).toBe("high");
+  it("returns 'high' when priority is true", () => {
+    expect(resolveFetchPriority(makeProps({ priority: true }))).toBe("high");
   });
 
-  it("returns the provided fetchPriority when not asap", () => {
+  it("returns the provided fetchPriority when not priority", () => {
     expect(resolveFetchPriority(makeProps({ fetchPriority: "low" }))).toBe("low");
   });
 

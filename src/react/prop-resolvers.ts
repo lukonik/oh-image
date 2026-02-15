@@ -29,11 +29,11 @@ export function resolveOptions(
 }
 
 export function resolveDecoding(prop: ImageProps) {
-  return prop.asap ? "async" : prop.decoding;
+  return (prop.priority || prop.asap) ? "async" : prop.decoding;
 }
 
 export function resolveFetchPriority(prop: ImageProps) {
-  if (prop.asap) {
+  if (prop.priority || prop.asap) {
     return "high";
   }
   return prop.fetchPriority ?? "auto";
@@ -80,10 +80,11 @@ export function resolveSrcSet(prop: ImageProps) {
 }
 
 export function resolveLoading(prop: ImageProps) {
-  if (!prop.asap && prop.loading !== undefined) {
+  const priority = prop.priority || prop.asap;
+  if (!priority && prop.loading !== undefined) {
     return prop.loading;
   }
-  return prop.asap ? "eager" : "lazy";
+  return priority ? "eager" : "lazy";
 }
 
 export function resolveSizes(

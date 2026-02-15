@@ -60,8 +60,8 @@ describe("Image", () => {
     expect(getByRole("img")).toHaveAttribute("fetchPriority", "high");
   });
 
-  it("should update attributes for fast load when asap is true", () => {
-    const { getByRole } = render(<Image alt="image" src="/" width={100} height={100} asap />);
+  it("should update attributes for fast load when priority is true", () => {
+    const { getByRole } = render(<Image alt="image" src="/" width={100} height={100} priority />);
     const img = getByRole("img");
     expect(img).toHaveAttribute("decoding", "async");
     expect(img).toHaveAttribute("loading", "eager");
