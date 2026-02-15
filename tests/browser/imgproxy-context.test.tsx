@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import {
   ImgproxyLoaderProvider,
   useImgproxyContext,
-} from "../../src/react/loaders/imgproxy-context";
+} from "../../src/react";
 
 describe("useImgproxyContext", () => {
   afterEach(() => {
