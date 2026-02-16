@@ -1,9 +1,14 @@
 import { createContext, useContext } from "react";
-import type { ImgproxyOptions } from "./imgproxy-options";
+import type {
+  ImgproxyGlobalOptions,
+  ImgproxyOptions,
+} from "./imgproxy-options";
 
-const ImgproxyContext = createContext<ImgproxyOptions>({
+const ImgproxyContext = createContext<ImgproxyGlobalOptions>({
   path: "",
-  placeholder: true,
+  placeholderTransforms: {
+    quality: 10,
+  },
 });
 
 export function useImgproxyContext() {

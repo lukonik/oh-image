@@ -1,4 +1,7 @@
-import type { BaseLoaderOptions } from "../base-loader-options";
+import type {
+  BaseGlobalLoaderOptions,
+  BaseLoaderOptions,
+} from "../base-loader-options";
 
 type ResizeType = "fit" | "fill" | "fill-down" | "force" | "auto";
 type ResizeAlgorithm = "nearest" | "linear" | "cubic" | "lanczos2" | "lanczos3";
@@ -123,11 +126,7 @@ interface PngOptions {
   quantization_colors?: number;
 }
 
-interface PlaceholderOptions {
-  quality?: number;
-}
-
-interface Transforms {
+export interface ImgproxyTransforms {
   /**
    * Defines the resizing type, width, height, enlarge, and extend.
    * All arguments are optional and can be omitted to use their default values.
@@ -442,4 +441,6 @@ interface Transforms {
   preset?: string[];
 }
 
-export type ImgproxyOptions = BaseLoaderOptions<Transforms, PlaceholderOptions>;
+export type ImgproxyOptions = BaseLoaderOptions<ImgproxyTransforms>;
+export type ImgproxyGlobalOptions =
+  BaseGlobalLoaderOptions<ImgproxyTransforms>;

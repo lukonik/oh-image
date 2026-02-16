@@ -3,11 +3,11 @@ import { createImgproxyUrl } from "./create-imgproxy-url";
 import { useImgproxyContext } from "./imgproxy-context";
 import type { ImgproxyOptions } from "./imgproxy-options";
 
-export function useImgproxyLoader(options: ImgproxyOptions) {
+export function useImgproxyPlaceholder(options: ImgproxyOptions) {
   const context = useImgproxyContext();
   const path = options.path || context.path;
   const transforms = {
-    ...context.transforms,
+    ...context.placeholderTransforms,
     ...options.transforms,
   };
   return (imageOptions: ImageLoaderOptions) =>

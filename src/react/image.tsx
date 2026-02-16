@@ -20,14 +20,14 @@ const preload =
     : null;
 
 function getPlaceholderStyles(props: ImageProps) {
-  if (!props.placeholderUrl) {
+  if (!props.placeholder) {
     return {};
   }
 
   const styles: Partial<CSSProperties> = {
     backgroundPosition: "50% 50%",
     backgroundRepeat: "no-repeat",
-    backgroundImage: `url(${props.placeholderUrl})`,
+    backgroundImage: `url(${props.placeholder})`,
     backgroundSize: "cover",
   };
   return styles;

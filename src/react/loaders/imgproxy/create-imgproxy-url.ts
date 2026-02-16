@@ -2,67 +2,6 @@ import type { ImageLoaderOptions } from "../../types";
 import { resolveDeprecatedParams } from "../loader-utils";
 import type { ImgproxyOptions } from "./imgproxy-options";
 type ImgproxyTransforms = NonNullable<ImgproxyOptions["transforms"]>;
-const IMGPROXY_OBJECT_OPTIONS_ORDER: any[] = [
-  {
-    optionName: "trim",
-    order: ["threshold", "color", "equal_hor", "equal_ver"],
-  },
-  {
-    optionName: "padding",
-    order: ["top", "right", "bottom", "left"],
-  },
-  {
-    optionName: "background",
-    order: ["r", "g", "b"],
-  },
-  {
-    optionName: "adjust",
-    order: ["brightness", "contrast", "saturation"],
-  },
-  {
-    optionName: "blur_detections",
-    order: ["sigma", "class_names"],
-  },
-  {
-    optionName: "draw_detections",
-    order: ["draw", "class_names"],
-  },
-  {
-    optionName: "watermark",
-    order: ["opacity", "position", "x_offset", "y_offset", "scale"],
-  },
-  {
-    optionName: "watermark_size",
-    order: ["width", "height"],
-  },
-  {
-    optionName: "unsharpening",
-    order: ["mode", "weight", "dividor"],
-  },
-  {
-    optionName: "autoquality",
-    order: ["method", "target", "min_quality", "max_quality", "allowed_error"],
-  },
-  {
-    optionName: "jpeg_options",
-    order: [
-      "progressive",
-      "no_subsample",
-      "trellis_quant",
-      "overshoot_deringing",
-      "optimize_scans",
-      "quant_table",
-    ],
-  },
-  {
-    optionName: "png_options",
-    order: ["interlaced", "quantize", "quantization_colors"],
-  },
-  {
-    optionName: "zoom",
-    order: ["x", "y"],
-  },
-];
 
 const stringifyOptions = (
   opCode: string,
@@ -160,6 +99,159 @@ const resolveObjectParam = <T extends keyof ImgproxyTransforms>(
       tSource.equal_ver,
     ]);
   }
+
+  if (key === "padding") {
+    const tSource = source as ImgproxyTransforms["padding"];
+    if (!tSource) {
+      return;
+    }
+
+    return stringifyOptions(key, [
+      tSource.top,
+      tSource.right,
+      tSource.bottom,
+      tSource.left,
+    ]);
+  }
+
+  if (key === "background") {
+    const tSource = source as ImgproxyTransforms["background"];
+    if (!tSource) {
+      return;
+    }
+
+    if (typeof tSource === "string") {
+      return stringifyOptions(key, [tSource]);
+    }
+
+    return stringifyOptions(key, [tSource.r, tSource.g, tSource.b]);
+  }
+
+  if (key === "adjust") {
+    const tSource = source as ImgproxyTransforms["adjust"];
+    if (!tSource) {
+      return;
+    }
+
+    return stringifyOptions(key, [
+      tSource.brightness,
+      tSource.contrast,
+      tSource.saturation,
+    ]);
+  }
+  if (key === "blur_detections") {
+    const tSource = source as ImgproxyTransforms["blur_detections"];
+    if (!tSource) {
+      return;
+    }
+
+    return stringifyOptions(key, [tSource.sigma, ...tSource.class_names]);
+  }
+
+  if (key === "draw_detections") {
+    const tSource = source as ImgproxyTransforms["draw_detections"];
+    if (!tSource) {
+      return;
+    }
+
+    return stringifyOptions(key, [tSource.draw, ...tSource.class_names]);
+  }
+
+  if (key === "watermark") {
+    const tSource = source as ImgproxyTransforms["watermark"];
+    if (!tSource) {
+      return;
+    }
+
+    return stringifyOptions(key, [
+      tSource.opacity,
+      tSource.position,
+      tSource.x_offset,
+      tSource.y_offset,
+      tSource.scale,
+    ]);
+  }
+
+  if (key === "watermark_size") {
+    const tSource = source as ImgproxyTransforms["watermark_size"];
+    if (!tSource) {
+      return;
+    }
+
+    return stringifyOptions(key, [tSource.width, tSource.height]);
+  }
+
+  if (key === "unsharpening") {
+    const tSource = source as ImgproxyTransforms["unsharpening"];
+    if (!tSource) {
+      return;
+    }
+
+    return stringifyOptions(key, [
+      tSource.mode,
+      tSource.weight,
+      tSource.dividor,
+    ]);
+  }
+
+  if (key === "autoquality") {
+    const tSource = source as ImgproxyTransforms["autoquality"];
+    if (!tSource) {
+      return;
+    }
+
+    return stringifyOptions(key, [
+      tSource.method,
+      tSource.target,
+      tSource.min_quality,
+      tSource.max_quality,
+      tSource.allowed_error,
+    ]);
+  }
+
+  if (key === "jpeg_options") {
+    const tSource = source as ImgproxyTransforms["jpeg_options"];
+    if (!tSource) {
+      return;
+    }
+
+    return stringifyOptions(key, [
+      tSource.progressive,
+      tSource.no_subsample,
+      tSource.trellis_quant,
+      tSource.overshoot_deringing,
+      tSource.optimize_scans,
+      tSource.quant_table,
+    ]);
+  }
+
+  if (key === "png_options") {
+    const tSource = source as ImgproxyTransforms["png_options"];
+    if (!tSource) {
+      return;
+    }
+
+    return stringifyOptions(key, [
+      tSource.interlaced,
+      tSource.quantize,
+      tSource.quantization_colors,
+    ]);
+  }
+
+  if (key === "zoom") {
+    const tSource = source as ImgproxyTransforms["zoom"];
+    if (!tSource) {
+      return;
+    }
+
+    if (typeof tSource === "number") {
+      return stringifyOptions(key, [tSource]);
+    }
+
+    return stringifyOptions(key, [tSource.x, tSource.y]);
+  }
+
+  return;
 };
 
 const resolveTransforms = (transforms: ImgproxyOptions["transforms"]) => {
@@ -169,11 +261,16 @@ const resolveTransforms = (transforms: ImgproxyOptions["transforms"]) => {
   const params: string[] = [];
   for (const key of Object.keys(transforms)) {
     const value = transforms[key as keyof ImgproxyOptions["transforms"]];
+    const keyCast = key as keyof ImgproxyOptions["transforms"];
+
     if (value === undefined) {
       continue;
     }
     if (typeof value === "object") {
-      params.push(resolveObjectParam(key, value));
+      const objectParams = resolveObjectParam(keyCast, value);
+      if (objectParams) {
+        params.push(objectParams);
+      }
     } else {
       params.push(stringifyOptions(key, [value]));
     }
@@ -183,9 +280,13 @@ const resolveTransforms = (transforms: ImgproxyOptions["transforms"]) => {
 };
 
 export function createImgproxyUrl(
-  options: ImgproxyOptions,
+  path: string | undefined,
+  transforms: ImgproxyTransforms,
   imageOptions: ImageLoaderOptions,
 ) {
+  if (!path) {
+    throw new Error("Path must be provided");
+  }
   const params: string[] = [];
   if (imageOptions.width) {
     params.push(stringifyOptions("width", [imageOptions.width]));
@@ -195,14 +296,14 @@ export function createImgproxyUrl(
     params.push(stringifyOptions("height", [imageOptions.height]));
   }
 
-  params.push(...resolveTransforms(options.transforms));
+  params.push(...resolveTransforms(transforms));
 
   // resolve deprecated params, will be removed in future
-  if (options.params) {
-    params.push(...resolveDeprecatedParams(options.params, ":"));
+  if (params) {
+    params.push(...resolveDeprecatedParams(params, ":"));
   }
 
   const stringifiedParams = params.join("/");
 
-  return `${options.path}/${stringifiedParams}/plain/${imageOptions.src}`;
+  return `${path}/${stringifiedParams}/plain/${imageOptions.src}`;
 }
