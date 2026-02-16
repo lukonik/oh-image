@@ -39,7 +39,6 @@ export function ImgproxyLoaderProvider({
   );
 }
 
-
 export function useImgproxyLoader(
   options?: Partial<ImgproxyLoaderOptions>,
 ): ImageLoader {
@@ -57,7 +56,7 @@ export function useImgproxyLoader(
     const paramsSeparator = resolvedOptions.paramsSeparator ?? "/";
 
     if (format) {
-      parts.push(`format:${format}`);
+      parts.push(`f:${format}`);
     }
 
     if (imageOptions.width) {
