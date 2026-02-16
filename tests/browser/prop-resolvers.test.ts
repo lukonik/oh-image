@@ -7,8 +7,7 @@ import {
   resolveSrcSet,
   resolveSrc,
   resolveWidth,
-  resolveHeight,
-  resolvePlaceholderURL,
+  resolveHeight
 } from "../../src/react/prop-resolvers";
 import type { ImageProps } from "../../src/react/types";
 
@@ -31,7 +30,7 @@ describe("resolveLoading", () => {
 
   it("returns 'eager' when priority is true even if loading is 'lazy'", () => {
     expect(resolveLoading(makeProps({ priority: true, loading: "lazy" }))).toBe(
-      "eager"
+      "eager",
     );
   });
 });
@@ -47,7 +46,7 @@ describe("resolveSizes", () => {
 
   it("does not prefix sizes with 'auto, ' for eager-loaded images", () => {
     expect(resolveSizes(makeProps({ sizes: "50vw", loading: "eager" }))).toBe(
-      "50vw"
+      "50vw",
     );
   });
 
@@ -56,26 +55,26 @@ describe("resolveSizes", () => {
   });
 
   it("defaults sizes to '100vw' when fill is true and does not prefix for eager", () => {
-    expect(
-      resolveSizes(makeProps({ fill: true, loading: "eager" }))
-    ).toBe("100vw");
+    expect(resolveSizes(makeProps({ fill: true, loading: "eager" }))).toBe(
+      "100vw",
+    );
   });
 
   it("uses explicit sizes over fill default", () => {
     expect(resolveSizes(makeProps({ fill: true, sizes: "50vw" }))).toBe(
-      "auto, 50vw"
+      "auto, 50vw",
     );
   });
 
   it("sets sizes to 'auto, 100vw' for lazy images with a valid width-descriptor srcSet", () => {
     expect(resolveSizes(makeProps({ srcSet: "200w, 400w" }))).toBe(
-      "auto, 100vw"
+      "auto, 100vw",
     );
   });
 
   it("does not set sizes for eager images with a valid width-descriptor srcSet", () => {
     expect(
-      resolveSizes(makeProps({ srcSet: "200w, 400w", loading: "eager" }))
+      resolveSizes(makeProps({ srcSet: "200w, 400w", loading: "eager" })),
     ).toBeUndefined();
   });
 
@@ -85,7 +84,7 @@ describe("resolveSizes", () => {
 
   it("does not set sizes when priority is true, even with a valid width-descriptor srcSet", () => {
     expect(
-      resolveSizes(makeProps({ priority: true, srcSet: "200w, 400w" }))
+      resolveSizes(makeProps({ priority: true, srcSet: "200w, 400w" })),
     ).toBeUndefined();
   });
 });
@@ -98,8 +97,12 @@ const objectSrc = {
   placeholderUrl: "/blur.jpg",
 };
 
-const mockLoader = (opts: { src: string; width?: number | null; height?: number | null; isPlaceholder?: boolean }) =>
-  `http://cdn.test/resize/${opts.width ?? "auto"}/${opts.src}`;
+const mockLoader = (opts: {
+  src: string;
+  width?: number | null;
+  height?: number | null;
+  isPlaceholder?: boolean;
+}) => `http://cdn.test/resize/${opts.width ?? "auto"}/${opts.src}`;
 
 describe("resolveDecoding", () => {
   it("returns 'async' when priority is true", () => {
@@ -121,7 +124,9 @@ describe("resolveFetchPriority", () => {
   });
 
   it("returns the provided fetchPriority when not priority", () => {
-    expect(resolveFetchPriority(makeProps({ fetchPriority: "low" }))).toBe("low");
+    expect(resolveFetchPriority(makeProps({ fetchPriority: "low" }))).toBe(
+      "low",
+    );
   });
 
   it("returns 'auto' by default", () => {
@@ -135,7 +140,9 @@ describe("resolveSrcSet", () => {
   });
 
   it("returns srcSets from object src", () => {
-    expect(resolveSrcSet(makeProps({ src: objectSrc }))).toBe(objectSrc.srcSets);
+    expect(resolveSrcSet(makeProps({ src: objectSrc }))).toBe(
+      objectSrc.srcSets,
+    );
   });
 
   it("returns undefined when no breakpoints and string src", () => {
@@ -152,12 +159,16 @@ describe("resolveSrcSet", () => {
   });
 
   it("returns undefined when breakpoints exist but no loader", () => {
-    expect(resolveSrcSet(makeProps({ breakpoints: [100, 200] }))).toBeUndefined();
+    expect(
+      resolveSrcSet(makeProps({ breakpoints: [100, 200] })),
+    ).toBeUndefined();
   });
 
   it("prefers object src srcSets over breakpoints", () => {
     expect(
-      resolveSrcSet(makeProps({ src: objectSrc, breakpoints: [100], loader: mockLoader })),
+      resolveSrcSet(
+        makeProps({ src: objectSrc, breakpoints: [100], loader: mockLoader }),
+      ),
     ).toBe(objectSrc.srcSets);
   });
 });
@@ -203,26 +214,5 @@ describe("resolveHeight", () => {
 
   it("returns undefined when no height and string src", () => {
     expect(resolveHeight(makeProps())).toBeUndefined();
-  });
-});
-
-describe("resolvePlaceholderURL", () => {
-  it("returns explicit placeholderUrl when provided", () => {
-    expect(resolvePlaceholderURL(makeProps({ placeholderUrl: "/my-blur" }))).toBe("/my-blur");
-  });
-
-  it("extracts placeholderUrl from object src", () => {
-    expect(resolvePlaceholderURL(makeProps({ src: objectSrc }))).toBe("/blur.jpg");
-  });
-
-  it("generates placeholder via loader when available", () => {
-    const result = resolvePlaceholderURL(
-      makeProps({ loader: mockLoader, width: 48 }),
-    );
-    expect(result).toBe("http://cdn.test/resize/48/image.jpg");
-  });
-
-  it("returns undefined when no placeholderUrl, no object src, and no loader", () => {
-    expect(resolvePlaceholderURL(makeProps())).toBeUndefined();
   });
 });

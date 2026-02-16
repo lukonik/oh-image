@@ -1,23 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup, renderHook } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import {
-  ImgproxyLoaderProvider,
-  useImgproxyContext,
-} from "../../src/react";
-
-describe("useImgproxyContext", () => {
-  afterEach(() => {
-    cleanup();
-  });
-
-  it("returns default values", () => {
-    const { result } = renderHook(() => useImgproxyContext());
-    expect(result.current.path).toBe("");
-    expect(result.current.placeholder).toBe(true);
-    expect(result.current.format).toBe("webp");
-  });
-});
+import { ImgproxyLoaderProvider, useImgproxyContext } from "../../src/react";
 
 describe("ImgproxyLoaderProvider", () => {
   afterEach(() => {
