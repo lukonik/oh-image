@@ -1,7 +1,6 @@
 import { createContext, useContext } from "react";
 import type {
-  ImgproxyGlobalOptions,
-  ImgproxyOptions,
+  ImgproxyGlobalOptions
 } from "./imgproxy-options";
 
 const ImgproxyContext = createContext<ImgproxyGlobalOptions>({
@@ -23,7 +22,7 @@ export function ImgproxyLoaderProvider({
   ...props
 }: {
   children: React.ReactNode;
-} & Partial<ImgproxyOptions>) {
+} & Partial<ImgproxyGlobalOptions>) {
   const ctx = useImgproxyContext();
   return (
     <ImgproxyContext.Provider value={{ ...ctx, ...props }}>
