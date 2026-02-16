@@ -40,6 +40,7 @@
     "play": "vite",
     "play:build": "vite build",
     "play:preview": "vite preview",
+    "play:host": "vite --host",
     "test": "vitest",
     "coverage": "vitest --coverage",
     "typecheck": "tsc --noEmit",

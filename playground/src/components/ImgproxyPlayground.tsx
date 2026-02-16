@@ -3,17 +3,23 @@ import { Image } from "../../../src/react/image";
 import {
   ImgproxyLoaderProvider,
   useImgproxyLoader,
-} from "../../../src/react/loaders/imgproxy-loader";
+} from "@lonik/oh-image/react";
 
 function ImgproxyDemo() {
-  const loader = useImgproxyLoader();
+  const loader = useImgproxyLoader({
+    transforms: {
+      watermark: {
+        opacity: 5,
+      },
+    },
+  });
 
   return (
     <div className="interactive-demo">
       <h3>Imgproxy Loaded Image</h3>
       <div className="image-container" style={{ maxWidth: "600px" }}>
         <Image
-          src={("http://192.168.0.88:5173/city.jpg")}
+          src={"http://192.168.0.88:5173/city.jpg"}
           alt="Imgproxy Example"
           loader={loader}
         />

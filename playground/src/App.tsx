@@ -7,7 +7,7 @@ import { ImgproxyPlayground } from "./components/ImgproxyPlayground";
 type Page = "image" | "cloudflare" | "cloudinary" | "imgproxy";
 
 export function App() {
-  const [page, setPage] = useState<Page>("image");
+  const [page, setPage] = useState<Page>("imgproxy");
 
   const buttonStyle = (active: boolean) => ({
     padding: "0.5rem 1rem",
