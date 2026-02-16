@@ -15,13 +15,12 @@ export type {
   ImgproxyGlobalOptions,
   ImgproxyTransforms,
 } from "./loaders/imgproxy/imgproxy-options";
-export { useImgproxyLoader } from "./loaders/imgproxy/use-imgproxy-loader";
 export {
   useImgproxyContext,
-  ImgproxyLoaderProvider,
-} from "./loaders/imgproxy/imgproxy-context";
-export { useImgproxyPlaceholder } from "./loaders/imgproxy/use-imgproxy-placeholder";
-
+  useImgproxyLoader,
+  useImgproxyPlaceholder,
+  ImgproxyLoaderProvider
+} from "./loaders/imgproxy/imgproxy-loader";
 export {
   type CloudflareLoaderOptions,
   useCloudflareContext,

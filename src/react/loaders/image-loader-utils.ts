@@ -1,5 +1,14 @@
 import { assert } from "../prop-asserts";
 
+export function normalizeTransforms(
+  params: any,
+  separator: string,
+): string[] {
+  return Object.entries(params).map(
+    ([key, value]) => `${key}${separator}${value}`,
+  );
+}
+
 export function normalizeLoaderParams(
   params: Record<string, string>,
   separator: string,

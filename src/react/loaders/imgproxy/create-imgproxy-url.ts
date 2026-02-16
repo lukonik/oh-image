@@ -288,13 +288,6 @@ export function createImgproxyUrl(
     throw new Error("Path must be provided");
   }
   const params: string[] = [];
-  if (imageOptions.width) {
-    params.push(stringifyOptions("width", [imageOptions.width]));
-  }
-
-  if (imageOptions.height) {
-    params.push(stringifyOptions("height", [imageOptions.height]));
-  }
 
   params.push(...resolveTransforms(transforms));
 
