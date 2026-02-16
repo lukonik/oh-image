@@ -9,12 +9,18 @@ export type {
 
 export { ImageProvider, useImageContext } from "./image-context";
 
+/** Imgproxy exports */
+export type {
+  ImgproxyOptions,
+  ImgproxyGlobalOptions,
+  ImgproxyTransforms,
+} from "./loaders/imgproxy/imgproxy-options";
+export { useImgproxyLoader } from "./loaders/imgproxy/use-imgproxy-loader";
 export {
-  type ImgproxyLoaderOptions,
   useImgproxyContext,
-  useImgproxyLoader,
   ImgproxyLoaderProvider,
-} from "./loaders/imgproxy-loader";
+} from "./loaders/imgproxy/imgproxy-context";
+export { useImgproxyPlaceholder } from "./loaders/imgproxy/use-imgproxy-placeholder";
 
 export {
   type CloudflareLoaderOptions,

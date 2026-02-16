@@ -1,99 +1,131 @@
----
-title: Imgproxy Loader
-description: Using imgproxy with oh-image
----
+import type {
+  BaseGlobalLoaderOptions,
+  BaseLoaderOptions,
+} from "../base-loader-options";
 
-The Imgproxy Loader allows you to integrate [imgproxy](https://imgproxy.net/).
+type ResizeType = "fit" | "fill" | "fill-down" | "force" | "auto";
+type ResizeAlgorithm = "nearest" | "linear" | "cubic" | "lanczos2" | "lanczos3";
+type GravityType =
+  | "no"
+  | "so"
+  | "ea"
+  | "we"
+  | "noea"
+  | "nowe"
+  | "soea"
+  | "sowe"
+  | "ce";
 
-## useImgproxyLoader
-
-The `useImgproxyLoader` hook generates a src url.
-
-```tsx
-import { useImgproxyLoader } from "@lonik/oh-image/react";
-
-function MyImage() {
-  const loader = useImgproxyLoader({
-    transforms: {
-      quality: 100,
-      format: "webp",
-    },
-  });
-
-  return <img loader={loader} alt="Processed image" />;
+interface ResizeOptions {
+  resizing_type?: ResizeType;
+  width?: number;
+  height?: number;
+  enlarge?: boolean;
+  extend?: boolean;
 }
-```
 
-## useImgproxyPlaceholder
-
-The `useImgproxyPlaceholder` hook generates a src url.
-
-```tsx
-import { useImgproxyPlaceholder } from "@lonik/oh-image/react";
-
-function MyImage() {
-  const loader = useImgproxyLoader({
-    transforms: {
-      quality: 100,
-      format: "webp",
-    },
-  });
-  const placeholder = useImgproxyPlaceholder({
-    transforms: {
-      quality: 10,
-      format: "webp",
-    },
-  });
-
-  return (
-    <img loader={loader} placeholder={placeholder} alt="Processed image" />
-  );
+interface SizeOptions {
+  width?: number;
+  height?: number;
+  enlarge?: boolean;
+  extend?: boolean;
 }
-```
 
-## Global Configuration
-
-You can configure the loader globally using the `ImgproxyLoaderProvider`.
-
-```tsx
-import { ImgproxyLoaderProvider } from "@oh-image/react";
-
-function App() {
-  return (
-    <ImgproxyLoaderProvider
-      path="https://imgproxy.example.com"
-      transforms={{
-        quality: 100,
-        format: "webp",
-      }}
-      placeholderTransforms={{
-        quality: 10,
-        format: "webp",
-      }}
-    >
-      <AppContent />
-    </ImgproxyLoaderProvider>
-  );
+interface ExtendOptions {
+  extend?: boolean;
+  gravity?: GravityType;
 }
-```
 
-### Default Options
-
-```json
-{
-  "transforms": {
-    "format": "webp"
-  },
-  "placeholderTransforms": {
-    "quality": 10,
-    "format": "webp"
-  }
+interface GravityOptions {
+  type: GravityType;
+  x_offset?: number;
+  y_offset?: number;
 }
-```
 
-## Transform
+interface CropOptions {
+  width: number;
+  height: number;
+  gravity?: GravityType;
+}
 
-```ts
+interface TrimOptions {
+  threshold: number;
+  color?: string;
+  equal_hor?: boolean;
+  equal_ver?: boolean;
+}
+
+interface PaddingOptions {
+  top?: number;
+  right?: number;
+  bottom?: number;
+  left?: number;
+}
+
+interface BackgroundOptions {
+  r: number;
+  g: number;
+  b: number;
+}
+
+interface AdjustOptions {
+  brightness?: number;
+  contrast?: number;
+  saturation?: number;
+}
+
+interface BlurDetectionsOptions {
+  sigma: number;
+  class_names: string[];
+}
+
+interface DrawDetectionsOptions {
+  draw: boolean;
+  class_names: string[];
+}
+
+interface WatermarkOptions {
+  opacity: number;
+  position?: GravityType | "re";
+  x_offset?: number;
+  y_offset?: number;
+  scale?: number;
+}
+
+interface WatermarkSizeOptions {
+  width: number;
+  height: number;
+}
+
+interface UnsharpeningOptions {
+  mode?: string;
+  weight?: number;
+  dividor?: number;
+}
+
+interface AutoqualityOptions {
+  method?: string;
+  target?: number;
+  min_quality?: number;
+  max_quality?: number;
+  allowed_error?: number;
+}
+
+interface JpegOptions {
+  progressive?: boolean;
+  no_subsample?: boolean;
+  trellis_quant?: boolean;
+  overshoot_deringing?: boolean;
+  optimize_scans?: boolean;
+  quant_table?: number;
+}
+
+interface PngOptions {
+  interlaced?: boolean;
+  quantize?: boolean;
+  quantization_colors?: number;
+}
+
 export interface ImgproxyTransforms {
   /**
    * Defines the resizing type, width, height, enlarge, and extend.
@@ -409,126 +441,6 @@ export interface ImgproxyTransforms {
   preset?: string[];
 }
 
-type ResizeType = "fit" | "fill" | "fill-down" | "force" | "auto";
-type ResizeAlgorithm = "nearest" | "linear" | "cubic" | "lanczos2" | "lanczos3";
-type GravityType =
-  | "no"
-  | "so"
-  | "ea"
-  | "we"
-  | "noea"
-  | "nowe"
-  | "soea"
-  | "sowe"
-  | "ce";
-
-interface ResizeOptions {
-  resizing_type?: ResizeType;
-  width?: number;
-  height?: number;
-  enlarge?: boolean;
-  extend?: boolean;
-}
-
-interface SizeOptions {
-  width?: number;
-  height?: number;
-  enlarge?: boolean;
-  extend?: boolean;
-}
-
-interface ExtendOptions {
-  extend?: boolean;
-  gravity?: GravityType;
-}
-
-interface GravityOptions {
-  type: GravityType;
-  x_offset?: number;
-  y_offset?: number;
-}
-
-interface CropOptions {
-  width: number;
-  height: number;
-  gravity?: GravityType;
-}
-
-interface TrimOptions {
-  threshold: number;
-  color?: string;
-  equal_hor?: boolean;
-  equal_ver?: boolean;
-}
-
-interface PaddingOptions {
-  top?: number;
-  right?: number;
-  bottom?: number;
-  left?: number;
-}
-
-interface BackgroundOptions {
-  r: number;
-  g: number;
-  b: number;
-}
-
-interface AdjustOptions {
-  brightness?: number;
-  contrast?: number;
-  saturation?: number;
-}
-
-interface BlurDetectionsOptions {
-  sigma: number;
-  class_names: string[];
-}
-
-interface DrawDetectionsOptions {
-  draw: boolean;
-  class_names: string[];
-}
-
-interface WatermarkOptions {
-  opacity: number;
-  position?: GravityType | "re";
-  x_offset?: number;
-  y_offset?: number;
-  scale?: number;
-}
-
-interface WatermarkSizeOptions {
-  width: number;
-  height: number;
-}
-
-interface UnsharpeningOptions {
-  mode?: string;
-  weight?: number;
-  dividor?: number;
-}
-
-interface AutoqualityOptions {
-  method?: string;
-  target?: number;
-  min_quality?: number;
-  max_quality?: number;
-  allowed_error?: number;
-}
-
-interface JpegOptions {
-  progressive?: boolean;
-  no_subsample?: boolean;
-  trellis_quant?: boolean;
-  overshoot_deringing?: boolean;
-  optimize_scans?: boolean;
-  quant_table?: number;
-}
-
-interface PngOptions {
-  interlaced?: boolean;
-  quantize?: boolean;
-  quantization_colors?: number;
-}
-```
+export type ImgproxyOptions = BaseLoaderOptions<ImgproxyTransforms>;
+export type ImgproxyGlobalOptions =
+  BaseGlobalLoaderOptions<ImgproxyTransforms>;

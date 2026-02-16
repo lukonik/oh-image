@@ -21,7 +21,7 @@ export function resolveOptions(
   resolved.loading = resolveLoading(resolved);
   resolved.srcSet = resolveSrcSet(resolved);
   resolved.sizes = resolveSizes(resolved, resolved.srcSet, resolved.loading);
-  resolved.placeholderUrl = resolvePlaceholderURL(resolved);
+  resolved.placeholder = resolvePlaceholder(resolved, resolved.src);
   resolved.height = resolveHeight(resolved);
   resolved.width = resolveWidth(resolved);
   resolved.src = resolveSrc(resolved);
@@ -29,7 +29,7 @@ export function resolveOptions(
 }
 
 export function resolveDecoding(prop: ImageProps) {
-  return (prop.priority || prop.asap) ? "async" : prop.decoding;
+  return prop.priority || prop.asap ? "async" : prop.decoding;
 }
 
 export function resolveFetchPriority(prop: ImageProps) {
@@ -66,7 +66,6 @@ export function resolveSrcSet(prop: ImageProps) {
           src: baseSrc,
           width: breakpoint,
           height: prop.height,
-          isPlaceholder: false,
         })} ${breakpoint}w`,
       );
     }
@@ -105,7 +104,11 @@ export function resolveSizes(
       sizes = "auto, " + sizes;
     }
   } else {
-    if (srcSet && VALID_WIDTH_DESCRIPTOR_SRCSET.test(srcSet) && loading === "lazy") {
+    if (
+      srcSet &&
+      VALID_WIDTH_DESCRIPTOR_SRCSET.test(srcSet) &&
+      loading === "lazy"
+    ) {
       sizes = "auto, 100vw";
     }
   }
@@ -147,20 +150,22 @@ export function resolveHeight(prop: ImageProps) {
   return undefined;
 }
 
-export function resolvePlaceholderURL(prop: ImageProps) {
-  if (prop.placeholderUrl) {
-    return prop.placeholderUrl;
+export function resolvePlaceholder(prop: ImageProps, src: string) {
+  if (!prop.placeholder) {
+    return null;
   }
-  if (typeof prop.src === "object") {
-    return prop.src.placeholderUrl;
+
+  if (typeof prop.placeholder === "string") {
+    return prop.placeholder;
   }
-  if (prop.loader) {
-    return prop.loader({
-      isPlaceholder: true,
-      src: prop.src,
+
+  if (typeof prop.placeholder === "function") {
+    return prop.placeholder({
+      src: src,
       width: prop.width,
       height: prop.height,
     });
   }
-  return undefined;
+
+  return null;
 }
