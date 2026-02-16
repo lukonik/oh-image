@@ -1,10 +1,19 @@
 /// <reference types="vitest/config" />
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { ohImage } from "./src/plugin";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 export default defineConfig({
   root: "./playground",
+  resolve: {
+    alias: {
+      "@lonik/oh-image/react": path.resolve(__dirname, "./src/react/index.ts"),
+    },
+  },
   plugins: [ohImage(), react()],
   test: {
     root: ".",

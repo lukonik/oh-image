@@ -8,9 +8,8 @@ import {
 function ImgproxyDemo() {
   const loader = useImgproxyLoader({
     transforms: {
-      watermark: {
-        opacity: 5,
-      },
+      blur: 10,
+      quality: 1,
     },
   });
 
