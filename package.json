@@ -80,7 +80,10 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.54.0",
     "vite": "^7.3.0",
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.16",
+    "tailwindcss": "^4.1.18",
+    "@tailwindcss/vite": "^4.1.18",
+    "json-edit-react": "^1.29.0"
   },
   "dependencies": {
     "p-limit": "^7.3.0",

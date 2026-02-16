@@ -5,6 +5,7 @@ import tanstackRouter from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { ohImage } from "./src/plugin";
+import tailwindcss from "@tailwindcss/vite";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -16,6 +17,7 @@ export default defineConfig({
     },
   },
   plugins: [
+    tailwindcss(),
     tanstackRouter({
       routesDirectory: path.resolve(__dirname, "./playground/src/routes"),
       generatedRouteTree: path.resolve(

@@ -14,7 +14,7 @@ type GravityType =
   | "ce";
 
 interface ResizeOptions {
-  resizingType?: ResizeType;
+  resizing_type?: ResizeType;
   width?: number;
   height?: number;
   enlarge?: boolean;
@@ -35,8 +35,8 @@ interface ExtendOptions {
 
 interface GravityOptions {
   type: GravityType;
-  xOffset?: number;
-  yOffset?: number;
+  x_offset?: number;
+  y_offset?: number;
 }
 
 interface CropOptions {
@@ -48,8 +48,8 @@ interface CropOptions {
 interface TrimOptions {
   threshold: number;
   color?: string;
-  equalHor?: boolean;
-  equalVer?: boolean;
+  equal_hor?: boolean;
+  equal_ver?: boolean;
 }
 
 interface PaddingOptions {
@@ -73,19 +73,19 @@ interface AdjustOptions {
 
 interface BlurDetectionsOptions {
   sigma: number;
-  classNames: string[];
+  class_names: string[];
 }
 
 interface DrawDetectionsOptions {
   draw: boolean;
-  classNames: string[];
+  class_names: string[];
 }
 
 interface WatermarkOptions {
   opacity: number;
   position?: GravityType | "re";
-  xOffset?: number;
-  yOffset?: number;
+  x_offset?: number;
+  y_offset?: number;
   scale?: number;
 }
 
@@ -103,24 +103,24 @@ interface UnsharpeningOptions {
 interface AutoqualityOptions {
   method?: string;
   target?: number;
-  minQuality?: number;
-  maxQuality?: number;
-  allowedError?: number;
+  min_quality?: number;
+  max_quality?: number;
+  allowed_error?: number;
 }
 
 interface JpegOptions {
   progressive?: boolean;
-  noSubsample?: boolean;
-  trellisQuant?: boolean;
-  overshootDeringing?: boolean;
-  optimizeScans?: boolean;
-  quantTable?: number;
+  no_subsample?: boolean;
+  trellis_quant?: boolean;
+  overshoot_deringing?: boolean;
+  optimize_scans?: boolean;
+  quant_table?: number;
 }
 
 interface PngOptions {
   interlaced?: boolean;
   quantize?: boolean;
-  quantizationColors?: number;
+  quantization_colors?: number;
 }
 
 interface PlaceholderOptions {
@@ -144,13 +144,13 @@ interface Transforms {
    * Defines how imgproxy will resize the source image.
    * Default: fit
    */
-  resizingType?: ResizeType;
+  resizing_type?: ResizeType;
 
   /**
    * Defines the algorithm that imgproxy will use for resizing.
    * Default: lanczos3
    */
-  resizingAlgorithm?: ResizeAlgorithm;
+  resizing_algorithm?: ResizeAlgorithm;
 
   /**
    * Defines the width of the resulting image.
@@ -168,13 +168,13 @@ interface Transforms {
    * Defines the minimum width of the resulting image.
    * Default: 0
    */
-  minWidth?: number;
+  "min-width"?: number;
 
   /**
    * Defines the minimum height of the resulting image.
    * Default: 0
    */
-  minHeight?: number;
+  "min-height"?: number;
 
   /**
    * When set, imgproxy will multiply the image dimensions according to these factors.
@@ -225,7 +225,7 @@ interface Transforms {
   /**
    * When set to true, imgproxy will automatically rotate images based on the EXIF Orientation parameter.
    */
-  autoRotate?: boolean;
+  auto_rotate?: boolean;
 
   /**
    * Rotates the image on the specified angle.
@@ -243,7 +243,7 @@ interface Transforms {
    * Adds an alpha channel to background.
    * Default: 1
    */
-  backgroundAlpha?: number;
+  background_alpha?: number;
 
   /**
    * Defines the brightness, contrast, and saturation.
@@ -294,12 +294,12 @@ interface Transforms {
   /**
    * imgproxy detects objects of the provided classes and blurs them.
    */
-  blurDetections?: BlurDetectionsOptions;
+  blur_detections?: BlurDetectionsOptions;
 
   /**
    * When draw is set to true, imgproxy detects objects of the provided classes and draws their bounding boxes.
    */
-  drawDetections?: DrawDetectionsOptions;
+  draw_detections?: DrawDetectionsOptions;
 
   /**
    * Places a watermark on the processed image.
@@ -311,19 +311,19 @@ interface Transforms {
    * When set, imgproxy will use the image from the specified URL as a watermark.
    * Default: blank
    */
-  watermarkUrl?: string;
+  watermark_url?: string;
 
   /**
    * When set, imgproxy will generate an image from the provided text and use it as a watermark.
    * Default: blank
    */
-  watermarkText?: string;
+  watermark_text?: string;
 
   /**
    * Defines the desired width and height of the watermark.
    * Default: 0:0
    */
-  watermarkSize?: WatermarkSizeOptions;
+  watermark_size?: WatermarkSizeOptions;
 
   /**
    * When set, imgproxy will prepend a <style> node with the provided content to the <svg> node.
@@ -334,27 +334,27 @@ interface Transforms {
   /**
    * When set to true, imgproxy will strip the metadata (EXIF, IPTC, etc.) on JPEG and WebP output images.
    */
-  stripMetadata?: boolean;
+  strip_metadata?: boolean;
 
   /**
    * When set to true, imgproxy will not remove copyright info while stripping metadata.
    */
-  keepCopyright?: boolean;
+  keep_copyright?: boolean;
 
   /**
    * When set to true, imgproxy will transform the embedded color profile (ICC) to sRGB and remove it from the image.
    */
-  stripColorProfile?: boolean;
+  strip_color_profile?: boolean;
 
   /**
    * When set to true and the source image has an embedded thumbnail, imgproxy will always use the embedded thumbnail.
    */
-  enforceThumbnail?: boolean;
+  enforce_thumbnail?: boolean;
 
   /**
    * When set to true, imgproxy will return attachment in the Content-Disposition header.
    */
-  returnAttachment?: boolean;
+  return_attachment?: boolean;
 
   /**
    * Redefines quality of the resulting image, as a percentage.
@@ -365,7 +365,7 @@ interface Transforms {
   /**
    * Adds or redefines IMGPROXY_FORMAT_QUALITY values.
    */
-  formatQuality?: Record<string, number>;
+  format_quality?: Record<string, number>;
 
   /**
    * Redefines autoquality settings.
@@ -376,17 +376,17 @@ interface Transforms {
    * When set, imgproxy automatically degrades the quality of the image until the image size is under the specified amount of bytes.
    * Default: 0
    */
-  maxBytes?: number;
+  max_bytes?: number;
 
   /**
    * Allows redefining JPEG saving options.
    */
-  jpegOptions?: JpegOptions;
+  jpeg_options?: JpegOptions;
 
   /**
    * Allows redefining PNG saving options.
    */
-  pngOptions?: PngOptions;
+  png_options?: PngOptions;
 
   /**
    * Specifies the resulting image format.
@@ -403,19 +403,19 @@ interface Transforms {
   /**
    * Allows redefining IMGPROXY_VIDEO_THUMBNAIL_SECOND config.
    */
-  videoThumbnailSecond?: number;
+  video_thumbnail_second?: number;
 
   /**
    * You can use a custom fallback image by specifying its URL.
    * Default: blank
    */
-  fallbackImageUrl?: string;
+  fallback_image_url?: string;
 
   /**
    * When set, imgproxy will skip the processing of the listed formats.
    * Default: empty
    */
-  skipProcessing?: string[];
+  skip_processing?: string[];
 
   /**
    * Cache buster doesn't affect image processing but its changing allows for bypassing the CDN, proxy server and browser cache.

@@ -23,65 +23,51 @@ function RootComponent() {
   };
 
   return (
-    <div className="playground">
-      <header>
-        <h1>oh-image Playground</h1>
-        <p>A playground for testing and demonstrating oh-image features.</p>
-
-        <nav
-          style={{
-            marginTop: "2rem",
-            display: "flex",
-            gap: "1rem",
-            justifyContent: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          <Link
-            to="/image"
-            style={buttonStyle}
-            activeProps={{ style: activeButtonStyle }}
-          >
-            Image Component
-          </Link>
-          <Link
-            to="/cloudflare"
-            style={buttonStyle}
-            activeProps={{ style: activeButtonStyle }}
-          >
-            Cloudflare Loader
-          </Link>
-          <Link
-            to="/cloudinary"
-            style={buttonStyle}
-            activeProps={{ style: activeButtonStyle }}
-          >
-            Cloudinary Loader
-          </Link>
-          <Link
-            to="/imgproxy"
-            style={buttonStyle}
-            activeProps={{ style: activeButtonStyle }}
-          >
-            Imgproxy Loader
-          </Link>
-          <Link
-            to="/demo"
-            style={buttonStyle}
-            activeProps={{ style: activeButtonStyle }}
-          >
-            Demo Page
-          </Link>
-        </nav>
-      </header>
-
-      <main>
-        <Outlet />
-      </main>
-
-      <footer>
-        <p>oh-image &copy; 2024</p>
-      </footer>
+    <div className="container mx-auto pt-20 flex justify-center">
+      <div>
+        <header>
+          <nav className="flex items-center gap-4 mb-20">
+            <Link
+              to="/image"
+              style={buttonStyle}
+              activeProps={{ style: activeButtonStyle }}
+            >
+              Image Component
+            </Link>
+            <Link
+              to="/cloudflare"
+              style={buttonStyle}
+              activeProps={{ style: activeButtonStyle }}
+            >
+              Cloudflare Loader
+            </Link>
+            <Link
+              to="/cloudinary"
+              style={buttonStyle}
+              activeProps={{ style: activeButtonStyle }}
+            >
+              Cloudinary Loader
+            </Link>
+            <Link
+              to="/imgproxy"
+              style={buttonStyle}
+              activeProps={{ style: activeButtonStyle }}
+            >
+              Imgproxy Loader
+            </Link>
+            <Link
+              to="/demo"
+              style={buttonStyle}
+              activeProps={{ style: activeButtonStyle }}
+            >
+              Demo Page
+            </Link>
+          </nav>
+        </header>
+        <main>
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }

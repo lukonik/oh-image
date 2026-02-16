@@ -23,7 +23,7 @@ type ImgproxyObjectOption = {
 const IMGPROXY_OBJECT_OPTIONS_ORDER: ImgproxyObjectOption[] = [
   {
     optionName: "resize",
-    order: ["resizingType", "width", "height", "enlarge", "extend"],
+    order: ["resizing_type", "width", "height", "enlarge", "extend"],
   },
   {
     optionName: "size",
@@ -35,7 +35,7 @@ const IMGPROXY_OBJECT_OPTIONS_ORDER: ImgproxyObjectOption[] = [
   },
   {
     optionName: "gravity",
-    order: ["type", "xOffset", "yOffset"],
+    order: ["type", "x_offset", "y_offset"],
   },
   {
     optionName: "crop",
@@ -43,7 +43,7 @@ const IMGPROXY_OBJECT_OPTIONS_ORDER: ImgproxyObjectOption[] = [
   },
   {
     optionName: "trim",
-    order: ["threshold", "color", "equalHor", "equalVer"],
+    order: ["threshold", "color", "equal_hor", "equal_ver"],
   },
   {
     optionName: "padding",
@@ -58,19 +58,19 @@ const IMGPROXY_OBJECT_OPTIONS_ORDER: ImgproxyObjectOption[] = [
     order: ["brightness", "contrast", "saturation"],
   },
   {
-    optionName: "blurDetections",
-    order: ["sigma", "classNames"],
+    optionName: "blur_detections",
+    order: ["sigma", "class_names"],
   },
   {
-    optionName: "drawDetections",
-    order: ["draw", "classNames"],
+    optionName: "draw_detections",
+    order: ["draw", "class_names"],
   },
   {
     optionName: "watermark",
-    order: ["opacity", "position", "xOffset", "yOffset", "scale"],
+    order: ["opacity", "position", "x_offset", "y_offset", "scale"],
   },
   {
-    optionName: "watermarkSize",
+    optionName: "watermark_size",
     order: ["width", "height"],
   },
   {
@@ -79,22 +79,22 @@ const IMGPROXY_OBJECT_OPTIONS_ORDER: ImgproxyObjectOption[] = [
   },
   {
     optionName: "autoquality",
-    order: ["method", "target", "minQuality", "maxQuality", "allowedError"],
+    order: ["method", "target", "min_quality", "max_quality", "allowed_error"],
   },
   {
-    optionName: "jpegOptions",
+    optionName: "jpeg_options",
     order: [
       "progressive",
-      "noSubsample",
-      "trellisQuant",
-      "overshootDeringing",
-      "optimizeScans",
-      "quantTable",
+      "no_subsample",
+      "trellis_quant",
+      "overshoot_deringing",
+      "optimize_scans",
+      "quant_table",
     ],
   },
   {
-    optionName: "pngOptions",
-    order: ["interlaced", "quantize", "quantizationColors"],
+    optionName: "png_options",
+    order: ["interlaced", "quantize", "quantization_colors"],
   },
   {
     optionName: "zoom",
@@ -102,8 +102,11 @@ const IMGPROXY_OBJECT_OPTIONS_ORDER: ImgproxyObjectOption[] = [
   },
 ];
 
+const camelToSnake = (str: string) =>
+  str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+
 const resolveParam = (key: string, value: unknown) => {
-  return `${key}:${value}`;
+  return `${camelToSnake(key)}:${value}`;
 };
 
 const resolveObjectParam = (key: string, source: Record<string, unknown>) => {
@@ -113,12 +116,12 @@ const resolveObjectParam = (key: string, source: Record<string, unknown>) => {
 
   if (!options) {
     console.warn(
-      "Unknown option: ${key}. If this option should be supported but is not yet available in oh-image, please open a GitHub issue at: https://github.com/lukonik/oh-image",
+      `Unknown option: ${key}. If this option should be supported but is not yet available in oh-image, please open a GitHub issue at: https://github.com/lukonik/oh-image`,
     );
     return "";
   }
 
-  const params: string[] = [`${key}`];
+  const params: string[] = [`${camelToSnake(key)}`];
 
   for (const key of options.order) {
     const value = source[key];
@@ -138,6 +141,9 @@ const resolveTransforms = (transforms: ImgproxyOptions["transforms"]) => {
   const params: string[] = [];
   for (const key of Object.keys(transforms)) {
     const value = transforms[key as keyof ImgproxyOptions["transforms"]];
+    if (value === undefined) {
+      continue;
+    }
     if (typeof value === "object") {
       params.push(resolveObjectParam(key, value));
     } else {
