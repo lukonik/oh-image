@@ -5,9 +5,12 @@ import type {
 } from "./imgproxy-options";
 
 const ImgproxyContext = createContext<ImgproxyGlobalOptions>({
-  path: "",
+  transforms: {
+    format: "webp",
+  },
   placeholderTransforms: {
     quality: 10,
+    format: "webp",
   },
 });
 

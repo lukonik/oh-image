@@ -7,40 +7,53 @@ The Imgproxy Loader allows you to integrate [imgproxy](https://imgproxy.net/).
 
 ## useImgproxyLoader
 
-The `useImgproxyLoader` hook generates a URL for an image processed by imgproxy.
+The `useImgproxyLoader` hook generates a src url.
 
 ```tsx
-import { useImgproxyLoader } from "@oh-image/react";
+import { useImgproxyLoader } from "@lonik/oh-image/react";
 
 function MyImage() {
-  const src = useImgproxyLoader("https://example.com/image.jpg", {
-    resize: {
-      width: 800,
+  const loader = useImgproxyLoader({
+    transforms: {
+      quality: 100,
+      format: "webp",
     },
-    format: "webp",
   });
 
-  return <img src={src} alt="Processed image" />;
+  return <img loader={loader} alt="Processed image" />;
 }
 ```
 
 ## useImgproxyPlaceholder
 
-The `useImgproxyPlaceholder` hook generates a low-quality placeholder URL for an image, useful for loading states or blur-up effects.
+The `useImgproxyPlaceholder` hook generates a src url.
 
 ```tsx
-import { useImgproxyPlaceholder } from "@oh-image/react";
+import { useImgproxyPlaceholder } from "@lonik/oh-image/react";
 
 function MyImage() {
-  const placeholder = useImgproxyPlaceholder("https://example.com/image.jpg");
+  const loader = useImgproxyLoader({
+    transforms: {
+      quality: 100,
+      format: "webp",
+    },
+  });
+  const placeholder = useImgproxyPlaceholder({
+    transforms: {
+      quality: 10,
+      format: "webp",
+    },
+  });
 
-  return <img src={placeholder} alt="placeholder" />;
+  return (
+    <img loader={loader} placeholder={placeholder} alt="Processed image" />
+  );
 }
 ```
 
 ## Global Configuration
 
-You can configure the loader globally using the `ImgproxyLoaderProvider`. This allows you to set the base URL for your imgproxy instance and default settings.
+You can configure the loader globally using the `ImgproxyLoaderProvider`.
 
 ```tsx
 import { ImgproxyLoaderProvider } from "@oh-image/react";
@@ -49,12 +62,32 @@ function App() {
   return (
     <ImgproxyLoaderProvider
       path="https://imgproxy.example.com"
-      format="webp"
-      placeholder={true}
+      transforms={{
+        quality: 100,
+        format: "webp",
+      }}
+      placeholderTransforms={{
+        quality: 10,
+        format: "webp",
+      }}
     >
       <AppContent />
     </ImgproxyLoaderProvider>
   );
+}
+```
+
+### Default Options
+
+```json
+{
+  "transforms": {
+    "format": "webp"
+  },
+  "placeholderTransforms": {
+    "quality": 10,
+    "format": "webp"
+  }
 }
 ```
 

@@ -5,7 +5,7 @@ import {
   useImgproxyLoader,
   Image,
   type ImgproxyOptions,
-  useImgproxyPlaceholder,
+  useImgproxyPlaceholder
 } from "@lonik/oh-image/react";
 
 export const Route = createFileRoute("/imgproxy/")({
@@ -63,25 +63,23 @@ function RouteComponent() {
     preset: undefined,
   });
   const loader = useImgproxyLoader({
-    path: "http://localhost:8080/insecure",
     transforms: transform,
   });
   const placeholder = useImgproxyPlaceholder({
-    path: "http://localhost:8080/insecure",
     transforms: transform,
   });
   return (
     <div className="flex">
-      <ImgproxyControls transform={transform} setTransform={setTransform} />
-      <Image
-        className="w-1/2 h-[300px]"
-        width={1920}
-        height={1080}
-        src={"http://192.168.0.88:5173/city.jpg"}
-        alt="Imgproxy Example"
-        loader={loader}
-        placeholder={placeholder}
-      />
+        <ImgproxyControls transform={transform} setTransform={setTransform} />
+        <Image
+          className="w-1/2 h-[300px]"
+          width={1920}
+          height={1080}
+          src={"http://192.168.0.88:5173/city.jpg"}
+          alt="Imgproxy Example"
+          loader={loader}
+          placeholder={placeholder}
+        />
     </div>
   );
 }
