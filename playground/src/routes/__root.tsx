@@ -1,5 +1,5 @@
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
-import { ImgproxyLoaderProvider } from "@lonik/oh-image/react";
+import { ImgproxyLoaderProvider } from "../../../src/react";
 
 export const Route = createRootRoute({
   component: RootComponent,

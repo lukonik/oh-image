@@ -1,9 +1,10 @@
-import { createContext, useContext } from "react";
-import type {
-  ImgproxyGlobalOptions
-} from "./imgproxy-options";
+import type { ImgproxyGlobalOptions } from "./imgproxy-options";
+import loaderContextFactory from "./loader-context-factory";
 
-const ImgproxyContext = createContext<ImgproxyGlobalOptions>({
+export const {
+  useLoaderContext: useImgproxyContext,
+  LoaderProvider: ImgproxyLoaderProvider,
+} = loaderContextFactory<ImgproxyGlobalOptions>({
   transforms: {
     format: "webp",
   },
@@ -12,21 +13,3 @@ const ImgproxyContext = createContext<ImgproxyGlobalOptions>({
     format: "webp",
   },
 });
-
-export function useImgproxyContext() {
-  return useContext(ImgproxyContext);
-}
-
-export function ImgproxyLoaderProvider({
-  children,
-  ...props
-}: {
-  children: React.ReactNode;
-} & Partial<ImgproxyGlobalOptions>) {
-  const ctx = useImgproxyContext();
-  return (
-    <ImgproxyContext.Provider value={{ ...ctx, ...props }}>
-      {children}
-    </ImgproxyContext.Provider>
-  );
-}
