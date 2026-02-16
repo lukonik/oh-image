@@ -1,6 +1,7 @@
 /// <reference types="vitest/config" />
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import tanstackRouter from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { ohImage } from "./src/plugin";
@@ -14,7 +15,17 @@ export default defineConfig({
       "@lonik/oh-image/react": path.resolve(__dirname, "./src/react/index.ts"),
     },
   },
-  plugins: [ohImage(), react()],
+  plugins: [
+    tanstackRouter({
+      routesDirectory: path.resolve(__dirname, "./playground/src/routes"),
+      generatedRouteTree: path.resolve(
+        __dirname,
+        "./playground/src/routeTree.gen.ts",
+      ),
+    }),
+    ohImage(),
+    react(),
+  ],
   test: {
     root: ".",
     projects: [

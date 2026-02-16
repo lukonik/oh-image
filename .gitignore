@@ -29,3 +29,4 @@ pnpm-debug.log*
 
 # test coverage
 coverage
+routeTree.gen.ts
