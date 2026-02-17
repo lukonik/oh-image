@@ -1,4 +1,4 @@
-import { assertPath, resolveTransforms } from "./image-loader-utils";
+import { assertPath, resolveTransforms } from "./transforms-resolver";
 import type { ImageLoader, ImageLoaderOptions } from "../types";
 import { createContext, useContext } from "react";
 

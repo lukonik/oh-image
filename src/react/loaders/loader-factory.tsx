@@ -4,7 +4,7 @@ import type {
   BaseLoaderTransforms,
 } from "./base-loader-options";
 import type { ImageLoaderOptions } from "../types";
-import { resolveTransform } from "./image-loader-utils";
+import { resolveTransform } from "./transforms-resolver";
 import type {
   LoaderFactoryConfig,
   LoaderUrlResolved,
