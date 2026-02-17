@@ -3,7 +3,7 @@ import {
   type CloudinaryGlobalOptions,
 } from "./cloudinary-options";
 import loaderFactory from "../loader-factory";
-import { normalizeTransforms } from "../image-loader-utils";
+import { normalizeLoaderParams } from "../image-loader-utils";
 
 export const {
   useLoaderContext: useCloudinaryContext,
@@ -13,19 +13,19 @@ export const {
 } = loaderFactory<CloudinaryTransforms, CloudinaryGlobalOptions>(
   {
     transforms: {
-      format: "auto",
+      f: "webp",
     },
     placeholderTransforms: {
-      quality: 10,
-      format: "auto",
+      q: 10,
+      f: "webp",
     },
   },
   {
-    optionSeparator: "=",
+    optionSeparator: "_",
     paramSeparator: ",",
   },
   ({ transforms, optionSeparator }) =>
-    normalizeTransforms(transforms, optionSeparator),
+    normalizeLoaderParams(transforms, optionSeparator),
   ({ path, params, imageOptions }) =>
-    `${path}/cdn-cgi/image/${params}/${imageOptions.src}`,
+    `${path}/image/upload/${params}/${imageOptions.src}`,
 );

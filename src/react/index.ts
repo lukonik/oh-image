@@ -35,9 +35,16 @@ export {
   CloudflareLoaderProvider,
 } from "./loaders/cloudflare/cloudflare-loader";
 
+/** Cloudinary exports */
+export type {
+  CloudinaryGlobalOptions,
+  CloudinaryOptions,
+  CloudinaryTransforms,
+} from "./loaders/cloudinary/cloudinary-options";
+
 export {
-  type CloudinaryLoaderOptions,
   useCloudinaryContext,
+  useCloudinaryPlaceholder,
   useCloudinaryLoader,
   CloudinaryLoaderProvider,
-} from "./loaders/cloudinary-loader";
+} from "./loaders/cloudinary/cloudinary-loader";

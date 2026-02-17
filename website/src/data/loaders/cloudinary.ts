@@ -1,10 +1,20 @@
-import type {
-  BaseGlobalLoaderOptions,
-  BaseLoaderOptions,
-  BaseLoaderTransforms,
-} from "../base-loader-options";
-
-export interface CloudflareTransforms extends BaseLoaderTransforms {
+export const cloudinary = {
+  slug: "cloudinary",
+  name: "Cloudinary",
+  title: "Cloudinary Loader",
+  defaults: `
+  {
+    transforms: {
+      format: "auto",
+    },
+    placeholderTransforms: {
+      quality: 10,
+      format: "auto",
+    },
+  }
+  `,
+  link: "https://cloudinary.com/documentation/transformation_reference",
+  interface: `export interface CloudflareTransforms {
   anim?: boolean;
   background?: string;
   blur?: number;
@@ -26,8 +36,5 @@ export interface CloudflareTransforms extends BaseLoaderTransforms {
   rotate?: number;
   sharpen?: number;
   trim?: string;
-}
-
-export type CloudflareOptions = BaseLoaderOptions<CloudflareTransforms>;
-export type CloudflareGlobalOptions =
-  BaseGlobalLoaderOptions<CloudflareTransforms>;
+}`,
+};

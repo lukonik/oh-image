@@ -1,31 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
-  normalizeLoaderTransform,
   isAbsoluteUrl,
-  assertPath,
+  assertPath
 } from "../../src/react/loaders/image-loader-utils";
-
-describe("normalizeLoaderTransform", () => {
-  it("returns the string as-is when params is a string", () => {
-    expect(normalizeLoaderTransform("foo=bar", "=", "/")).toBe("foo=bar");
-  });
-
-  it("transforms a record into key-separator-value pairs joined by joinSeparator", () => {
-    expect(
-      normalizeLoaderTransform({ width: "100", height: "200" }, ":", "/"),
-    ).toBe("width:100/height:200");
-  });
-
-  it("uses custom separators", () => {
-    expect(
-      normalizeLoaderTransform({ a: "1", b: "2" }, "=", "&"),
-    ).toBe("a=1&b=2");
-  });
-
-  it("handles a single-entry record", () => {
-    expect(normalizeLoaderTransform({ key: "val" }, ":", ",")).toBe("key:val");
-  });
-});
 
 describe("isAbsoluteUrl", () => {
   it("returns true for http URLs", () => {

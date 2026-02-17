@@ -3,7 +3,7 @@ import {
   type CloudflareGlobalOptions,
 } from "./cloudflare-options";
 import loaderFactory from "../loader-factory";
-import { normalizeTransforms } from "../image-loader-utils";
+import { normalizeLoaderParams } from "../image-loader-utils";
 
 export const {
   useLoaderContext: useCloudflareContext,
@@ -25,7 +25,7 @@ export const {
     paramSeparator: ",",
   },
   ({ transforms, optionSeparator }) =>
-    normalizeTransforms(transforms, optionSeparator),
+    normalizeLoaderParams(transforms, optionSeparator),
   ({ path, params, imageOptions }) =>
     `${path}/cdn-cgi/image/${params}/${imageOptions.src}`,
 );

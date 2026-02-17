@@ -36,6 +36,5 @@ export const cloudflare = {
   rotate?: number;
   sharpen?: number;
   trim?: string;
-  redirectOnError?: boolean;
 }`,
 };
