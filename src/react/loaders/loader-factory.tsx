@@ -4,44 +4,16 @@ import type {
   BaseLoaderTransforms,
 } from "./base-loader-options";
 import type { ImageLoaderOptions } from "../types";
-import { resolveComplexTransforms } from "./image-loader-utils";
-
-export type LoaderParamsResolver<K> = (options: {
-  path: string;
-  transforms: K;
-  imageOptions: ImageLoaderOptions;
-  params: string[];
-  optionSeparator: string;
-  paramSeparator: string;
-}) => string[];
-
-export type LoaderUrlResolved = (options: {
-  imageOptions: ImageLoaderOptions;
-  params: string;
-  path: string;
-}) => string;
-
-// orders: Record<any, string[]>;
-//     customResolver?: Partial<
-//       Record<
-//         KnownKeys<T>,
-//         (key: string, value: any) => string | undefined | null
-//       >
-//     >
+import { resolveTransform } from "./image-loader-utils";
+import type {
+  LoaderFactoryConfig,
+  LoaderUrlResolved,
+} from "./loader-factory-types";
 
 export default function loaderFactory<
   K extends BaseLoaderTransforms,
   T extends BaseGlobalLoaderOptions<K>,
->(
-  defaults: T,
-  config: {
-    optionSeparator: string;
-    paramSeparator: string;
-    orders?: any;
-    customResolver?: any;
-  },
-  urlResolver: LoaderUrlResolved,
-) {
+>(defaults: T, config: LoaderFactoryConfig, urlResolver: LoaderUrlResolved) {
   const loaderContext = createContext<T>(defaults);
 
   function useLoaderContext() {
@@ -86,11 +58,14 @@ export default function loaderFactory<
         params.push("height" + config.optionSeparator + imageOptions.height);
       }
 
-      const resolvedParams = resolveComplexTransforms<K>(transforms, {
-        optionSeparator: config.optionSeparator,
-        orders: config.orders,
-        customResolver: config.customResolver,
-      }).join(config.paramSeparator);
+      const resolvedTransforms = resolveTransform<K>(
+        transforms,
+        config,
+      );
+
+      const resolvedParams = [...params, ...resolvedTransforms].join(
+        config.paramSeparator,
+      );
 
       return urlResolver({
         imageOptions,

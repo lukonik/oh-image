@@ -25,17 +25,14 @@ describe("loaderFactory", () => {
     paramSeparator: "&",
   };
 
-  const paramsResolver = vi.fn();
   const urlResolver = vi.fn();
 
   // Reset mocks before each test
   const setup = () => {
-    paramsResolver.mockReset().mockReturnValue(["mock=params"]);
     urlResolver.mockReset().mockReturnValue("https://resolved.url");
     return loaderFactory<TestTransforms, TestConfig>(
       defaults,
       config,
-      paramsResolver,
       urlResolver,
     );
   };
@@ -72,7 +69,7 @@ describe("loaderFactory", () => {
     const { LoaderProvider, useLoader } = loaderFactory<
       TestTransforms,
       TestConfig
-    >({} as any, config, paramsResolver, urlResolver);
+    >({} as any, config, urlResolver);
 
     const { result } = renderHook(() => useLoader(), {
       wrapper: ({ children }) => <LoaderProvider>{children}</LoaderProvider>,
@@ -95,18 +92,9 @@ describe("loaderFactory", () => {
 
     expect(url).toBe("https://resolved.url");
 
-    expect(paramsResolver).toHaveBeenCalledWith({
-      path: defaults.path,
-      transforms: defaults.transforms,
-      imageOptions,
-      params: [`width,100`, `height,100`],
-      optionSeparator: ",",
-      paramSeparator: "&",
-    });
-
     expect(urlResolver).toHaveBeenCalledWith({
       imageOptions,
-      params: "mock=params", // Joined result of paramsResolver
+      params: "width,100&height,100&q,80", 
       path: defaults.path,
     });
   });
@@ -120,9 +108,9 @@ describe("loaderFactory", () => {
     const generateUrl = result.current;
     generateUrl({ src: "img.png" });
 
-    expect(paramsResolver).toHaveBeenCalledWith(
+    expect(urlResolver).toHaveBeenCalledWith(
       expect.objectContaining({
-        transforms: { q: "80", fmt: "webp" },
+        params: "q,80&fmt,webp",
       }),
     );
   });
@@ -134,9 +122,9 @@ describe("loaderFactory", () => {
 
     generateUrl({ src: "img.png" });
 
-    expect(paramsResolver).toHaveBeenCalledWith(
+    expect(urlResolver).toHaveBeenCalledWith(
       expect.objectContaining({
-        transforms: { q: "10" }, // placeholderTransforms from defaults
+        params: "q,10",
       }),
     );
   });
@@ -149,11 +137,6 @@ describe("loaderFactory", () => {
 
     generateUrl({ src: "img.jpg" });
 
-    expect(paramsResolver).toHaveBeenCalledWith(
-      expect.objectContaining({
-        path: localPath,
-      }),
-    );
     expect(urlResolver).toHaveBeenCalledWith(
       expect.objectContaining({
         path: localPath,

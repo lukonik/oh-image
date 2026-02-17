@@ -1,5 +1,6 @@
 import { assert } from "../prop-asserts";
 import type { BaseLoaderTransforms } from "./base-loader-options";
+import type { LoaderFactoryConfig } from "./loader-factory-types";
 
 export function resolveTransforms(
   params: Record<string, string>,
@@ -19,42 +20,24 @@ const stringifyOptions = (
     opCode,
     ...values.map((v) => (v == null ? "" : encodeURIComponent(v))),
   ].join(separator);
-  // .replace(/:+$/, "");
 };
 
 const resolveObjectParam = (
   key: string,
-  value: any,
+  value: Record<string, unknown>,
   order: string[] | undefined,
   separator: string,
 ): string | undefined => {
   if (!order) {
     return;
   }
-  const values = order.map((k) => value[k]);
+  const values = order.map((k) => value[k]) as string[];
   return stringifyOptions(key, values, separator);
 };
 
-type KnownKeys<T> = keyof {
-  [K in keyof T as string extends K
-    ? never
-    : number extends K
-      ? never
-      : K]: T[K];
-};
-
-export function resolveComplexTransforms<T extends BaseLoaderTransforms>(
+export function resolveTransform<T extends BaseLoaderTransforms>(
   transforms: T,
-  config: {
-    optionSeparator: string;
-    orders: Record<any, string[]> | undefined;
-    customResolver?: Partial<
-      Record<
-        KnownKeys<T>,
-        (key: string, value: any) => string | undefined | null
-      >
-    >;
-  },
+  config: LoaderFactoryConfig,
 ): string[] {
   if (!transforms) {
     return [];
@@ -68,12 +51,15 @@ export function resolveComplexTransforms<T extends BaseLoaderTransforms>(
     }
     const type = typeof value;
 
-    if (config.customResolver && (config.customResolver as any)[key]) {
-      const resolved = (config.customResolver as any)[key](key, value);
-      if (resolved) {
-        params.push(resolved);
+    if (config.customResolver) {
+      const resolverFn = config.customResolver[key];
+      if (resolverFn) {
+        const resolvedValue = resolverFn(key, value);
+        if (resolvedValue !== undefined) {
+          params.push(resolvedValue);
+        }
+        continue;
       }
-      continue;
     }
 
     switch (type) {
@@ -84,11 +70,10 @@ export function resolveComplexTransforms<T extends BaseLoaderTransforms>(
         break;
       }
       case "object": {
-        const order = (config.orders as any)[key];
         const objectParams = resolveObjectParam(
           key,
           value,
-          order,
+          config?.orders?.[key],
           config.optionSeparator,
         );
         if (objectParams) {

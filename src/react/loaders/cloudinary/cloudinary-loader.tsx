@@ -4,7 +4,7 @@ import {
 } from "./cloudinary-options";
 import loaderFactory from "../loader-factory";
 
-function customResolver(key: string, value: any) {
+function customResolver(key: string, value: boolean | number) {
   if (typeof value === "boolean") {
     return value ? key : undefined;
   }
