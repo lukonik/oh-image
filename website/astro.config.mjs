@@ -68,7 +68,7 @@ export default defineConfig({
             { label: "Overview", slug: "docs/loaders/overview" },
             { label: "Imgproxy", link: "docs/loaders/imgproxy" },
             { label: "Cloudflare", link: "docs/loaders/cloudflare" },
-            { label: "Cloudinary", slug: "docs/loaders/cloudinary" },
+            { label: "Cloudinary", link: "docs/loaders/cloudinary" },
           ],
         },
       ],
