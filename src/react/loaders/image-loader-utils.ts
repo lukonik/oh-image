@@ -47,9 +47,12 @@ export function resolveComplexTransforms<T extends BaseLoaderTransforms>(
   transforms: T,
   config: {
     optionSeparator: string;
-    orders: Record<keyof T, string[]>;
+    orders: Record<Partial<KnownKeys<T>>, string[]>;
     customResolver?: Partial<
-      Record<KnownKeys<T>, (key: string, value: any) => string>
+      Record<
+        KnownKeys<T>,
+        (key: string, value: any) => string | undefined | null
+      >
     >;
   },
 ): string[] {
@@ -66,7 +69,10 @@ export function resolveComplexTransforms<T extends BaseLoaderTransforms>(
     const type = typeof value;
 
     if (config.customResolver && (config.customResolver as any)[key]) {
-      params.push((config.customResolver as any)[key](key, value));
+      const resolved = (config.customResolver as any)[key](key, value);
+      if (resolved) {
+        params.push(resolved);
+      }
       continue;
     }
 
