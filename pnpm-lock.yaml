@@ -4,10 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  dir: link:dir
-  oh-image: link:../../../Library/pnpm/global/5/node_modules/oh-image
-
 importers:
 
   .:
