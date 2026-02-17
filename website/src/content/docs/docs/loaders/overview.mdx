@@ -4,21 +4,3 @@ description: Understanding how loaders work in oh-image
 ---
 
 Loaders are functions that generate image URLs. They are essential when you want to serve images from an external Image CDN (like Cloudinary, Imgproxy, or Cloudflare) instead of hosting them locally.
-
-## What is a Loader?
-
-A loader is a function that generates the URL for an image based on its configuration. It transforms an abstract source (like a file path or ID) into a concrete URL that can be fetched by the browser.
-
-The `Image` component uses this function to generate the correct URL for each image size in the `srcSet`, as well as the main `src` and the placeholder.
-
-```ts
-type ImageLoader = (options: ImageLoaderOptions) => string;
-
-export interface ImageLoaderOptions {
-  src: string;
-  width?: number | null | undefined;
-  height?: number | null | undefined;
-}
-```
-
-
