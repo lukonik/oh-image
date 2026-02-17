@@ -1,0 +1,36 @@
+---
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+import { Code } from "astro:components";
+import { loaders } from "../../../data/loaders/loaders";
+
+export function getStaticPaths() {
+  return loaders.map((loader) => ({
+    params: { slug: loader.slug },
+    props: { loader },
+  }));
+}
+
+const { loader } = Astro.props;
+---
+
+<StarlightPage frontmatter={{ title: loader.title }}>
+  <p>Official <a href={loader.link}>link</a></p>
+  <h2>use{loader.name}Loader</h2>
+  <p>Main Loader for hook</p>
+  <h2>use{loader.name}Placeholder</h2>
+  <p>Main Placeholder for hook</p>
+  <h2>{loader.name}LoaderProvider</h2>
+  <p>To configure globally the hook</p>
+  <h2>use{loader.name}Context</h2>
+  <p>hook to return the global defaults</p>
+  <h2>Global Defaults</h2>
+  <Code code={loader.defaults} lang="ts" title={`${loader.title} Options`} />
+
+  <h2>Transforms Interface</h2>
+  <p>
+    Below is the TypeScript interface defining the available options for this
+    loader.
+  </p>
+
+  <Code code={loader.interface} lang="ts" title={`${loader.title} Options`} />
+</StarlightPage>
