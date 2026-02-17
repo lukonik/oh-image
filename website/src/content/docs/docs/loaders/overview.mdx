@@ -21,25 +21,4 @@ export interface ImageLoaderOptions {
 }
 ```
 
-## Integration with Image Component
 
-You can pass a `loader` directly to any `Image` component. When a loader is present, the component will use it to construct URLs for the `src` and every entry in the `srcSet`.
-
-```tsx
-import { Image } from "@lonik/oh-image/react";
-
-const myCustomLoader = ({ src, width }) => {
-  return `https://example.com/${src}?w=${width}`;
-};
-
-export function App() {
-  return (
-    <Image
-      src="my-image.jpg"
-      width={800}
-      height={600}
-      loader={myCustomLoader}
-    />
-  );
-}
-```
