@@ -1,4 +1,4 @@
-import type { ImageLoaderOptions } from "../types";
+import type { ImageLoaderOptions } from "../react/types";
 
 export type LoaderCustomResolver = Record<string, LoaderCustomResolverFn>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

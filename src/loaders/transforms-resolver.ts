@@ -1,4 +1,4 @@
-import { assert } from "../prop-asserts";
+import { assert } from "../react/prop-asserts";
 import type { BaseLoaderTransforms } from "./base-loader-options";
 import type { LoaderFactoryConfig } from "./loader-factory-types";
 

@@ -6,6 +6,9 @@ export default defineConfig({
   entry: {
     plugin: "src/plugin/index.ts",
     react: "src/react/index.ts",
+    cloudflare: "src/loaders/cloudflare/index.ts",
+    cloudinary: "src/loaders/cloudinary/index.ts",
+    imgproxy: "src/loaders/imgproxy/index.ts",
   },
   dts: true,
   external: [

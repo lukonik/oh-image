@@ -1,5 +1,5 @@
 import { assertPath, resolveTransforms } from "./transforms-resolver";
-import type { ImageLoader, ImageLoaderOptions } from "../types";
+import type { ImageLoader, ImageLoaderOptions } from "../react/types";
 import { createContext, useContext } from "react";
 
 export interface CloudinaryLoaderOptions {

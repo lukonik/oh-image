@@ -1,13 +1,13 @@
 import { createContext, useContext } from "react";
 import type {
-  BaseGlobalLoaderOptions,
-  BaseLoaderTransforms,
+    BaseGlobalLoaderOptions,
+    BaseLoaderTransforms,
 } from "./base-loader-options";
-import type { ImageLoaderOptions } from "../types";
+import type { ImageLoaderOptions } from "../react/types";
 import { resolveTransform } from "./transforms-resolver";
 import type {
-  LoaderFactoryConfig,
-  LoaderUrlResolved,
+    LoaderFactoryConfig,
+    LoaderUrlResolved,
 } from "./loader-factory-types";
 
 export default function loaderFactory<
