@@ -4,7 +4,7 @@ import type {
   BaseLoaderTransforms,
 } from "../base-loader-options";
 
-export interface CloudflareTransforms extends BaseLoaderTransforms {
+export interface CloudinaryTransforms extends BaseLoaderTransforms {
   anim?: boolean;
   background?: string;
   blur?: number;
@@ -29,6 +29,6 @@ export interface CloudflareTransforms extends BaseLoaderTransforms {
   redirectOnError?: boolean;
 }
 
-export type CloudflareOptions = BaseLoaderOptions<CloudflareTransforms>;
-export type CloudflareGlobalOptions =
-  BaseGlobalLoaderOptions<CloudflareTransforms>;
+export type CloudinaryOptions = BaseLoaderOptions<CloudinaryTransforms>;
+export type CloudinaryGlobalOptions =
+  BaseGlobalLoaderOptions<CloudinaryTransforms>;

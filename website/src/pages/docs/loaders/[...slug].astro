@@ -1,5 +1,6 @@
 ---
 import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+import { Aside } from "@astrojs/starlight/components";
 import { Code } from "astro:components";
 import { loaders } from "../../../data/loaders/loaders";
 
@@ -21,19 +22,22 @@ const useContextName = `use${loaderName}Context`;
 
 <StarlightPage frontmatter={{ title: loader.title }}>
   <p>
-    This integration allows you to use <strong>{loader.name}</strong> for image
-    optimization. For more details, refer to the <a href={loader.link}
+    This integration allows you to use <strong>{loader.name}</strong> for image optimization.
+    For more details, refer to the <a href={loader.link}
       >official documentation</a
     >.
   </p>
 
   <h2>{useLoaderName}</h2>
   <p>
-    The primary hook for generating the loader function. It accepts configuration options
-    and returns a function that generates the final image URL based on the provided transforms.
-    Pass this result to the <code>loader</code> prop of the <code>Image</code> component.
+    The primary hook for generating the loader function. It accepts
+    configuration options and returns a function that generates the final image
+    URL based on the provided transforms. Pass this result to the <code
+      >loader</code
+    > prop of the <code>Image</code> component.
   </p>
-  <Code code={`import { ${useLoaderName}, Image } from '@lonik/oh-image/react';
+  <Code
+    code={`import { ${useLoaderName}, Image } from '@lonik/oh-image/react';
 
 function MyComponent() {
   const loader = ${useLoaderName}({
@@ -47,14 +51,20 @@ function MyComponent() {
       loader={loader}
     />
   );
-}`} lang="tsx" title={`Using ${useLoaderName}`} />
+}`}
+    lang="tsx"
+    title={`Using ${useLoaderName}`}
+  />
 
   <h2>{usePlaceholderName}</h2>
   <p>
-    Creates a loader function specifically configured for generating low-quality placeholders
-    (e.g., blurred images). Pass the result to the <code>placeholder</code> prop of the <code>Image</code> component.
+    Creates a loader function specifically configured for generating low-quality
+    placeholders (e.g., blurred images). Pass the result to the <code
+      >placeholder</code
+    > prop of the <code>Image</code> component.
   </p>
-  <Code code={`import { ${usePlaceholderName}, Image } from '@lonik/oh-image/react';
+  <Code
+    code={`import { ${usePlaceholderName}, Image } from '@lonik/oh-image/react';
 
 function MyComponent() {
   const placeholderLoader = ${usePlaceholderName}({
@@ -67,14 +77,19 @@ function MyComponent() {
       placeholder={placeholderLoader}
     />
   );
-}`} lang="tsx" title={`Using ${usePlaceholderName}`} />
+}`}
+    lang="tsx"
+    title={`Using ${usePlaceholderName}`}
+  />
 
   <h2>{providerName}</h2>
   <p>
-    A Context Provider that configures global options for all child components using this loader.
-    This is the recommended way to set the base path/URL and default transforms.
+    A Context Provider that configures global options for all child components
+    using this loader. This is the recommended way to set the base path/URL and
+    default transforms.
   </p>
-  <Code code={`import { ${providerName} } from '@lonik/oh-image/react';
+  <Code
+    code={`import { ${providerName} } from '@lonik/oh-image/react';
 
 function App() {
   return (
@@ -85,29 +100,45 @@ function App() {
       <MyApp />
     </${providerName}>
   );
-}`} lang="tsx" title={`Configuring ${providerName}`} />
+}`}
+    lang="tsx"
+    title={`Configuring ${providerName}`}
+  />
 
   <h2>{useContextName}</h2>
   <p>
-    A utility hook that exposes the current context value, including the global configuration
-    set by <code>{providerName}</code>. Useful for debugging or building custom components that
-    need access to the global loader settings.
+    A utility hook that exposes the current context value, including the global
+    configuration set by <code>{providerName}</code>. Useful for debugging or
+    building custom components that need access to the global loader settings.
   </p>
-  <Code code={`import { ${useContextName} } from '@lonik/oh-image/react';
+  <Code
+    code={`import { ${useContextName} } from '@lonik/oh-image/react';
 
 function DebugConfig() {
   const config = ${useContextName}();
   return <pre>{JSON.stringify(config, null, 2)}</pre>;
-}`} lang="tsx" title={`Using ${useContextName}`} />
+}`}
+    lang="tsx"
+    title={`Using ${useContextName}`}
+  />
 
   <h2>Global Defaults</h2>
-  <Code code={loader.defaults} lang="ts" title={`${loader.title} Default Config`} />
+  <Code
+    code={loader.defaults}
+    lang="ts"
+    title={`${loader.title} Default Config`}
+  />
 
   <h2>Transforms Interface</h2>
   <p>
-    Below is the TypeScript interface defining the available transformation options for this
-    loader.
+    Below is the TypeScript interface defining the available transformation
+    options for this loader.
   </p>
-
+  <Aside>
+    We try to keep parameters updated, but if you notice any missing, you can
+    still pass them, the URL will generate correctly despite the lack of
+    TypeScript IntelliSense. If you find a missing parameter, please open a
+    GitHub issue so we can add official support.
+  </Aside>
   <Code code={loader.interface} lang="ts" title={`${loader.title} Interface`} />
 </StarlightPage>
