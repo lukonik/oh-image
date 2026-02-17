@@ -64,6 +64,43 @@ type ART_FILTER =
   | "sonnet"
   | "ukulele"
   | "zorro";
+
+type FORMAT_TYPE =
+  | "3ds" // 3DS Max
+  | "ai" // Adobe Illustrator
+  | "avif" // AVIF Image
+  | "bmp" // Bitmap
+  | "bw" // Browzwear
+  | "djvu" // DjVu
+  | "dng" // Digital Negative
+  | "eps" // Encapsulated PostScript
+  | "fbx" // Filmbox 3D
+  | "flif" // Free Lossless Image Format
+  | "gif" // GIF (Static & Animated)
+  | "glb" // Binary glTF
+  | "gltf" // GL Transmission Format
+  | "heif" // High Efficiency Image File
+  | "heic" // High Efficiency Image Coding
+  | "ico" // Icon
+  | "indd" // Adobe InDesign
+  | "jp2" // JPEG 2000
+  | "jpg" // JPEG
+  | "jpeg" // JPEG
+  | "jxl" // JPEG XL
+  | "obj" // Wavefront OBJ
+  | "pdf" // Portable Document Format
+  | "ply" // Polygon File Format
+  | "png" // Portable Network Graphics
+  | "psd" // Photoshop Document
+  | "raw" // Generic Raw (arw, cr2, cr3)
+  | "svg" // Scalable Vector Graphics
+  | "tga" // Truevision TGA
+  | "tif" // Tagged Image File Format
+  | "tiff" // Tagged Image File Format
+  | "u3ma" // Fabric file
+  | "usdz" // Universal Scene Description
+  | "wdp" // JPEG XR
+  | "webp"; // WebP (Static & Animated)
 export interface CloudinaryTransforms extends BaseLoaderTransforms {
   a?: number | ANGLE_MODE | string;
   mode?: string; //TODO
@@ -90,6 +127,13 @@ export interface CloudinaryTransforms extends BaseLoaderTransforms {
   anti_removal?: number | boolean;
   art?: ART_FILTER;
   e_auto_brightness?: boolean | number;
+  e_auto_color?: boolean | number;
+  e_auto_contrast?: boolean | number;
+  e_auto_enhance?: boolean | number;
+  f?: FORMAT_TYPE;
+  w?: number;
+  h?: number;
+  z?: number;
 }
 
 export type CloudinaryOptions = BaseLoaderOptions<CloudinaryTransforms>;

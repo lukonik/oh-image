@@ -35,12 +35,22 @@ const resolveObjectParam = (
   return stringifyOptions(key, values, separator);
 };
 
+type KnownKeys<T> = keyof {
+  [K in keyof T as string extends K
+    ? never
+    : number extends K
+      ? never
+      : K]: T[K];
+};
+
 export function resolveComplexTransforms<T extends BaseLoaderTransforms>(
   transforms: T,
   config: {
     optionSeparator: string;
     orders: Record<keyof T, string[]>;
-    customResolver?: Record<keyof T, (key: string, value: any) => string>;
+    customResolver?: Partial<
+      Record<KnownKeys<T>, (key: string, value: any) => string>
+    >;
   },
 ): string[] {
   if (!transforms) {
@@ -55,8 +65,8 @@ export function resolveComplexTransforms<T extends BaseLoaderTransforms>(
     }
     const type = typeof value;
 
-    if (config.customResolver && config.customResolver[key]) {
-      params.push(config.customResolver[key](key, value));
+    if (config.customResolver && (config.customResolver as any)[key]) {
+      params.push((config.customResolver as any)[key](key, value));
       continue;
     }
 
