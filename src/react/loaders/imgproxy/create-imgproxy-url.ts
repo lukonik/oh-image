@@ -1,5 +1,4 @@
 import type { LoaderParamsResolver } from "../loader-factory";
-import { resolveDeprecatedParams } from "../loader-utils";
 import type { ImgproxyOptions } from "./imgproxy-options";
 type ImgproxyTransforms = NonNullable<ImgproxyOptions["transforms"]>;
 
@@ -280,13 +279,7 @@ const resolveTransforms = (transforms: ImgproxyTransforms) => {
 };
 
 export const createImgproxyUrl: LoaderParamsResolver<ImgproxyTransforms> =
-  function ({ transforms, params, optionSeparator }) {
+  function ({ transforms, params }) {
     params.push(...resolveTransforms(transforms));
-
-    // resolve deprecated params, will be removed in future
-    if (params) {
-      params.push(...resolveDeprecatedParams(params, optionSeparator));
-    }
-
     return params;
   };
