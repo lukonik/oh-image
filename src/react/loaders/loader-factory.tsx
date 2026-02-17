@@ -57,7 +57,8 @@ export default function loaderFactory<K, T extends BaseGlobalLoaderOptions<K>>(
       ...options?.transforms,
     } as K;
     if (!path) {
-      throw new Error("Path is required");
+      console.warn("Path is not provided");
+      return () => undefined;
     }
     return (imageOptions: ImageLoaderOptions) => {
       const params: string[] = [];
