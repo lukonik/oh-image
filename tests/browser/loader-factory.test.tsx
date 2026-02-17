@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import type { BaseGlobalLoaderOptions } from "../../src/react/loaders/base-loader-options";
-import loaderFactory from "../../src/react/loaders/loader-factory";
+import type { BaseGlobalLoaderOptions } from "../../src/loaders/base-loader-options";
+import loaderFactory from "../../src/loaders/loader-factory";
 import type { ImageLoaderOptions } from "../../src/react/types";
 
 interface TestTransforms {
