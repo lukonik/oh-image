@@ -14,6 +14,7 @@
       "@lonik/oh-image/react": ["./src/react/index.ts"],
       "@lonik/oh-image/plugin": ["./src/plugin/index.ts"]
     },
+    "types": ["vite/client"],
     "verbatimModuleSyntax": true
   },
   "include": ["src"]

@@ -6,7 +6,7 @@ export interface ImageLoaderOptions {
   height?: number | null | undefined;
 }
 
-export type ImageLoader = (options: ImageLoaderOptions) => string;
+export type ImageLoader = (options: ImageLoaderOptions) => string | undefined;
 
 export type ImageSrcType = string | ImageSrc;
 

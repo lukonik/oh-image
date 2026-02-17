@@ -1,5 +1,5 @@
-import { assertPath, normalizeLoaderParams } from "./image-loader-utils";
-import type { ImageLoader, ImageLoaderOptions } from "../types";
+import { assertPath, resolveTransforms } from "./transforms-resolver";
+import type { ImageLoader, ImageLoaderOptions } from "../react/types";
 import { createContext, useContext } from "react";
 
 export interface CloudinaryLoaderOptions {
@@ -65,19 +65,9 @@ export function useCloudinaryLoader(
       parts.push(`h_${imageOptions.height}`);
     }
 
-    if (imageOptions.isPlaceholder) {
-      if (resolvedOptions.placeholderParams) {
-        const placeholderParams = normalizeLoaderParams(
-          resolvedOptions.placeholderParams,
-          "",
-        );
-        parts.push(...placeholderParams);
-      }
-    } else {
-      if (resolvedOptions.params) {
-        const params = normalizeLoaderParams(resolvedOptions.params, "");
-        parts.push(...params);
-      }
+    if (resolvedOptions.params) {
+      const params = resolveTransforms(resolvedOptions.params, "");
+      parts.push(...params);
     }
 
     let src = imageOptions.src;
