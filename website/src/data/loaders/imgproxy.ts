@@ -1,6 +1,6 @@
 export const imgproxy = {
   slug: "imgproxy",
-  name: "imgproxy",
+  name: "Imgproxy",
   title: "Imgproxy Loader",
   link: "https://docs.imgproxy.net/",
   defaults: `

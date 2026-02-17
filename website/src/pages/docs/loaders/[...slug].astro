@@ -20,7 +20,12 @@ const useContextName = `use${loaderName}Context`;
 ---
 
 <StarlightPage frontmatter={{ title: loader.title }}>
-  <p>Official <a href={loader.link}>link</a></p>
+  <p>
+    This integration allows you to use <strong>{loader.name}</strong> for image
+    optimization. For more details, refer to the <a href={loader.link}
+      >official documentation</a
+    >.
+  </p>
 
   <h2>{useLoaderName}</h2>
   <p>

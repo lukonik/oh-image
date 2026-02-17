@@ -66,8 +66,8 @@ export default defineConfig({
           label: "Loaders",
           items: [
             { label: "Overview", slug: "docs/loaders/overview" },
-            { label: "Imgproxy", slug: "docs/loaders/imgproxy" },
-            { label: "Cloudflare", slug: "docs/loaders/cloudflare" },
+            { label: "Imgproxy", link: "docs/loaders/imgproxy" },
+            { label: "Cloudflare", link: "docs/loaders/cloudflare" },
             { label: "Cloudinary", slug: "docs/loaders/cloudinary" },
             { label: "Custom Loader", slug: "docs/loaders/custom-loader" },
           ],
