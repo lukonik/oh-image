@@ -84,7 +84,7 @@ export function resolveComplexTransforms<T extends BaseLoaderTransforms>(
         break;
       }
       case "object": {
-        const order = config.orders[key];
+        const order = (config.orders as any)[key];
         const objectParams = resolveObjectParam(
           key,
           value,
