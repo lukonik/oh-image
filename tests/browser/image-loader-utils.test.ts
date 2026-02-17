@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   isAbsoluteUrl,
-  assertPath
+  assertPath,
+  resolveComplexTransforms,
 } from "../../src/react/loaders/image-loader-utils";
 
 describe("isAbsoluteUrl", () => {
@@ -61,5 +62,87 @@ describe("assertPath", () => {
 
   it("does not throw for a valid https URL", () => {
     expect(() => assertPath("https://cdn.example.com")).not.toThrow();
+  });
+});
+
+describe("resolveComplexTransforms", () => {
+  it("resolves primitive values", () => {
+    const transforms = { width: 100, height: 200 };
+    const config = { optionSeparator: ":", orders: {} };
+    expect(resolveComplexTransforms(transforms, config)).toEqual([
+      "width:100",
+      "height:200",
+    ]);
+  });
+
+  it("resolves object values with order", () => {
+    const transforms = {
+      crop: { width: 100, height: 200, gravity: "center" },
+    };
+    const config = {
+      optionSeparator: ":",
+      orders: {
+        crop: ["width", "height", "gravity"],
+      },
+    };
+    expect(resolveComplexTransforms(transforms, config)).toEqual([
+      "crop:100:200:center",
+    ]);
+  });
+
+  it("handles missing values in object (undefined)", () => {
+    const transforms = {
+      crop: { width: 100, height: undefined, gravity: "center" },
+    };
+    const config = {
+      optionSeparator: ":",
+      orders: {
+        crop: ["width", "height", "gravity"],
+      },
+    };
+    // undefined becomes empty string based on stringifyOptions implementation
+    expect(resolveComplexTransforms(transforms, config)).toEqual([
+      "crop:100::center",
+    ]);
+  });
+
+  it("skips object key if order is not provided", () => {
+    const transforms = {
+      crop: { width: 100 },
+    };
+    const config = {
+      optionSeparator: ":",
+      orders: {},
+    };
+    expect(resolveComplexTransforms(transforms, config)).toEqual([]);
+  });
+
+  it("skips undefined primitive values", () => {
+    const transforms = { width: undefined, height: 200 };
+    const config = { optionSeparator: ":", orders: {} };
+    expect(resolveComplexTransforms(transforms, config)).toEqual([
+      "height:200",
+    ]);
+  });
+
+  it("uses custom separator", () => {
+    const transforms = { width: 100 };
+    const config = { optionSeparator: "/", orders: {} };
+    expect(resolveComplexTransforms(transforms, config)).toEqual(["width/100"]);
+  });
+
+  it("uses custom separator for object params", () => {
+    const transforms = {
+      crop: { width: 100, height: 200 },
+    };
+    const config = {
+      optionSeparator: "/",
+      orders: {
+        crop: ["width", "height"],
+      },
+    };
+    expect(resolveComplexTransforms(transforms, config)).toEqual([
+      "crop/100/200",
+    ]);
   });
 });

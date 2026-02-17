@@ -16,6 +16,8 @@ function RouteComponent() {
   const [transform, setTransform] = useState<CloudinaryTransforms>({
     q: 1,
     o: 70,
+    e_accelerate: 30,
+    e_auto_brightness: 10,
   });
   const loader = useCloudinaryLoader({
     transforms: transform,

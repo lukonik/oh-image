@@ -1,4 +1,4 @@
-import { assertPath, normalizeLoaderParams } from "./image-loader-utils";
+import { assertPath, resolveTransforms } from "./image-loader-utils";
 import type { ImageLoader, ImageLoaderOptions } from "../types";
 import { createContext, useContext } from "react";
 
@@ -66,7 +66,7 @@ export function useCloudinaryLoader(
     }
 
     if (resolvedOptions.params) {
-      const params = normalizeLoaderParams(resolvedOptions.params, "");
+      const params = resolveTransforms(resolvedOptions.params, "");
       parts.push(...params);
     }
 

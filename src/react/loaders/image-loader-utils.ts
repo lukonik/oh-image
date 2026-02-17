@@ -1,12 +1,93 @@
 import { assert } from "../prop-asserts";
+import type { BaseLoaderTransforms } from "./base-loader-options";
 
-export function normalizeLoaderParams(
+export function resolveTransforms(
   params: Record<string, string>,
   separator: string,
 ): string[] {
   return Object.entries(params).map(
     ([key, value]) => `${key}${separator}${value}`,
   );
+}
+
+const stringifyOptions = (
+  opCode: string,
+  values: Array<string | number | boolean | undefined>,
+  separator: string,
+): string => {
+  return [
+    opCode,
+    ...values.map((v) => (v == null ? "" : encodeURIComponent(v))),
+  ].join(separator);
+  // .replace(/:+$/, "");
+};
+
+const resolveObjectParam = (
+  key: string,
+  value: any,
+  order: string[] | undefined,
+  separator: string,
+): string | undefined => {
+  if (!order) {
+    return;
+  }
+  const values = order.map((k) => value[k]);
+  return stringifyOptions(key, values, separator);
+};
+
+export function resolveComplexTransforms<T extends BaseLoaderTransforms>(
+  transforms: T,
+  config: {
+    optionSeparator: string;
+    orders: Record<keyof T, string[]>;
+    customResolver?: Record<keyof T, (key: string, value: any) => string>;
+  },
+): string[] {
+  if (!transforms) {
+    return [];
+  }
+  const params: string[] = [];
+  for (const key of Object.keys(transforms)) {
+    const value = transforms[key as keyof T];
+
+    if (value === undefined) {
+      continue;
+    }
+    const type = typeof value;
+
+    if (config.customResolver && config.customResolver[key]) {
+      params.push(config.customResolver[key](key, value));
+      continue;
+    }
+
+    switch (type) {
+      case "boolean": {
+        if (value === true) {
+          params.push(key);
+        }
+        break;
+      }
+      case "object": {
+        const order = config.orders[key];
+        const objectParams = resolveObjectParam(
+          key,
+          value,
+          order,
+          config.optionSeparator,
+        );
+        if (objectParams) {
+          params.push(objectParams);
+        }
+        break;
+      }
+      default: {
+        params.push(stringifyOptions(key, [value], config.optionSeparator));
+        break;
+      }
+    }
+  }
+
+  return params;
 }
 
 export function isAbsoluteUrl(src: string): boolean {

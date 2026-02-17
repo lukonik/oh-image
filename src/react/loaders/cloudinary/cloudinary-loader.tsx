@@ -3,7 +3,14 @@ import {
   type CloudinaryGlobalOptions,
 } from "./cloudinary-options";
 import loaderFactory from "../loader-factory";
-import { normalizeLoaderParams } from "../image-loader-utils";
+import { resolveComplexTransforms } from "../image-loader-utils";
+
+function customResolver(key: string, value: any) {
+  if (typeof value === "boolean") {
+    return key;
+  }
+  return `${key}:${value}`;
+}
 
 export const {
   useLoaderContext: useCloudinaryContext,
@@ -25,7 +32,14 @@ export const {
     paramSeparator: ",",
   },
   ({ transforms, optionSeparator }) =>
-    normalizeLoaderParams(transforms, optionSeparator),
+    resolveComplexTransforms<CloudinaryTransforms>(transforms, {
+      optionSeparator: optionSeparator,
+      orders: {},
+      customResolver: {
+        e_accelerate: customResolver,
+        e_auto_brightness: customResolver,
+      },
+    }),
   ({ path, params, imageOptions }) =>
     `${path}/image/upload/${params}/${imageOptions.src}`,
 );
