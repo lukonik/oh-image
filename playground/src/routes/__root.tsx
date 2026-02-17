@@ -1,9 +1,7 @@
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
-import {
-  CloudflareLoaderProvider,
-  CloudinaryLoaderProvider,
-  ImgproxyLoaderProvider,
-} from "@lonik/oh-image/react";
+import { CloudflareLoaderProvider } from "@lonik/oh-image/cloudflare";
+import { CloudinaryLoaderProvider } from "@lonik/oh-image/cloudinary";
+import { ImgproxyLoaderProvider } from "@lonik/oh-image/imgproxy";
 
 export const Route = createRootRoute({
   component: RootComponent,

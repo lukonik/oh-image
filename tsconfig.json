@@ -12,7 +12,10 @@
     "emitDeclarationOnly": true,
     "paths": {
       "@lonik/oh-image/react": ["./src/react/index.ts"],
-      "@lonik/oh-image/plugin": ["./src/plugin/index.ts"]
+      "@lonik/oh-image/plugin": ["./src/plugin/index.ts"],
+      "@lonik/oh-image/imgproxy": ["./src/loaders/imgproxy/index.ts"],
+      "@lonik/oh-image/cloudflare": ["./src/loaders/cloudflare/index.ts"],
+      "@lonik/oh-image/cloudinary": ["./src/loaders/cloudinary/index.ts"]
     },
     "types": ["vite/client"],
     "verbatimModuleSyntax": true

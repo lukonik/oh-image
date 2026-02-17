@@ -3,7 +3,7 @@ import {
   type CloudflareTransforms,
   useCloudflareLoader,
   useCloudflarePlaceholder,
-} from "@lonik/oh-image/react";
+} from "@lonik/oh-image/cloudflare";
 import { useState } from "react";
 import ControlsPanel from "../../components/controls-panel";
 import { JsonEditor } from "json-edit-react";

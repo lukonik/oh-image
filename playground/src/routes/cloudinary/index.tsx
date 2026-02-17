@@ -3,8 +3,8 @@ import {
   type CloudinaryTransforms,
   useCloudinaryLoader,
   useCloudinaryPlaceholder,
-  Image,
-} from "@lonik/oh-image/react";
+} from "@lonik/oh-image/cloudinary";
+import { Image } from "@lonik/oh-image/react";
 import { useState } from "react";
 import ControlsPanel from "../../components/controls-panel";
 import { JsonEditor } from "json-edit-react";

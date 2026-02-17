@@ -3,10 +3,10 @@ import ImgproxyControls from "./-components/imgproxy-controls";
 import { useState } from "react";
 import {
   useImgproxyLoader,
-  Image,
   type ImgproxyOptions,
   useImgproxyPlaceholder
-} from "@lonik/oh-image/react";
+} from "@lonik/oh-image/imgproxy";
+import { Image } from "@lonik/oh-image/react";
 
 export const Route = createFileRoute("/imgproxy/")({
   component: RouteComponent,
