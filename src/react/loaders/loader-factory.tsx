@@ -1,6 +1,10 @@
 import { createContext, useContext } from "react";
-import type { BaseGlobalLoaderOptions } from "./base-loader-options";
+import type {
+  BaseGlobalLoaderOptions,
+  BaseLoaderTransforms,
+} from "./base-loader-options";
 import type { ImageLoaderOptions } from "../types";
+import { resolveComplexTransforms } from "./image-loader-utils";
 
 export type LoaderParamsResolver<K> = (options: {
   path: string;
@@ -17,13 +21,25 @@ export type LoaderUrlResolved = (options: {
   path: string;
 }) => string;
 
-export default function loaderFactory<K, T extends BaseGlobalLoaderOptions<K>>(
+// orders: Record<any, string[]>;
+//     customResolver?: Partial<
+//       Record<
+//         KnownKeys<T>,
+//         (key: string, value: any) => string | undefined | null
+//       >
+//     >
+
+export default function loaderFactory<
+  K extends BaseLoaderTransforms,
+  T extends BaseGlobalLoaderOptions<K>,
+>(
   defaults: T,
   config: {
     optionSeparator: string;
     paramSeparator: string;
+    orders?: any;
+    customResolver?: any;
   },
-  paramsResolver: LoaderParamsResolver<K>,
   urlResolver: LoaderUrlResolved,
 ) {
   const loaderContext = createContext<T>(defaults);
@@ -69,13 +85,11 @@ export default function loaderFactory<K, T extends BaseGlobalLoaderOptions<K>>(
       if (imageOptions.height) {
         params.push("height" + config.optionSeparator + imageOptions.height);
       }
-      const resolvedParams = paramsResolver({
-        path,
-        transforms,
-        imageOptions,
-        params,
+
+      const resolvedParams = resolveComplexTransforms<K>(transforms, {
         optionSeparator: config.optionSeparator,
-        paramSeparator: config.paramSeparator,
+        orders: config.orders,
+        customResolver: config.customResolver,
       }).join(config.paramSeparator);
 
       return urlResolver({

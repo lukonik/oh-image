@@ -47,7 +47,7 @@ export function resolveComplexTransforms<T extends BaseLoaderTransforms>(
   transforms: T,
   config: {
     optionSeparator: string;
-    orders: Record<Partial<KnownKeys<T>>, string[]>;
+    orders: Record<any, string[]> | undefined;
     customResolver?: Partial<
       Record<
         KnownKeys<T>,
