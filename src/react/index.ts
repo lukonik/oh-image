@@ -19,14 +19,21 @@ export {
   useImgproxyContext,
   useImgproxyLoader,
   useImgproxyPlaceholder,
-  ImgproxyLoaderProvider
+  ImgproxyLoaderProvider,
 } from "./loaders/imgproxy/imgproxy-loader";
+
+/** Cloudflare exports */
+export type {
+  CloudflareGlobalOptions,
+  CloudflareOptions,
+  CloudflareTransforms,
+} from "./loaders/cloudflare/cloudflare-options";
 export {
-  type CloudflareLoaderOptions,
   useCloudflareContext,
+  useCloudflarePlaceholder,
   useCloudflareLoader,
   CloudflareLoaderProvider,
-} from "./loaders/cloudflare-loader";
+} from "./loaders/cloudflare/cloudflare-loader";
 
 export {
   type CloudinaryLoaderOptions,

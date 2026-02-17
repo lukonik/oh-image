@@ -1,24 +1,31 @@
 import {
-    type CloudflareTransforms,
-    type CloudflareGlobalOptions,
+  type CloudflareTransforms,
+  type CloudflareGlobalOptions,
 } from "./cloudflare-options";
-import loaderContextFactory from "../loader-context-factory";
-import { createCloudflareUrl } from "./create-Cloudflare-url";
+import loaderFactory from "../loader-factory";
+import { normalizeTransforms } from "../image-loader-utils";
 
 export const {
   useLoaderContext: useCloudflareContext,
   LoaderProvider: CloudflareLoaderProvider,
   useLoader: useCloudflareLoader,
   usePlaceholder: useCloudflarePlaceholder,
-} = loaderContextFactory<CloudflareTransforms, CloudflareGlobalOptions>(
+} = loaderFactory<CloudflareTransforms, CloudflareGlobalOptions>(
   {
     transforms: {
-      format: "webp",
+      format: "auto",
     },
     placeholderTransforms: {
       quality: 10,
-      format: "webp",
+      format: "auto",
     },
   },
-  createCloudflareUrl,
+  {
+    optionSeparator: "=",
+    paramSeparator: ",",
+  },
+  ({ transforms, optionSeparator }) =>
+    normalizeTransforms(transforms, optionSeparator),
+  ({ path, params, imageOptions }) =>
+    `${path}/cdn-cgi/image/${params}/${imageOptions.src}`,
 );

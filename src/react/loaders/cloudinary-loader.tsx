@@ -65,19 +65,9 @@ export function useCloudinaryLoader(
       parts.push(`h_${imageOptions.height}`);
     }
 
-    if (imageOptions.isPlaceholder) {
-      if (resolvedOptions.placeholderParams) {
-        const placeholderParams = normalizeLoaderParams(
-          resolvedOptions.placeholderParams,
-          "",
-        );
-        parts.push(...placeholderParams);
-      }
-    } else {
-      if (resolvedOptions.params) {
-        const params = normalizeLoaderParams(resolvedOptions.params, "");
-        parts.push(...params);
-      }
+    if (resolvedOptions.params) {
+      const params = normalizeLoaderParams(resolvedOptions.params, "");
+      parts.push(...params);
     }
 
     let src = imageOptions.src;

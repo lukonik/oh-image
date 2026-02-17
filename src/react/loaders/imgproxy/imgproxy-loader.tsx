@@ -2,7 +2,7 @@ import {
   type ImgproxyTransforms,
   type ImgproxyGlobalOptions,
 } from "./imgproxy-options";
-import loaderContextFactory from "../loader-context-factory";
+import loaderFactory from "../loader-factory";
 import { createImgproxyUrl } from "./create-imgproxy-url";
 
 export const {
@@ -10,7 +10,7 @@ export const {
   LoaderProvider: ImgproxyLoaderProvider,
   useLoader: useImgproxyLoader,
   usePlaceholder: useImgproxyPlaceholder,
-} = loaderContextFactory<ImgproxyTransforms, ImgproxyGlobalOptions>(
+} = loaderFactory<ImgproxyTransforms, ImgproxyGlobalOptions>(
   {
     transforms: {
       format: "webp",
@@ -20,6 +20,10 @@ export const {
       format: "webp",
     },
   },
-  ":",
+  {
+    optionSeparator: ":",
+    paramSeparator: "/",
+  },
   createImgproxyUrl,
+  ({ path, params, imageOptions }) => `${path}/${params}/plain/${imageOptions.src}`,
 );

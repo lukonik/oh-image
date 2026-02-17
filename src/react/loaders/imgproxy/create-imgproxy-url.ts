@@ -1,4 +1,4 @@
-import type { ImageLoaderOptions } from "../../types";
+import type { LoaderParamsResolver } from "../loader-factory";
 import { resolveDeprecatedParams } from "../loader-utils";
 import type { ImgproxyOptions } from "./imgproxy-options";
 type ImgproxyTransforms = NonNullable<ImgproxyOptions["transforms"]>;
@@ -254,9 +254,9 @@ const resolveObjectParam = <T extends keyof ImgproxyTransforms>(
   return;
 };
 
-const resolveTransforms = (transforms: ImgproxyOptions["transforms"]) => {
+const resolveTransforms = (transforms: ImgproxyTransforms) => {
   if (!transforms) {
-    return "";
+    return [];
   }
   const params: string[] = [];
   for (const key of Object.keys(transforms)) {
@@ -279,24 +279,14 @@ const resolveTransforms = (transforms: ImgproxyOptions["transforms"]) => {
   return params;
 };
 
-export function createImgproxyUrl(
-  path: string | undefined,
-  transforms: ImgproxyTransforms,
-  imageOptions: ImageLoaderOptions,
-) {
-  if (!path) {
-    throw new Error("Path must be provided");
-  }
-  const params: string[] = [];
+export const createImgproxyUrl: LoaderParamsResolver<ImgproxyTransforms> =
+  function ({ transforms, params, optionSeparator }) {
+    params.push(...resolveTransforms(transforms));
 
-  params.push(...resolveTransforms(transforms));
+    // resolve deprecated params, will be removed in future
+    if (params) {
+      params.push(...resolveDeprecatedParams(params, optionSeparator));
+    }
 
-  // resolve deprecated params, will be removed in future
-  if (params) {
-    params.push(...resolveDeprecatedParams(params, ":"));
-  }
-
-  const stringifiedParams = params.join("/");
-
-  return `${path}/${stringifiedParams}/plain/${imageOptions.src}`;
-}
+    return params;
+  };
