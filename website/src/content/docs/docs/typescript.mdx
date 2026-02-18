@@ -3,9 +3,39 @@ title: TypeScript
 description: TypeScript support and configuration for oh-image
 ---
 
-oh-image is written in TypeScript, so you get full type safety and autocomplete out of the box when configuring the plugin or using the React component. However, there are some caveats when importing images with the `?oh` suffix.
+oh-image is written in TypeScript, so you get full type safety and autocomplete out of the box for APIs.
+however to get typescript intelissense to imports for vite optimizer you need to configure the project to use `@lonik/oh-image/client` Type definition.
 
-## Adding type definitions for the import syntax
+## Add to the tsconfig include field
+
+open `tsconfig.json` file and add `@lonik/oh-image/client' to the `include` field
+
+```json
+{
+    ...
+    "include": ["src", "@lonik/oh-image/client"]
+}
+
+```
+
+now based on how you inject type definitions in your project, do one of the following
+
+## (Option 1) Add to the tsconfig types array
+
+```json
+{
+  "compilerOptions": {
+    ...
+     types:["@lonik/oh-image/client","vite/client"] // make sure the vite/client comes after oh-image/client
+    ...
+  },
+  "include": ["src", "@lonik/oh-image/client"]
+}
+```
+
+## (Option 2) Add to the vite-env.d.ts
+
+if you use `vite-env.d.ts` for types add `@lonik/oh-image/client` as a triple slash directive
 
 To add the type definition for the `?oh` import syntax, use one of the following options:
 
@@ -14,8 +44,8 @@ To add the type definition for the `?oh` import syntax, use one of the following
 If your project has a `vite-env.d.ts` file (created by Vite's scaffolding), add a triple-slash reference:
 
 ```ts
-/// <reference types="vite/client" />
 /// <reference types="@lonik/oh-image/client" />
+/// <reference types="vite/client" />
 ```
 
 ### Option 2: Using the `types` array in tsconfig.json
@@ -30,19 +60,30 @@ Add `@lonik/oh-image/client` to the `types` array in your `tsconfig.json`:
 }
 ```
 
-**Note:** When you specify a `types` array, TypeScript only includes the types you list. Make sure to include other type definitions your project needs (like `vite/client`).
+you might need to restart TS server after the changes, in VS Code CMD+SHIFT+P Restart TS Server
 
-## Query parameters and TypeScript
+## Showcase
 
-Unfortunately, TypeScript does not support double wildcard module augmentation. This means that while the base `?oh` suffix is fully typed, adding query parameters to it (e.g., `?oh&w=500`) will cause TypeScript to complain:
+after the configuration is finished you should get the proper intelisense on imports
 
+```tsx
+import CarImage from "./assets/car.jpg?$oh";
+
+function App() {
+  return <CarImage />; // full ts intelisense
+}
 ```
-Cannot find module './image.jpg?oh&w=500' or its corresponding type declarations.
-```
 
-To work around this, you can and should add `@ts-expect-error` above the import. Everything will work as expected and your project will build successfully:
+## Important Caveat
 
-```ts
-// @ts-expect-error - TypeScript doesn't support double wildcard module declarations
-import image from "./image.jpg?oh&w=500";
+To properly have an import client type definitions declare following pattern:
+`declare module "*$oh"`
+in short it means match any import that ends with `$oh`
+as you will see later vite plugin can pass the parameters to customize optimization
+
+```tsx
+import CarImage from "./assets/car.jpg?blur=50&$oh";
 ```
+now to have proper import type check here. the `$oh` suffix **must** be in the end of the import path.
+You may ask why we haven't use two * wildcards to match anything that has $oh in it, but unfortunately 
+only one wildcard is currently supported for declaring module. So we have to make this as it is
