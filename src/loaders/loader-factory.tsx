@@ -60,7 +60,7 @@ export default function loaderFactory<
       }
 
       if (imageOptions.height) {
-        const heightKey = config.heightKey ?? "width";
+        const heightKey = config.heightKey ?? "height";
         params.push(heightKey + config.optionSeparator + imageOptions.height);
       }
 

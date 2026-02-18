@@ -2,12 +2,13 @@ export const cloudflare = {
   slug: "cloudflare",
   name: "Cloudflare",
   title: "Cloudflare Loader",
+  urlSchema: "<path>/cdn-cgi/image/<params>/<src>",
   defaults: `
   {
     transforms: {
       format: "auto",
     },
-    placeholderTransforms: {
+    placeholder: {
       quality: 10,
       format: "auto",
     },

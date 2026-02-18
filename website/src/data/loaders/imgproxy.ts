@@ -3,12 +3,13 @@ export const imgproxy = {
   name: "Imgproxy",
   title: "Imgproxy Loader",
   link: "https://docs.imgproxy.net/",
+  urlSchema: "<path>/<params>/plain/<src>",
   defaults: `
   {
     transforms: {
       format: "webp",
     },
-    placeholderTransforms: {
+    placeholder: {
       quality: 10,
       format: "webp",
     },
