@@ -63,11 +63,11 @@ function RootComponent() {
                     Imgproxy Loader
                   </Link>
                   <Link
-                    to="/demo"
+                    to="/vite-image"
                     style={buttonStyle}
                     activeProps={{ style: activeButtonStyle }}
                   >
-                    Demo Page
+                    Vite Image
                   </Link>
                 </nav>
               </header>

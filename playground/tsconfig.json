@@ -13,13 +13,14 @@
     "baseUrl": ".",
     "paths": {
       "@lonik/oh-image/react": ["../src/react/index.ts"],
-      "@lonik/oh-image/plugin": ["./src/plugin/index.ts"],
-      "@lonik/oh-image/cloudflare": ["./src/loaders/cloudflare/index.ts"],
-      "@lonik/oh-image/cloudinary": ["./src/loaders/cloudinary/index.ts"],
-      "@lonik/oh-image/imgproxy": ["./src/loaders/imgproxy/index.ts"]
+      "@lonik/oh-image/plugin": ["../src/plugin/index.ts"],
+      "@lonik/oh-image/cloudflare": ["../src/loaders/cloudflare/index.ts"],
+      "@lonik/oh-image/cloudinary": ["../src/loaders/cloudinary/index.ts"],
+      "@lonik/oh-image/imgproxy": ["../src/loaders/imgproxy/index.ts"],
+      "@lonik/oh-image/client": ["../src/client.d.ts"]
     },
     "types": ["vite/client"],
     "verbatimModuleSyntax": true
   },
-  "include": ["playground", "src/client.d.ts"]
+  "include": ["src", "./vite-env-override.d.ts"]
 }

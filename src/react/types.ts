@@ -8,8 +8,6 @@ export interface ImageLoaderOptions {
 
 export type ImageLoader = (options: ImageLoaderOptions) => string | undefined;
 
-export type ImageSrcType = string | ImageSrc;
-
 export interface ImageProps extends Partial<
   Pick<
     ImgHTMLAttributes<HTMLImageElement>,
@@ -30,7 +28,7 @@ export interface ImageProps extends Partial<
   priority?: boolean;
 
   /** */
-  src: ImageSrcType;
+  src: string;
 
   /** The URL of the placeholder image to display while loading. */
   placeholder?: string | undefined | ImageLoader | null;

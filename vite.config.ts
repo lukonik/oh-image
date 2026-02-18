@@ -6,10 +6,13 @@ import { defineConfig } from "vite";
 import { ohImage } from "./src/plugin";
 import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+import Inspect from "vite-plugin-inspect";
 
 export default defineConfig({
   root: "./playground",
   plugins: [
+    Inspect(),
+    ohImage(),
     tsconfigPaths({
       logFile: true,
       projects: [path.resolve(__dirname, "tsconfig.playground.json")], // Explicitly point to the root config
@@ -22,7 +25,6 @@ export default defineConfig({
         "./playground/src/routeTree.gen.ts",
       ),
     }),
-    ohImage(),
     react(),
   ],
   test: {

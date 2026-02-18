@@ -72,3 +72,10 @@ export interface ImageOptions {
   threshold?: number | null;
 }
 
+export interface ImageSrc {
+  width?: number | undefined;
+  height?: number | undefined;
+  src: string;
+  srcSet?: string;
+  placeholder?: string;
+}

@@ -1,8 +1,12 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { Image, type ImageProps } from "@lonik/oh-image/react";
 import { useState } from "react";
-import { Image } from "../../../src/react/image";
-import mountain from "../mountain.jpg?oh&breakpoints&placeholder=false";
-import type { ImageProps } from "../../../src/react/types";
-export function ImagePlayground() {
+
+export const Route = createFileRoute("/image/")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const [props, setProps] = useState<Partial<ImageProps>>({
     fill: false,
     asap: false,
