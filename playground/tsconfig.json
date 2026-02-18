@@ -19,8 +19,8 @@
       "@lonik/oh-image/imgproxy": ["../src/loaders/imgproxy/index.ts"],
       "@lonik/oh-image/client": ["../src/client.d.ts"]
     },
-    "types": ["vite/client"],
+    "types": ["../src/client.d.ts", "vite/client"],
     "verbatimModuleSyntax": true
   },
-  "include": ["src", "./vite-env-override.d.ts"]
+  "include": ["src","../src/client.d.ts"]
 }

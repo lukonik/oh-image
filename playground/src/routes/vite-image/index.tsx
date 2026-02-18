@@ -5,5 +5,5 @@ export const Route = createFileRoute("/vite-image/")({
 });
 
 function RouteComponent() {
-  return <StaticImage className="flex" />;
+  return <StaticImage alt="data" className="flex" />;
 }
