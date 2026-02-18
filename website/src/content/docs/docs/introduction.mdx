@@ -3,39 +3,35 @@ title: Introduction
 description: Introduction for oh-image
 ---
 
-:::note
-⚠️ This doc is out of sync and will be updated shortly.
-:::
+<span className="project-title pr-1">Oh Image</span> is your all-in-one solution for handling images in React. Whether you're dealing with local assets or remote URLs, we've got you covered with a powerful runtime component and a smart build-time optimizer.
 
-<span className="project-title pr-1">Oh Image</span> is a comprehensive solution for handling images in React applications. It combines a powerful runtime component with a build-time optimizer to cover all your image needs.
+Here is what you need to know:
 
-The library consists of two main parts that work together or independently:
+### The Image Component
+Think of this as `<img>` on steroids. It is a smart React component that replaces the standard HTML tag and handles all the heavy lifting for you. It connects easily with image CDNs like Cloudinary or Cloudflare, and automatically handles performance best practices like lazy loading, fetch priority, and decoding. Plus, it generates the right `srcSet` and `sizes` so your users always get the best image for their device.
 
-### 1. The Image Component
-A smart React component that serves as a drop-in replacement for the standard `<img>` tag. It handles:
-- **Dynamic Optimization:** Works with external image CDNs (Cloudinary, Cloudflare, Imgproxy) via "loaders".
-- **Performance Best Practices:** Enforces correct usage of `loading`, `fetchPriority`, and decoding strategies.
-- **Responsiveness:** Automatically calculates `srcSet` and `sizes` to ensure the best image is served for every device.
-- **Developer Experience:** Provides typed props and useful assertions to prevent common performance pitfalls.
+**Example:**
+```tsx
+import { Image } from "@lonik/oh-image/react";
 
-### 2. The Vite Plugin (Static Images)
-A build tool that processes your local assets. When you import an image with the `?oh` suffix, the plugin:
-- **Transforms & Optimizes:** Converts images to modern formats (WebP, AVIF) and resizes them at build time.
-- **Generates Metadata:** Automatically creates the `srcSet`, width, height, and a blurred placeholder.
-- **Zero Config:** The generated metadata is passed directly to the `Image` component, so you don't have to manually configure dimensions or responsive variants.
+<Image 
+  src="https://example.com/photo.jpg" 
+  width={800} 
+  height={600} 
+  alt="Remote photo" 
+/>
+```
 
----
+### The Static Image Component
+This is where the magic happens for your local files. Our Vite plugin lets you import images directly as React components. When you add `?oh` to your import, we transform the image to modern formats like WebP or AVIF and generate multiple sizes for perfect responsiveness. It even creates a blurred background placeholder for that instant loading feel, giving you a zero-config component ready to drop into your JSX.
 
-## Key Features
+**Example:**
+```tsx
+// Import with ?oh to get a component
+import HeroImage from "./assets/hero.jpg?oh";
 
-- **Automatic `srcSet` Generation:** Whether static or dynamic, your images will always have the correct responsive variants.
-- **Smart Defaults:** Sensible default `sizes` attributes for various aspect ratios.
-- **Priority Loading:** A single `priority` prop to optimize Critical Image (LCP) loading (e.g., hero images).
-- **Lazy Loading Placeholders:** Built-in support for low-quality image placeholders (LQIP) to prevent layout shifts.
-- **CDN Integrations:** First-class support for `imgproxy`, `cloudflare`, and `cloudinary`, plus a custom loader API.
-- **Global Configuration:** Set defaults for loaders, breakpoints, and behavior globally via `ImageProvider`.
-
-You can think of Oh-Image as the Next.js `<Image />` component, but built specifically for the Vite ecosystem.
+<HeroImage alt="My hero image" className="w-full" />
+```
 
 ## Why?
 

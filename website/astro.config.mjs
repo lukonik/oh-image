@@ -55,7 +55,7 @@ export default defineConfig({
         { label: "Installation", slug: "docs/installation" },
         {
           label: "Image",
-          items: [{ label: "Image component", slug: "docs/image/component" }],
+          slug: "docs/image/component",
         },
         {
           label: "Loaders",
