@@ -3,14 +3,16 @@ title: Image Component
 description: Documentation for the Image component in oh-image
 ---
 
-The `Image` component is what makes the project alive. It is a wrapper around native `img` element, which adds responsivness and makes it fast.
-Also that it what allows to vite optimize images automatically and work with a CDN provider with a breeze.
+The `Image` component is the heart of the project. It wraps the native `<img>`
+element to add responsiveness and performance enhancements. This wrapper also
+enables automatic Vite optimization and effortless integration with CDN
+providers.
 
-you import image component as follows:
+Import the component like this:
 
 `import { Image } from "@lonik/oh-image/react";`
 
-Let's explore props for the `Image` component
+Let's explore the props available on `Image`.
 
 ## Props
 
@@ -80,8 +82,9 @@ An array of widths used to generate the `srcSet` when using a `loader`.
 
 **Type**: `string` (optional)
 
-The `sizes` attribute of `img` element.
-By default, the `Image` component tries to set the best possible size, but **this cannot be predicted automatically** for all layouts. You commonly have to set it manually to match your layout.
+The `sizes` attribute of the `<img>` element. By default, the `Image` component
+attempts to set an appropriate value, but **layout-specific needs cannot be
+predicted automatically**. Set this manually whenever your design demands it.
 
 ```tsx
 <Image
@@ -110,6 +113,17 @@ By default, the `Image` component tries to set the best possible size, but **thi
 - Defaults to `'auto'`.
 - If `priority` is `true`, this is forced to `'high'`.
 
+### `className`
+
+**Type**: `string` (optional)
+
+classes forwarded to the rendered `<img>` element.
+### `style`
+
+**Type**: `React.CSSProperties` (optional)
+
+styles forwarded to the rendered `<img>` element.
+
 ## Global Configuration
 
 You can configure default settings for all `Image` components in your application using the `ImageProvider`.
@@ -122,7 +136,6 @@ const customBreakpoints = [320, 640, 1024, 1920];
 export function App() {
   return (
     <ImageProvider
-      loading="lazy"
       breakpoints={customBreakpoints}
       placeholder={true}
     >
@@ -134,8 +147,9 @@ export function App() {
 
 ## Defaults
 
-If not specified, the `Image` component uses the following defaults (unless overridden by `ImageProvider`):
+If not specified, the `Image` component uses the following defaults (unless
+overridden by `ImageProvider`):
 
-- **placeholder**: 'true'
+- **placeholder**: `true`
 - **breakpoints**: `[16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920]`
 - **loader**: null
