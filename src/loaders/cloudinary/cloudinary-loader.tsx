@@ -28,6 +28,8 @@ export const {
   {
     optionSeparator: "_",
     paramSeparator: ",",
+    widthKey: "w",
+    heightKey: "h",
     orders: {
       b_auto: ["mode", "number", "direction", "color"],
       b_gen_fill: ["prompt", "seed"],

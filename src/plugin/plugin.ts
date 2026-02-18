@@ -18,7 +18,7 @@ const DEFAULT_CONFIGS: PluginConfig = {
   format: "webp",
   placeholder: true,
 };
-const PROCESS_KEY = "oh";
+const PROCESS_KEY = "$oh";
 
 export const SUPPORTED_IMAGE_FORMATS =
   /\.(jpe?g|png|webp|avif|gif|svg)(\?.*)?$/i;

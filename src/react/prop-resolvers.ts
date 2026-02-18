@@ -5,7 +5,7 @@ import type { ImageProps } from "./types";
  * RegExpr to determine whether a src in a srcset is using width descriptors.
  * Should match something like: "100w, 200w".
  */
-const VALID_WIDTH_DESCRIPTOR_SRCSET = /^((\s*\d+w\s*(,|$)){1,})$/;
+const VALID_WIDTH_DESCRIPTOR_SRCSET = /^(\s*\S+\s+\d+w\s*(,|$)\s*)+$/;
 
 export function resolveOptions(
   prop: ImageProps,

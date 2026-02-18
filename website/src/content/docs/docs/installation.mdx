@@ -5,17 +5,13 @@ description: Install and configure oh-image in your project
 
 import { PackageManagers } from "starlight-package-managers";
 
-## Installation
-
-Start by installing the package and the `sharp` image processing library using your preferred package manager:
+install the package and the `sharp` image processing library using your preferred package manager:
 
 <PackageManagers type="add" pkg="@lonik/oh-image sharp" />
 
 ## Setup
 
-To enable automatic image optimization, placeholders, and metadata generation, add the `ohImage` plugin to your Vite configuration.
-
-Open `vite.config.js` (or `vite.config.ts`) and add the plugin:
+add `oh-image` plugin to the plugins array
 
 ```ts
 // vite.config.ts
@@ -28,45 +24,4 @@ export default defineConfig({
 });
 ```
 
-### How it Works
-
-For the plugin to process your images, you must import the asset as a module and append the `?oh` suffix to the import path. The plugin automatically converts your images to optimized formats (like WebP/AVIF), generates responsive `srcSet` variants, and creates a low-quality placeholder for lazy loading—all out of the box.
-
-```jsx
-// Proper import with the 'oh' suffix
-import hero from "./hero.png?oh";
-
-// Pass the imported object to the src prop
-<Image src={hero} alt="hero image" />;
-```
-
-:::note
-**Asset Location:** Images **must** reside inside your `src` directory (e.g., in an `assets` folder) to be processed. Files in the `public` folder are copied as-is by Vite and **will not** be optimized by this plugin.
-
-**Module Imports:** Importing an image with the `?oh` suffix returns a structured object containing the optimization data, not just a string path.
-:::
-
----
-
-## Loaders
-
-Image CDNs are essential for modern web performance. `oh-image` features built-in functionality to serve images via CDN both easily and optimally.
-
-The `Image` component accepts a `loader` prop. When provided, this function automatically generates image URLs based on specific parameters like width, height, and format.
-
-### Example: Cloudinary Integration
-
-If you are using Cloudinary, you can set up a loader like this:
-
-```jsx
-const loader = useCloudinary({
-  path: "https://res.cloudinary.com/example",
-});
-
-<Image loader={loader} src="hero.png" width={600} height={1200} />;
-```
-
-The loader will automatically generate the `src` attribute, resulting in a URL similar to:
-`https://res.cloudinary.com/example/image/upload/f_auto,w_600,h_1200/hero.png`
-
-The `Image` component also uses the loader to generate all `srcSet` variants and the low-resolution placeholder.
+And that’s it; you’re good to go.
