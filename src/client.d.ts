@@ -1,3 +1,4 @@
+// module declaration
 declare module "*$oh" {
   export interface StaticImageProps extends Partial<
     Pick<
