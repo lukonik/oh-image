@@ -143,9 +143,10 @@ export function resolvePlaceholder(prop: ImageProps, src: string) {
     return prop.placeholder;
   }
 
-  if (typeof prop.placeholder === "function") {
-    return prop.placeholder({
+  if (prop.loader) {
+    return prop.loader({
       src: src,
+      isPlaceholder: true,
       width: prop.width,
       height: prop.height,
     });

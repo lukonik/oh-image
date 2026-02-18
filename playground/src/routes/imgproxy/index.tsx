@@ -3,23 +3,19 @@ import ImgproxyControls from "./-components/imgproxy-controls";
 import { useState } from "react";
 import {
   useImgproxyLoader,
-  type ImgproxyOptions,
-  useImgproxyPlaceholder,
+  type ImgproxyTransforms,
 } from "@lonik/oh-image/imgproxy";
 import { Image } from "@lonik/oh-image/react";
-
 
 export const Route = createFileRoute("/imgproxy/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const [transform, setTransform] = useState<ImgproxyOptions["transforms"]>({
+  const [transform, setTransform] = useState<ImgproxyTransforms>({
     resize: undefined,
     size: undefined,
     resizing_type: "fit",
-    width: 300,
-    height: 300,
     "min-width": 0,
     "min-height": 0,
     zoom: 1,
@@ -62,11 +58,8 @@ function RouteComponent() {
     expires: undefined,
     filename: undefined,
     preset: undefined,
-  });
+  } as any);
   const loader = useImgproxyLoader({
-    transforms: transform,
-  });
-  const placeholder = useImgproxyPlaceholder({
     transforms: transform,
   });
   return (
@@ -79,7 +72,6 @@ function RouteComponent() {
         src={"http://192.168.0.88:5173/city.jpg"}
         alt="Imgproxy Example"
         loader={loader}
-        placeholder={placeholder}
       />
     </div>
   );

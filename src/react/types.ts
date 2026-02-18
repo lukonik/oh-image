@@ -4,6 +4,7 @@ export interface ImageLoaderOptions {
   src: string;
   width?: number | null | undefined;
   height?: number | null | undefined;
+  isPlaceholder?: boolean;
 }
 
 export type ImageLoader = (options: ImageLoaderOptions) => string | undefined;
@@ -31,7 +32,7 @@ export interface ImageProps extends Partial<
   src: string;
 
   /** The URL of the placeholder image to display while loading. */
-  placeholder?: string | undefined | ImageLoader | null;
+  placeholder?: string | undefined | boolean | null;
 
   /**
    * Sets the image to "fill mode", which eliminates the height/width requirement and adds

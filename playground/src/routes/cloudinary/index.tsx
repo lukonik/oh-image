@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
   type CloudinaryTransforms,
-  useCloudinaryLoader,
-  useCloudinaryPlaceholder,
+  useCloudinaryLoader
 } from "@lonik/oh-image/cloudinary";
 import { Image } from "@lonik/oh-image/react";
 import { useState } from "react";
@@ -22,9 +21,7 @@ function RouteComponent() {
   const loader = useCloudinaryLoader({
     transforms: transform,
   });
-  const placeholder = useCloudinaryPlaceholder({
-    transforms: transform,
-  });
+
   return (
     <div className="flex ">
       <ControlsPanel>
@@ -41,7 +38,6 @@ function RouteComponent() {
           src={"cld-sample.jpg"}
           alt="Imgproxy Example"
           loader={loader}
-          placeholder={placeholder}
         />
       </div>
     </div>

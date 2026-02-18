@@ -8,13 +8,12 @@ export const {
   useLoaderContext: useImgproxyContext,
   LoaderProvider: ImgproxyLoaderProvider,
   useLoader: useImgproxyLoader,
-  usePlaceholder: useImgproxyPlaceholder,
 } = loaderFactory<ImgproxyTransforms, ImgproxyGlobalOptions>(
   {
     transforms: {
       format: "webp",
     },
-    placeholderTransforms: {
+    placeholder: {
       quality: 10,
       format: "webp",
     },
