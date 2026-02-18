@@ -3,39 +3,14 @@ title: Image Component
 description: Documentation for the Image component in oh-image
 ---
 
-The `Image` component is a wrapper around the native `<img>` element that adds functionality.
+The `Image` component is what makes the project alive. It is a wrapper around native `img` element, which adds responsivness and makes it fast.
+Also that it what allows to vite optimize images automatically and work with a CDN provider with a breeze.
 
-:::note
-This page documents the `<Image />` component, which is used for rendering images from URLs or external sources (using loaders).
+you import image component as follows:
 
-If you want to render static images optimized by the Vite plugin. See [Static Image](/docs/static-image) for details.
-:::
+`import { Image } from "@lonik/oh-image/react";`
 
-## Overview
-
-The `Image` component extends the native `<img>` element with additional functionality. It is designed to work seamlessly with CDN providers out of the box and provides custom loader support.
-
-You should use this component directly when:
-1.  You are loading images from a remote URL.
-2.  You are using an image loader (Cloudinary, Imgproxy, etc.).
-3.  You need manual control over the image attributes without the Vite plugin's automation.
-
-## Usage
-
-```tsx
-import { Image } from "@lonik/oh-image/react";
-
-export function App() {
-  return (
-    <Image 
-      src="https://example.com/photo.jpg" 
-      width={800} 
-      height={600} 
-      alt="External Photo" 
-    />
-  );
-}
-```
+Let's explore props for the `Image` component
 
 ## Props
 
@@ -94,7 +69,6 @@ Use this for critical images, such as the Largest Contentful Paint (LCP) element
 A function to generate the image URL.
 
 - Useful for using external image CDNs (Cloudinary, Imgproxy, etc.).
-- Can be configured globally via `ImageProvider`.
 
 ### `breakpoints`
 
@@ -102,18 +76,18 @@ A function to generate the image URL.
 
 An array of widths used to generate the `srcSet` when using a `loader`.
 
-- Defaults to a wide range of standard device widths.
-
 ### `sizes`
 
 **Type**: `string` (optional)
 
-The `sizes` attribute is critical for responsive images. It defines the size of the image on the screen, allowing the browser to select the best source from `srcSet`.
-
+The `sizes` attribute of `img` element.
 By default, the `Image` component tries to set the best possible size, but **this cannot be predicted automatically** for all layouts. You commonly have to set it manually to match your layout.
 
 ```tsx
-<Image src="https://example.com/photo.jpg" sizes="(max-width: 768px) 100vw, 50vw" />
+<Image
+  src="https://example.com/photo.jpg"
+  sizes="(max-width: 768px) 100vw, 50vw"
+/>
 ```
 
 ### `loading`
@@ -140,8 +114,6 @@ By default, the `Image` component tries to set the best possible size, but **thi
 
 You can configure default settings for all `Image` components in your application using the `ImageProvider`.
 
-Wrap your application (or a specific subtree) with `ImageProvider` to set defaults for `loading`, `breakpoints`, `loader`, and `placeholder`.
-
 ```tsx
 import { ImageProvider } from "@lonik/oh-image/react";
 
@@ -149,8 +121,8 @@ const customBreakpoints = [320, 640, 1024, 1920];
 
 export function App() {
   return (
-    <ImageProvider 
-      loading="lazy" 
+    <ImageProvider
+      loading="lazy"
       breakpoints={customBreakpoints}
       placeholder={true}
     >
@@ -160,14 +132,10 @@ export function App() {
 }
 ```
 
-This is particularly useful when using an external image service loader, allowing you to define the loader once globally.
-
 ## Defaults
 
 If not specified, the `Image` component uses the following defaults (unless overridden by `ImageProvider`):
 
-- **loading**: `'lazy'`
-- **fetchPriority**: `'auto'`
 - **placeholder**: 'true'
 - **breakpoints**: `[16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920]`
 - **loader**: null
