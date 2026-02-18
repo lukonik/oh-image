@@ -1,22 +1,19 @@
 /// <reference types="vitest/config" />
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import tanstackRouter from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { ohImage } from "./src/plugin";
 import tailwindcss from "@tailwindcss/vite";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   root: "./playground",
-  resolve: {
-    alias: {
-      "@lonik/oh-image/react": path.resolve(__dirname, "./src/react/index.ts"),
-    },
-  },
   plugins: [
+    tsconfigPaths({
+      logFile: true,
+      projects: [path.resolve(__dirname, "tsconfig.playground.json")], // Explicitly point to the root config
+    }),
     tailwindcss(),
     tanstackRouter({
       routesDirectory: path.resolve(__dirname, "./playground/src/routes"),
