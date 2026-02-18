@@ -46,9 +46,12 @@ export default function loaderFactory<
       const defaultTransform = imageOptions.isPlaceholder
         ? context.placeholder
         : context.transforms;
+      const optionTransforms = imageOptions.isPlaceholder
+        ? options?.placeholder
+        : options?.transforms;
       const transforms = {
         ...defaultTransform,
-        ...options?.transforms,
+        ...optionTransforms,
       } as K;
       const params: string[] = [];
       if (imageOptions.width) {
