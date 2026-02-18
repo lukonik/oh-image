@@ -1,10 +1,9 @@
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
-import {
-  CloudflareLoaderProvider,
-  CloudinaryLoaderProvider,
-  ImgproxyLoaderProvider,
-} from "@lonik/oh-image/react";
+import { CloudflareLoaderProvider } from "@lonik/oh-image/cloudflare";
 
+import { ImgproxyLoaderProvider } from "@lonik/oh-image/imgproxy";
+
+import { CloudinaryLoaderProvider } from "@lonik/oh-image/cloudinary";
 export const Route = createRootRoute({
   component: RootComponent,
 });
@@ -64,11 +63,11 @@ function RootComponent() {
                     Imgproxy Loader
                   </Link>
                   <Link
-                    to="/demo"
+                    to="/vite-image"
                     style={buttonStyle}
                     activeProps={{ style: activeButtonStyle }}
                   >
-                    Demo Page
+                    Vite Image
                   </Link>
                 </nav>
               </header>

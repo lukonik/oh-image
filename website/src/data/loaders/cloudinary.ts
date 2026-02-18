@@ -2,12 +2,13 @@ export const cloudinary = {
   slug: "cloudinary",
   name: "Cloudinary",
   title: "Cloudinary Loader",
+  urlSchema: "<path>/image/upload/<params>/<src>",
   defaults: `
   {
     transforms: {
       format: "auto",
     },
-    placeholderTransforms: {
+    placeholder: {
       quality: 10,
       format: "auto",
     },

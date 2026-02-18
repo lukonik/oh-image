@@ -51,26 +51,27 @@ export default defineConfig({
         },
       ],
       sidebar: [
+        { label: "Introduction", slug: "docs/introduction" },
+        { label: "Installation", slug: "docs/installation" },
         {
-          label: "Docs",
-          items: [
-            // Each item here is one entry in the navigation menu.
-            { label: "Introduction", slug: "docs/introduction" },
-            { label: "Get Started", slug: "docs/get-started" },
-            { label: "Image component", slug: "docs/image-component" },
-            { label: "Plugin", slug: "docs/plugin" },
-            { label: "Typescript", slug: "docs/typescript" },
-          ],
+          label: "Image",
+          slug: "docs/image/component",
         },
         {
           label: "Loaders",
           items: [
-            { label: "Overview", slug: "docs/loaders/overview" },
-            { label: "Imgproxy", link: "docs/loaders/imgproxy" },
-            { label: "Cloudflare", link: "docs/loaders/cloudflare" },
-            { label: "Cloudinary", link: "docs/loaders/cloudinary" },
+            { label: "Overview", slug: "docs/image/loaders/overview" },
+            { label: "Imgproxy", link: "docs/image/loaders/imgproxy" },
+            { label: "Cloudflare", link: "docs/image/loaders/cloudflare" },
+            { label: "Cloudinary", link: "docs/image/loaders/cloudinary" },
+            {
+              label: "Custom Loader",
+              slug: "docs/image/loaders/custom-loader",
+            },
           ],
         },
+        { label: "Static Image", slug: "docs/static-image" },
+        { label: "Typescript", slug: "docs/typescript" },
       ],
       customCss: ["./src/styles/global.css"],
     }),

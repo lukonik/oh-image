@@ -57,7 +57,7 @@ export function Image(props: ImageProps) {
     ...props.style,
   };
 
-  if (preload && options.asap) {
+  if (preload && options.priority) {
     preload(options.src, { as: "image", fetchPriority: "high" });
   }
 

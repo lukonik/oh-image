@@ -25,21 +25,33 @@ image responsive and optimized. Now let's try the vite plugin version, all we ha
 and oh-image vite plugin will take care of the rest.
 
 
-- Automatically generating `srcSets`.
-- Using sensible defaults for `sizes` attributes for different aspect ratios.
-- Proper assertions to prevent you from using performance-killing attributes together, such as `loading="lazy"` with `fetchingpriority="high"`.
-- A single attribute, `"priority"`, that configures images (like headlines) to load them as soon as possible.
-- A custom Vite plugin that automatically transforms images, generating `srcSets` versions on-the-fly in Dev mode and generating them as static assets during build-time.
-- Different loaders that will fetch images from your favorite CDN:
-  - `imgproxy`
-  - `cloudflare`
-  - `cloudinary`
-  - A custom loader for your specific CDN.
-  - More CDNs to come...
-- Adding an optimized placeholder image while the main image is loading.
-- Global and local configuration for every piece of functionality.
+Here is what you need to know:
 
-You can think of Oh-Image as a Next.js image component, but without Next.js.
+### The Image Component
+Think of this as `<img>` on steroids. It is a smart React component that replaces the standard HTML tag and handles all the heavy lifting for you. It connects easily with image CDNs like Cloudinary or Cloudflare, and automatically handles performance best practices like lazy loading, fetch priority, and decoding. Plus, it generates the right `srcSet` and `sizes` so your users always get the best image for their device.
+
+**Example:**
+```tsx
+import { Image } from "@lonik/oh-image/react";
+
+<Image 
+  src="https://example.com/photo.jpg" 
+  width={800} 
+  height={600} 
+  alt="Remote photo" 
+/>
+```
+
+### The Static Image Component
+This is where the magic happens for your local files. Our Vite plugin lets you import images directly as React components. When you add `?oh` to your import, we transform the image to modern formats like WebP or AVIF and generate multiple sizes for perfect responsiveness. It even creates a blurred background placeholder for that instant loading feel, giving you a zero-config component ready to drop into your JSX.
+
+**Example:**
+```tsx
+// Import with ?oh to get a component
+import HeroImage from "./assets/hero.jpg?oh";
+
+<HeroImage alt="My hero image" className="w-full" />
+```
 
 ## Why?
 

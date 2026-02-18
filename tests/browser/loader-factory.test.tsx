@@ -17,7 +17,7 @@ describe("loaderFactory", () => {
   const defaults: TestConfig = {
     path: "https://example.com",
     transforms: { q: "80" },
-    placeholderTransforms: { q: "10" },
+    placeholder: { q: "10" },
   };
 
   const config = {
@@ -38,11 +38,9 @@ describe("loaderFactory", () => {
   };
 
   it("creates the expected exports", () => {
-    const { LoaderProvider, useLoader, usePlaceholder, useLoaderContext } =
-      setup();
+    const { LoaderProvider, useLoader, useLoaderContext } = setup();
     expect(LoaderProvider).toBeDefined();
     expect(useLoader).toBeDefined();
-    expect(usePlaceholder).toBeDefined();
     expect(useLoaderContext).toBeDefined();
   });
 
@@ -115,15 +113,16 @@ describe("loaderFactory", () => {
     );
   });
 
-  it("usePlaceholder uses placeholderTransforms", () => {
-    const { usePlaceholder } = setup();
-    const { result } = renderHook(() => usePlaceholder());
+  it("useLoader uses placeholder config when isPlaceholder is true", () => {
+    const { useLoader } = setup();
+    const { result } = renderHook(() => useLoader());
     const generateUrl = result.current;
 
-    generateUrl({ src: "img.png" });
+    generateUrl({ src: "img.png", isPlaceholder: true });
 
     expect(urlResolver).toHaveBeenCalledWith(
       expect.objectContaining({
+        imageOptions: expect.objectContaining({ isPlaceholder: true }),
         params: "q,10",
       }),
     );

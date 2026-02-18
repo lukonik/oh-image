@@ -1,5 +1,5 @@
 import { basename, extname, join, parse } from "node:path";
-import type { PluginConfig } from "./types";
+import type { PluginConfig, ImageSrc } from "./types";
 import { queryToOptions } from "./utils";
 import { getFileHash, readFileSafe, saveFileSafe } from "./file-utils";
 import { createImageIdentifier } from "./image-identifier";
@@ -125,7 +125,7 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
             width: metadata.width,
             height: metadata.height,
             src: mainIdentifier,
-            srcSets: "",
+            srcSet: "",
           };
 
           // if placeholder is specified as placeholder as well
@@ -147,7 +147,7 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
               normalize: mergedOptions.normalize,
               threshold: mergedOptions.threshold,
             });
-            src.placeholderUrl = placeholderIdentifier;
+            src.placeholder = placeholderIdentifier;
           }
 
           if (mergedOptions.breakpoints) {
@@ -174,10 +174,14 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
               });
               srcSets.push(`${srcSetIdentifier} ${breakpoint}w`);
             }
-            src.srcSets = srcSets.join(", ");
+            src.srcSet = srcSets.join(", ");
           }
 
-          return `export default ${JSON.stringify(src)};`;
+          return `
+               import { __imageFactory } from "@lonik/oh-image/react";
+
+           export default __imageFactory(${JSON.stringify({ width: src.width, height: src.height, src: src.src, srcSet: src.srcSet, placeholder: src.placeholder, alt: "" })})
+`;
         } catch (err) {
           console.error(`Couldn't load image with id: ${id} error:${err}`);
           return null;

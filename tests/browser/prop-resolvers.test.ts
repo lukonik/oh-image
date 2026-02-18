@@ -5,9 +5,7 @@ import {
   resolveDecoding,
   resolveFetchPriority,
   resolveSrcSet,
-  resolveSrc,
-  resolveWidth,
-  resolveHeight
+  resolveSrc
 } from "../../src/react/prop-resolvers";
 import type { ImageProps } from "../../src/react/types";
 
@@ -139,11 +137,7 @@ describe("resolveSrcSet", () => {
     expect(resolveSrcSet(makeProps({ srcSet: "a.jpg 1x" }))).toBe("a.jpg 1x");
   });
 
-  it("returns srcSets from object src", () => {
-    expect(resolveSrcSet(makeProps({ src: objectSrc }))).toBe(
-      objectSrc.srcSets,
-    );
-  });
+  
 
   it("returns undefined when no breakpoints and string src", () => {
     expect(resolveSrcSet(makeProps())).toBeUndefined();
@@ -164,13 +158,7 @@ describe("resolveSrcSet", () => {
     ).toBeUndefined();
   });
 
-  it("prefers object src srcSets over breakpoints", () => {
-    expect(
-      resolveSrcSet(
-        makeProps({ src: objectSrc, breakpoints: [100], loader: mockLoader }),
-      ),
-    ).toBe(objectSrc.srcSets);
-  });
+
 });
 
 describe("resolveSrc", () => {
@@ -178,9 +166,7 @@ describe("resolveSrc", () => {
     expect(resolveSrc(makeProps())).toBe("image.jpg");
   });
 
-  it("extracts src from object src", () => {
-    expect(resolveSrc(makeProps({ src: objectSrc }))).toBe("/image.jpg");
-  });
+ 
 
   it("runs string src through loader", () => {
     expect(resolveSrc(makeProps({ loader: mockLoader, width: 300 }))).toBe(
@@ -189,30 +175,5 @@ describe("resolveSrc", () => {
   });
 });
 
-describe("resolveWidth", () => {
-  it("returns explicit width when provided", () => {
-    expect(resolveWidth(makeProps({ width: 100 }))).toBe(100);
-  });
 
-  it("extracts width from object src", () => {
-    expect(resolveWidth(makeProps({ src: objectSrc }))).toBe(500);
-  });
 
-  it("returns undefined when no width and string src", () => {
-    expect(resolveWidth(makeProps())).toBeUndefined();
-  });
-});
-
-describe("resolveHeight", () => {
-  it("returns explicit height when provided", () => {
-    expect(resolveHeight(makeProps({ height: 200 }))).toBe(200);
-  });
-
-  it("extracts height from object src", () => {
-    expect(resolveHeight(makeProps({ src: objectSrc }))).toBe(600);
-  });
-
-  it("returns undefined when no height and string src", () => {
-    expect(resolveHeight(makeProps())).toBeUndefined();
-  });
-});

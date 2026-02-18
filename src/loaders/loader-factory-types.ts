@@ -9,6 +9,8 @@ export interface LoaderFactoryConfig {
   paramSeparator: string;
   orders?: LoaderOrders;
   customResolver?: LoaderCustomResolver;
+  widthKey?: string;
+  heightKey?: string;
 }
 
 export type LoaderParamsResolver<K> = (options: {
