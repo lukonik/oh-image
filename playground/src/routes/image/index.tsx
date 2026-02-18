@@ -1,11 +1,14 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { Image, type ImageProps } from "@lonik/oh-image/react";
 import { useState } from "react";
-import { Image } from "../../../src/react/image";
-import mountain from "../mountain.jpg?oh&breakpoints&placeholder=false";
-import type { ImageProps } from "../../../src/react/types";
-export function ImagePlayground() {
+
+export const Route = createFileRoute("/image/")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const [props, setProps] = useState<Partial<ImageProps>>({
     fill: false,
-    asap: false,
     loading: "lazy",
     fetchPriority: "auto",
     width: undefined,
@@ -32,10 +35,10 @@ export function ImagePlayground() {
           <label>
             <input
               type="checkbox"
-              checked={props.asap}
-              onChange={(e) => handleChange("asap", e.target.checked)}
+              checked={props.priority}
+              onChange={(e) => handleChange("priority", e.target.checked)}
             />
-            Asap (Preload)
+            Prirority (Preload)
           </label>
           <label>
             Loading:

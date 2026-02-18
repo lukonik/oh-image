@@ -1,13 +1,13 @@
 import { createContext, useContext } from "react";
 import type {
-    BaseGlobalLoaderOptions,
-    BaseLoaderTransforms,
+  BaseGlobalLoaderOptions,
+  BaseLoaderTransforms,
 } from "./base-loader-options";
 import type { ImageLoaderOptions } from "../react/types";
 import { resolveTransform } from "./transforms-resolver";
 import type {
-    LoaderFactoryConfig,
-    LoaderUrlResolved,
+  LoaderFactoryConfig,
+  LoaderUrlResolved,
 } from "./loader-factory-types";
 
 export default function loaderFactory<
@@ -34,34 +34,37 @@ export default function loaderFactory<
     );
   }
 
-  const loader = (isPlaceholder: boolean) => (options?: T) => {
+  const loader = () => (options?: T) => {
     const context = useLoaderContext();
     const path = options?.path || context.path;
-    const defaultTransform = isPlaceholder
-      ? context.placeholderTransforms
-      : context.transforms;
-    const transforms = {
-      ...defaultTransform,
-      ...options?.transforms,
-    } as K;
+
     if (!path) {
       console.warn("Path is not provided");
       return () => undefined;
     }
     return (imageOptions: ImageLoaderOptions) => {
+      const defaultTransform = imageOptions.isPlaceholder
+        ? context.placeholder
+        : context.transforms;
+      const optionTransforms = imageOptions.isPlaceholder
+        ? options?.placeholder
+        : options?.transforms;
+      const transforms = {
+        ...defaultTransform,
+        ...optionTransforms,
+      } as K;
       const params: string[] = [];
       if (imageOptions.width) {
-        params.push("width" + config.optionSeparator + imageOptions.width);
+        const widthKey = config.widthKey ?? "width";
+        params.push(widthKey + config.optionSeparator + imageOptions.width);
       }
 
       if (imageOptions.height) {
-        params.push("height" + config.optionSeparator + imageOptions.height);
+        const heightKey = config.heightKey ?? "height";
+        params.push(heightKey + config.optionSeparator + imageOptions.height);
       }
 
-      const resolvedTransforms = resolveTransform<K>(
-        transforms,
-        config,
-      );
+      const resolvedTransforms = resolveTransform<K>(transforms, config);
 
       const resolvedParams = [...params, ...resolvedTransforms].join(
         config.paramSeparator,
@@ -75,14 +78,12 @@ export default function loaderFactory<
     };
   };
 
-  const useLoader = loader(false);
-  const usePlaceholder = loader(true);
+  const useLoader = loader();
 
   return {
     LoaderProvider,
     loaderContext,
     useLoaderContext,
     useLoader,
-    usePlaceholder,
   };
 }

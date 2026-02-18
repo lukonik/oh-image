@@ -15,13 +15,12 @@ export const {
   useLoaderContext: useCloudinaryContext,
   LoaderProvider: CloudinaryLoaderProvider,
   useLoader: useCloudinaryLoader,
-  usePlaceholder: useCloudinaryPlaceholder,
 } = loaderFactory<CloudinaryTransforms, CloudinaryGlobalOptions>(
   {
     transforms: {
       f: "webp",
     },
-    placeholderTransforms: {
+    placeholder: {
       q: 10,
       f: "webp",
     },

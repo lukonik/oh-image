@@ -24,16 +24,16 @@ export function resolveOptions(
   resolved.placeholder = resolvePlaceholder(resolved, resolved.src);
   resolved.height = resolveHeight(resolved);
   resolved.width = resolveWidth(resolved);
-  resolved.src = resolveSrc(resolved);
+  resolved.src = resolveSrc(resolved) as string;
   return resolved;
 }
 
 export function resolveDecoding(prop: ImageProps) {
-  return prop.priority || prop.asap ? "async" : prop.decoding;
+  return prop.priority ? "async" : prop.decoding;
 }
 
 export function resolveFetchPriority(prop: ImageProps) {
-  if (prop.priority || prop.asap) {
+  if (prop.priority) {
     return "high";
   }
   return prop.fetchPriority ?? "auto";
@@ -42,14 +42,6 @@ export function resolveFetchPriority(prop: ImageProps) {
 export function resolveSrcSet(prop: ImageProps) {
   if (prop.srcSet) {
     return prop.srcSet;
-  }
-
-  // If src is an object and srcSets is defined,
-  // srcSets takes priority over breakpoints.
-  // Even if breakpoints are defined, srcSets must match src
-  // to ensure the correct files are generated at build time.
-  if (typeof prop.src === "object") {
-    return prop.src.srcSets;
   }
 
   if (!prop.breakpoints) {
@@ -79,7 +71,7 @@ export function resolveSrcSet(prop: ImageProps) {
 }
 
 export function resolveLoading(prop: ImageProps) {
-  const priority = prop.priority || prop.asap;
+  const priority = prop.priority;
   if (!priority && prop.loading !== undefined) {
     return prop.loading;
   }
@@ -117,9 +109,6 @@ export function resolveSizes(
 }
 
 export function resolveSrc(prop: ImageProps) {
-  if (typeof prop.src === "object") {
-    return prop.src.src;
-  }
   if (prop.loader) {
     return prop.loader({
       src: prop.src,
@@ -127,15 +116,12 @@ export function resolveSrc(prop: ImageProps) {
       height: prop.height,
     });
   }
-  return prop.src;
+  return prop.src as string;
 }
 
 export function resolveWidth(prop: ImageProps) {
   if (prop.width) {
     return prop.width;
-  }
-  if (typeof prop.src === "object") {
-    return prop.src.width;
   }
   return undefined;
 }
@@ -144,9 +130,7 @@ export function resolveHeight(prop: ImageProps) {
   if (prop.height) {
     return prop.height;
   }
-  if (typeof prop.src === "object") {
-    return prop.src.height;
-  }
+
   return undefined;
 }
 
@@ -159,9 +143,10 @@ export function resolvePlaceholder(prop: ImageProps, src: string) {
     return prop.placeholder;
   }
 
-  if (typeof prop.placeholder === "function") {
-    return prop.placeholder({
+  if (prop.loader) {
+    return prop.loader({
       src: src,
+      isPlaceholder: true,
       width: prop.width,
       height: prop.height,
     });

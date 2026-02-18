@@ -4,7 +4,7 @@ export interface BaseLoaderOptions<T> {
 }
 
 export interface BaseGlobalLoaderOptions<T> extends BaseLoaderOptions<T> {
-  placeholderTransforms?: T;
+  placeholder?: T;
 }
 
 export interface BaseLoaderTransforms {

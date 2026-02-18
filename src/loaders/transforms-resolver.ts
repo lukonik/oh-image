@@ -1,4 +1,3 @@
-import { assert } from "../react/prop-asserts";
 import type { BaseLoaderTransforms } from "./base-loader-options";
 import type { LoaderFactoryConfig } from "./loader-factory-types";
 
@@ -93,20 +92,4 @@ export function resolveTransform<T extends BaseLoaderTransforms>(
 
 export function isAbsoluteUrl(src: string): boolean {
   return /^https?:\/\//.test(src);
-}
-
-export function assertPath(path: string | null | undefined) {
-  assert(() => !path?.trim(), import.meta.env.DEV && `Path is required`);
-
-  assert(
-    () => {
-      try {
-        new URL(path!);
-        return !isAbsoluteUrl(path!);
-      } catch {
-        return true;
-      }
-    },
-    import.meta.env.DEV && `Path is invalid url: ${path}`,
-  );
 }

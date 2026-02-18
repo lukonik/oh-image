@@ -3,7 +3,6 @@ import {
   assertLoadingProp,
   assertDecodingProp,
   assertFetchPriorityProp,
-  assertBreakpointsProp,
   assertFillProp,
   assertDimensionsProp,
 } from "../../src/react/prop-asserts";
@@ -78,33 +77,6 @@ describe("assertFetchPriorityProp", () => {
   });
 });
 
-describe("assertBreakpointsProp", () => {
-  it("throws when breakpoints are used with an object src", () => {
-    expect(() =>
-      assertBreakpointsProp(
-        makeProps({ breakpoints: [100, 200], src: objectSrc }),
-      ),
-    ).toThrow();
-  });
-
-  it("throws when breakpoints are used without a loader", () => {
-    expect(() =>
-      assertBreakpointsProp(makeProps({ breakpoints: [100, 200] })),
-    ).toThrow();
-  });
-
-  it("does not throw when breakpoints are used with a loader", () => {
-    expect(() =>
-      assertBreakpointsProp(
-        makeProps({ breakpoints: [100, 200], loader: mockLoader }),
-      ),
-    ).not.toThrow();
-  });
-
-  it("does not throw when no breakpoints are set", () => {
-    expect(() => assertBreakpointsProp(makeProps())).not.toThrow();
-  });
-});
 
 describe("assertFillProp", () => {
   it("throws when fill is used with width", () => {

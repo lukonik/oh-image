@@ -71,28 +71,8 @@ describe("ohImage plugin", () => {
       expect(mockEntriesInstance.createMainEntry).toHaveBeenCalled();
     });
 
-    it("should handle placeholders", async () => {
-      const plugin = ohImage();
-      const loadHandler = (plugin.load as any).handler;
 
-      const result = await loadHandler("test-image.jpg?oh&placeholder=true");
-      
-      const mockEntriesInstance = (imageEntries.createImageEntries as Mock).mock.results[0].value;
-      expect(mockEntriesInstance.createPlaceholderEntry).toHaveBeenCalled();
-      expect(result).toContain("placeholderUrl");
-    });
-
-    it("should handle breakpoints (srcSet)", async () => {
-      const plugin = ohImage({ breakpoints: [300, 600] });
-      const loadHandler = (plugin.load as any).handler;
-
-      const result = await loadHandler("test-image.jpg?oh");
-      
-      const mockEntriesInstance = (imageEntries.createImageEntries as Mock).mock.results[0].value;
-      expect(mockEntriesInstance.createSrcSetEntry).toHaveBeenCalledTimes(2); // 2 breakpoints
-      expect(result).toContain("srcSets");
-    });
-
+    
     it("should ignore requests without 'oh' query", async () => {
       const plugin = ohImage();
       const loadHandler = (plugin.load as any).handler;

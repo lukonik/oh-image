@@ -2,7 +2,7 @@
 import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
 import { Aside } from "@astrojs/starlight/components";
 import { Code } from "@astrojs/starlight/components";
-import { loaders } from "../../../data/loaders/loaders";
+import { loaders } from "../../../../data/loaders/loaders";
 
 export function getStaticPaths() {
   return loaders.map((loader) => ({
@@ -16,7 +16,6 @@ const { loader } = Astro.props;
 const loaderName = loader.name;
 const providerName = `${loaderName}LoaderProvider`;
 const useLoaderName = `use${loaderName}Loader`;
-const usePlaceholderName = `use${loaderName}Placeholder`;
 const useContextName = `use${loaderName}Context`;
 ---
 
@@ -28,14 +27,19 @@ const useContextName = `use${loaderName}Context`;
     >.
   </p>
   <h2>Module import</h2>
-  <Code lang={"ts"} code={`import * from '@lonik/oh-image/${loader.name.toLowerCase()}'`} />
+  <Code
+    lang={"ts"}
+    code={`import * from '@lonik/oh-image/${loader.name.toLowerCase()}'`}
+  />
+  <h2>URL Schema</h2>
+  <p>The loader generates URLs following this pattern:</p>
+  <Code code={loader.urlSchema} lang="bash" title="URL Schema" />
   <h2>{useLoaderName}</h2>
   <p>
     The primary hook for generating the loader function. It accepts
-    configuration options and returns a function that generates the final image
-    URL based on the provided transforms. Pass this result to the <code
-      >loader</code
-    > prop of the <code>Image</code> component.
+    configuration options (including transforms and placeholder settings) and
+    returns a function that generates the final image URL. Pass this result to
+    the <code>loader</code> prop of the <code>Image</code> component.
   </p>
   <Code
     code={`import { ${useLoaderName} } from '@lonik/oh-image/${loader.name.toLowerCase()}';
@@ -43,7 +47,8 @@ import { Image } from '@lonik/oh-image/react'
 
 function MyComponent() {
   const loader = ${useLoaderName}({
-    transforms: { format: 'webp' }
+    transforms: { format: 'webp' },
+    placeholder: { blur: 20, quality: 10 }
   });
 
   return (
@@ -51,38 +56,12 @@ function MyComponent() {
       src="image.jpg"
       width={500}
       loader={loader}
+      placeholder={true}
     />
   );
 }`}
     lang="tsx"
     title={`Using ${useLoaderName}`}
-  />
-
-  <h2>{usePlaceholderName}</h2>
-  <p>
-    Creates a loader function specifically configured for generating low-quality
-    placeholders (e.g., blurred images). Pass the result to the <code
-      >placeholder</code
-    > prop of the <code>Image</code> component.
-  </p>
-  <Code
-    code={`import { ${usePlaceholderName} } from '@lonik/oh-image/${loader.name.toLowerCase()}';
-import { Image } from '@lonik/oh-image/react'
-
-function MyComponent() {
-  const placeholderLoader = ${usePlaceholderName}({
-    transforms: { blur: 20, quality: 10 }
-  });
-
-  return (
-    <Image
-      src="image.jpg"
-      placeholder={placeholderLoader}
-    />
-  );
-}`}
-    lang="tsx"
-    title={`Using ${usePlaceholderName}`}
   />
 
   <h2>{providerName}</h2>
@@ -98,6 +77,7 @@ function App() {
     <${providerName}
       path="https://example.com/images"
       transforms={{ quality: 80 }}
+      placeholder={{ blur: 10 }}
     >
       <MyApp />
     </${providerName}>
@@ -108,23 +88,10 @@ function App() {
   />
 
   <h2>{useContextName}</h2>
-  <p>
-    A utility hook that exposes the current context value, including the global
-    configuration set by <code>{providerName}</code>. Useful for debugging or
-    building custom components that need access to the global loader settings.
-  </p>
-  <Code
-    code={`import { ${useContextName} } from '@lonik/oh-image/${loader.name.toLowerCase()}';
-
-function DebugConfig() {
-  const config = ${useContextName}();
-  return <pre>{JSON.stringify(config, null, 2)}</pre>;
-}`}
-    lang="tsx"
-    title={`Using ${useContextName}`}
-  />
+  <p>returns the global configuration of the loader</p>
 
   <h2>Global Defaults</h2>
+  By default the loader is configured with the following properties:
   <Code
     code={loader.defaults}
     lang="ts"

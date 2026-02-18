@@ -1,6 +1,6 @@
 ---
-title: The Plugin
-description: Comprehensive guide to the oh-image Vite plugin
+title: Static Image
+description: Import and use optimized images directly with the oh-image Vite plugin
 ---
 
 import { Tabs, TabItem } from "@astrojs/starlight/components";
@@ -56,29 +56,30 @@ You can also pass query parameters to customize the output for a specific image:
 import hero from "./assets/hero.jpg?oh&format=avif&width=800";
 ```
 
-## Integration with Image Component
+## Using Imported Images
 
-When you import an image with `?oh`, the plugin doesn't just return a string. It returns a structured object that the `<Image />` component understands perfectly.
+When you import an image with `?oh`, the plugin returns a **ready-to-use React component**. This component wraps the underlying `<Image />` primitive and automatically supplies all the optimized properties (src, srcSet, placeholder, dimensions).
 
-**The emitted object looks like this:**
+You **do not** pass this import to the `Image` component. You render it directly.
 
-```ts
-{
-  src: "/@oh-images/photo.webp", // Main image URL
-  width: 1920,                  // Original width
-  height: 1080,                 // Original height
-  srcSet: "...",                // Responsive srcSet string
-  placeholderUrl: "..."         // Data URI for blurred placeholder
+```tsx
+// 1. Import the component (Component name usually starts with Uppercase)
+import MyImage from "./assets/photo.jpg?oh";
+
+export function App() {
+  // 2. Render it directly
+  return <MyImage alt="My Photo" />;
 }
 ```
 
-You pass this directly to the `Image` component:
+The component accepts all standard `<Image />` props (like `className`, `style`, `onClick`, `priority`, etc.), which will be passed down to the internal image element.
 
 ```tsx
-import { Image } from "@lonik/oh-image/react";
-import myImage from "./assets/photo.jpg?oh";
-
-<Image src={myImage} alt="My Photo" />;
+<MyImage 
+  alt="Hero Background" 
+  className="hero-img" 
+  priority={true} 
+/>
 ```
 
 ## Public Folder Restriction
@@ -122,13 +123,13 @@ The plugin exposes many powerful [Sharp](https://sharp.pixelplumbing.com/api-ope
 
 ```ts
 // Resize to 500x500 and flip vertically
-import avatar from "./avatar.png?oh&width=500&height=500&flip=true";
+import Avatar from "./avatar.png?oh&width=500&height=500&flip=true";
 
 // Apply a blur effect
-import background from "./bg.jpg?oh&blur=10";
+import Background from "./bg.jpg?oh&blur=10";
 
 // Disable placeholder for a specific icon
-import icon from "./icon.png?oh&placeholder=false";
+import Icon from "./icon.png?oh&placeholder=false";
 ```
 
 ### Resetting Global Defaults
@@ -137,7 +138,7 @@ You can explicitly unset a global option by passing it without a value:
 
 ```ts
 // Use original format instead of global default (e.g. WebP)
-import original from "./photo.jpg?oh&format";
+import Original from "./photo.jpg?oh&format";
 ```
 
 ## Global Configuration

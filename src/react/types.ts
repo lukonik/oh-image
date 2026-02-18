@@ -4,11 +4,10 @@ export interface ImageLoaderOptions {
   src: string;
   width?: number | null | undefined;
   height?: number | null | undefined;
+  isPlaceholder?: boolean;
 }
 
 export type ImageLoader = (options: ImageLoaderOptions) => string | undefined;
-
-export type ImageSrcType = string | ImageSrc;
 
 export interface ImageProps extends Partial<
   Pick<
@@ -24,16 +23,15 @@ export interface ImageProps extends Partial<
 > {
   /** Alternative text for the image, required for accessibility. Use an empty string for decorative images. */
   alt: string;
-  /** @deprecated Use `priority` instead. */
-  asap?: boolean;
+  
   /** Configures the Image component to load the image immediately. */
   priority?: boolean;
 
   /** */
-  src: ImageSrcType;
+  src: string;
 
   /** The URL of the placeholder image to display while loading. */
-  placeholder?: string | undefined | ImageLoader | null;
+  placeholder?: string | undefined | boolean | null;
 
   /**
    * Sets the image to "fill mode", which eliminates the height/width requirement and adds

@@ -1,17 +1,31 @@
-interface ImageSrc {
-  /** Original width of the source image in pixels */
-  width: number;
-  /** Original height of the source image in pixels */
-  height: number;
-  /** URL to the placeholder image (if placeholder was enabled) */
-  placeholderUrl?: string;
-  /** Array of responsive image sources at different breakpoints */
-  srcSets: string;
-  /** URL to the main processed image */
-  src: string;
-}
+declare module "*&oh" {
+  export interface StaticImageProps extends Partial<
+    Pick<
+      ImgHTMLAttributes<HTMLImageElement>,
+      | "fetchPriority"
+      | "decoding"
+      | "loading"
+      | "srcSet"
+      | "className"
+      | "sizes"
+      | "style"
+    >
+  > {
+    /** Alternative text for the image, required for accessibility. Use an empty string for decorative images. */
+    alt: string;
 
-declare module "*?oh" {
-  const imageSrc: any;
-  export default imageSrc;
+    /** Configures the Image component to load the image immediately. */
+    priority?: boolean;
+
+    /**
+     * Sets the image to "fill mode", which eliminates the height/width requirement and adds
+     * styles such that the image fills its containing element.
+     */
+    fill?: boolean;
+
+    breakpoints?: number[];
+  }
+
+  const component: React.FC<StaticImageProps>;
+  export default component;
 }

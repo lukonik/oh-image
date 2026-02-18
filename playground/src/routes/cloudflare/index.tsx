@@ -1,9 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
   type CloudflareTransforms,
-  useCloudflareLoader,
-  useCloudflarePlaceholder,
-} from "@lonik/oh-image/react";
+  useCloudflareLoader
+} from "@lonik/oh-image/cloudflare";
 import { useState } from "react";
 import ControlsPanel from "../../components/controls-panel";
 import { JsonEditor } from "json-edit-react";
@@ -27,9 +26,6 @@ function RouteComponent() {
   const loader = useCloudflareLoader({
     transforms: transform,
   });
-  const placeholder = useCloudflarePlaceholder({
-    transforms: transform,
-  });
   return (
     <div className="flex ">
       <ControlsPanel>
@@ -46,13 +42,7 @@ function RouteComponent() {
             width: 50,
           })}
         </div>
-        <div>
-          Placeholder:
-          {placeholder({
-            src: "test",
-            width: 50,
-          })}
-        </div>
+        <div></div>
       </div>
     </div>
   );

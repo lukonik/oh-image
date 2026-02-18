@@ -1,0 +1,87 @@
+---
+title: Loaders Overview
+description: Understanding how loaders work in oh-image
+---
+
+Loaders are functions responsible for generating the final URL of an image. They are the bridge between the `<Image />` component and your image hosting service (CDN).
+
+## Usage
+
+Each supported provider integration follows a consistent pattern, exporting two main utilities:
+
+1.  **`use[Provider]Loader`**: A hook that returns a configured loader function.
+2.  **`[Provider]LoaderProvider`**: A context provider component that allows you to set global configuration.
+
+### Configuration
+
+The `use[Provider]Loader` hook accepts a configuration object with three main properties:
+
+- **`path`**: The base URL for your image source. It is recommended to set this globally using the provider so you don't have to repeat it for every component.
+- **`transforms`**: An object defining the default transformations to apply to the main image (e.g., quality, format, effects).
+- **`placeholder`**: An object defining the transformations to apply specifically when generating a placeholder image (e.g., heavy blur, low quality).
+
+```tsx
+const myLoader = useCloudinaryLoader({
+  transforms: {
+    quality: 'auto',
+    format: 'auto'
+  },
+  placeholder: {
+    effect: 'blur:1000',
+    quality: 1
+  }
+});
+```
+
+### Placeholders
+
+To display a placeholder while the main image loads, simply pass the `placeholder={true}` prop to the `<Image />` component. The component will then internally call the loader with `isPlaceholder: true`, which triggers the use of the `placeholder` configuration you defined in the loader.
+
+### Dimension Handling
+
+When the `<Image />` component calls the loader, it passes the `src`, `width`, and `height` from its own props.
+
+-   **`src`**: Passed directly to the loader.
+-   **`width` & `height`**: If provided on the component, they are passed to the loader to ensure the requested image matches the display size. This also allows the browser to automatically infer the aspect ratio, preventing layout shifts.
+
+The loader combines these props with the `transforms` configuration to build the final URL.
+
+## Quick Example: Cloudinary
+
+Here is a complete example using Cloudinary. We configure the loader with defaults for both the main image and the placeholder, and then use it in the component.
+
+```tsx
+import { useCloudinaryLoader } from "@lonik/oh-image/cloudinary";
+import { Image } from "@lonik/oh-image/react";
+
+function MyComponent() {
+  // 1. Configure the loader
+  const cloudinaryLoader = useCloudinaryLoader({
+    path: "https://res.cloudinary.com/demo/image/upload",
+    transforms: {
+      format: 'auto',
+      quality: 'auto'
+    },
+    placeholder: {
+      effect: 'blur:2000', // Heavy blur for placeholder
+      quality: 'auto:low'  // Low quality for small size
+    }
+  });
+
+  return (
+    // 2. Pass loader to component
+    // 3. Enable placeholder generation
+    <Image
+      src="sample.jpg"
+      width={600}
+      height={400}
+      loader={cloudinaryLoader}
+      placeholder={true} 
+    />
+  );
+}
+```
+
+In this example:
+1.  The **main image** URL will be generated using `format=auto`, `quality=auto`, `width=600`, and `height=400`.
+2.  The **placeholder image** URL will be generated using `effect=blur:2000` and `quality=auto:low`.

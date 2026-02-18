@@ -8,13 +8,12 @@ export const {
   useLoaderContext: useCloudflareContext,
   LoaderProvider: CloudflareLoaderProvider,
   useLoader: useCloudflareLoader,
-  usePlaceholder: useCloudflarePlaceholder,
 } = loaderFactory<CloudflareTransforms, CloudflareGlobalOptions>(
   {
     transforms: {
       format: "auto",
     },
-    placeholderTransforms: {
+    placeholder: {
       quality: 10,
       format: "auto",
     },
