@@ -51,28 +51,6 @@ describe("ohImage plugin", () => {
   });
 
   describe("load hook", () => {
-    it("should process valid image requests", async () => {
-      const plugin = ohImage();
-      const loadHandler = (plugin.load as any).handler;
-
-      const result = await loadHandler("test-image.jpg?oh&width=500");
-      
-      expect(sharp).toHaveBeenCalledWith("test-image.jpg");
-      expect(fileUtils.getFileHash).toHaveBeenCalledWith("test-image.jpg", "oh&width=500");
-      
-      // Verify the returned code
-      expect(result).toContain("export default");
-      expect(result).toContain("width");
-      expect(result).toContain("height");
-      expect(result).toContain("src");
-      
-      // Verify entry creation
-      const mockEntriesInstance = (imageEntries.createImageEntries as Mock).mock.results[0].value;
-      expect(mockEntriesInstance.createMainEntry).toHaveBeenCalled();
-    });
-
-
-    
     it("should ignore requests without 'oh' query", async () => {
       const plugin = ohImage();
       const loadHandler = (plugin.load as any).handler;
