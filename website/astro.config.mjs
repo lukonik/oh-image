@@ -53,6 +53,7 @@ export default defineConfig({
       sidebar: [
         { label: "Introduction", slug: "docs/introduction" },
         { label: "Installation", slug: "docs/installation" },
+        { label: "Typescript", slug: "docs/typescript" },
         {
           label: "Image",
           slug: "docs/image/component",
@@ -71,7 +72,6 @@ export default defineConfig({
           ],
         },
         { label: "Vite Plugin", slug: "docs/vite-plugin" },
-        { label: "Typescript", slug: "docs/typescript" },
       ],
       customCss: ["./src/styles/global.css"],
     }),
