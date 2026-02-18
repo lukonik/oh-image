@@ -70,7 +70,7 @@ export default defineConfig({
             },
           ],
         },
-        { label: "Static Image", slug: "docs/static-image" },
+        { label: "Vite Plugin", slug: "docs/vite-plugin" },
         { label: "Typescript", slug: "docs/typescript" },
       ],
       customCss: ["./src/styles/global.css"],
