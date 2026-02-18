@@ -55,17 +55,18 @@ export default defineConfig({
         { label: "Installation", slug: "docs/installation" },
         {
           label: "Image",
+          items: [{ label: "Image component", slug: "docs/image/component" }],
+        },
+        {
+          label: "Loaders",
           items: [
-            { label: "Image component", slug: "docs/image/component" },
+            { label: "Overview", slug: "docs/image/loaders/overview" },
+            { label: "Imgproxy", link: "docs/image/loaders/imgproxy" },
+            { label: "Cloudflare", link: "docs/image/loaders/cloudflare" },
+            { label: "Cloudinary", link: "docs/image/loaders/cloudinary" },
             {
-              label: "Loaders",
-              items: [
-                { label: "Overview", slug: "docs/image/loaders/overview" },
-                { label: "Imgproxy", link: "docs/image/loaders/imgproxy" },
-                { label: "Cloudflare", link: "docs/image/loaders/cloudflare" },
-                { label: "Cloudinary", link: "docs/image/loaders/cloudinary" },
-                { label: "Custom Loader", slug: "docs/image/loaders/custom-loader" },
-              ],
+              label: "Custom Loader",
+              slug: "docs/image/loaders/custom-loader",
             },
           ],
         },
