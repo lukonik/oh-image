@@ -9,7 +9,6 @@ export const Route = createFileRoute("/image/")({
 function RouteComponent() {
   const [props, setProps] = useState<Partial<ImageProps>>({
     fill: false,
-    asap: false,
     loading: "lazy",
     fetchPriority: "auto",
     width: undefined,
@@ -36,10 +35,10 @@ function RouteComponent() {
           <label>
             <input
               type="checkbox"
-              checked={props.asap}
-              onChange={(e) => handleChange("asap", e.target.checked)}
+              checked={props.priority}
+              onChange={(e) => handleChange("priority", e.target.checked)}
             />
-            Asap (Preload)
+            Prirority (Preload)
           </label>
           <label>
             Loading:

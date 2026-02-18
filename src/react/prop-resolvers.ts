@@ -29,11 +29,11 @@ export function resolveOptions(
 }
 
 export function resolveDecoding(prop: ImageProps) {
-  return prop.priority || prop.asap ? "async" : prop.decoding;
+  return prop.priority ? "async" : prop.decoding;
 }
 
 export function resolveFetchPriority(prop: ImageProps) {
-  if (prop.priority || prop.asap) {
+  if (prop.priority) {
     return "high";
   }
   return prop.fetchPriority ?? "auto";
@@ -71,7 +71,7 @@ export function resolveSrcSet(prop: ImageProps) {
 }
 
 export function resolveLoading(prop: ImageProps) {
-  const priority = prop.priority || prop.asap;
+  const priority = prop.priority;
   if (!priority && prop.loading !== undefined) {
     return prop.loading;
   }

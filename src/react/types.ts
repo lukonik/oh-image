@@ -23,8 +23,7 @@ export interface ImageProps extends Partial<
 > {
   /** Alternative text for the image, required for accessibility. Use an empty string for decorative images. */
   alt: string;
-  /** @deprecated Use `priority` instead. */
-  asap?: boolean;
+  
   /** Configures the Image component to load the image immediately. */
   priority?: boolean;
 
