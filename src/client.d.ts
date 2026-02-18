@@ -1,4 +1,4 @@
-declare module "*?oh" {
+declare module "*&oh" {
   export interface StaticImageProps extends Partial<
     Pick<
       ImgHTMLAttributes<HTMLImageElement>,
