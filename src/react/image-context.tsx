@@ -11,7 +11,7 @@ export interface ImageContextValue extends Pick<
 }
 
 const ImageContext = createContext<ImageContextValue>({
-  breakpoints: [], //[16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920],
+  breakpoints: [16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920],
   loading: "lazy",
   loader: null,
   placeholder: true,
