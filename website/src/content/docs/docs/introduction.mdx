@@ -3,17 +3,18 @@ title: Introduction
 description: Introduction for oh-image
 ---
 
-<span className="project-title pr-1">Oh Image</span> is an Image component
-library that is used for React and Vite apps. It ships with tiny but powerful
-Image component and Vite optimizer plugin that automatically optimizes Static
-images on the website. Depending on the status of your image if it is static or
-fetched remotely from the CDN provider, you would use one of the two. Let me
-give you quick examples so you get taste of the project
+<span className="project-title pr-1">Oh Image</span> is an image component
+library for React and Vite apps. It ships with a lightweight yet powerful Image
+component plus a Vite optimizer plugin that automatically optimizes static
+assets. Depending on whether your image is local or fetched from a CDN, you can
+choose the integration that fits best. The quick examples below give you a taste
+of the project.
 
 ## Vite plugin
 
-vite plugin main purpose is to generate Image component automatically for you based on static images. So let's say you want
-to load hero image on the homepage from the assets folder:
+The Vite plugin's main purpose is to generate an Image component automatically
+for each static import. Suppose you want to load a hero image on the homepage
+from the assets folder:
 
 ```tsx
 import HeroImage from "./assets/hero.jpg"; // this will return image url
@@ -23,9 +24,10 @@ function App() {
 }
 ```
 
-now in this case the src value will be simple url for the image and you have tu manually do lot's of the things to make this
-image responsive and optimized. Now let's try the vite plugin version, all we have to do is add query param`$oh` suffix to the import
-and oh-image vite plugin will take care of the rest.
+In this case the `src` value is just the URL for the image, so you have to
+manually handle every detail that makes it responsive and optimized. Now add the
+`$oh` query parameter suffix to the import and let the oh-image Vite plugin take
+care of the rest:
 
 ```tsx
 import HeroImage from "./assets/hero.jpg?$oh"; // this will return Image component
@@ -35,7 +37,8 @@ function App() {
 }
 ```
 
-now this will return the Image component where the inner img element will look something like this:
+This returns the Image component, whose inner `<img>` element renders markup
+similar to the following:
 
 ```HTML
 <img class="flex" width="1920" height="1280"  loading="lazy" fetchpriority="auto"
@@ -58,18 +61,20 @@ sizes="auto, 100vw"
 >
 ```
 
-Long html but it worth exploring so automatically we got:
+It's a lot of HTML, but it gives you a feel for the benefits you get
+automatically:
 
-- width taken from image metadata
-- height taken from image metadata
-- srcset images for wide range of devices
-- placeholder image in the background while image loads
-- all images are optimized to the webp although the image was in jpg
-- sensible default attributes to increase the performance of your website
-  & sizes set by using best possible values according to srcSets and other attributes
+- width pulled from the image metadata
+- height pulled from the image metadata
+- `srcset` entries that cover a wide range of devices
+- a placeholder background while the image loads
+- WebP output even if the source asset is JPEG
+- sensible default attributes (e.g., `sizes`) to maximize performance
 
-having all these with a single suffix is not a bad thing.
-as we know hero images must be loaded as soon as possible. for oh-image it is just setting single attribute to true
+That's a solid payoff for adding a single suffix. 
+
+Let's adjust our HeroImage. Hero images often need to load
+immediately, and with oh-image you only need to set one prop:
 
 ```tsx
 function App() {
@@ -77,16 +82,16 @@ function App() {
 }
 ```
 
-and done img will be configured the way to load the image as soon as possible
+The generated `<img>` is now configured to load as soon as possible.
 
-This version is perfect for images that needs to be loaded statically and is configured for you. But what to do when you want
-to fetch the image from Image CDN or you don't want any optimization and just render img from public dir. That's when Image component comes into play
+This setup is perfect for statically loaded images. If you need to fetch assets
+from an image CDN—or simply want to render an `<img>` from the `public`
+directory—reach for the Image component itself.
 
 ## Image component
 
-Image component is a React component returned by vite optimizer plugin and can be used as a standalone component. it has bunch of properties
-to make img responsive and fast.
-example:
+The Image component is a powerful wrapper around native `img` element that you can use it directly. It exposes a collection of props
+that keep images responsive and fast. For example:
 
 ```tsx
 import { Image } from "@lonik/oh-image/react";
@@ -103,17 +108,21 @@ function App() {
 }
 ```
 
-more on this properties later in the guide. Using this Image in such away won't optimize static image but it still ar capable of lot's of things
-for exmaple automatically generating srcSets, set sensible performant defaults etc.
+We'll cover these props in later guides. 
 
-But mostly it shines when it is used with conjuction with Loaders
+Using the component this way won't
+optimize a local file, but it still gives you niceties such as automatically
+generated `srcset` values and sensible performance defaults.
+
+The component really shines when combined with loaders.
 
 ## Loaders
 
-Loaders are the bridge between Image component and Image CDN provider.
-it gives you out-of-the box integration with popular Image CDN providers
-all we have to do is pass specific CDN loader to the image loader prop and that it is. Let's say you use Cloudinary Image CDN provider.
-there is a separate loader for this Cloudinary and use it like this:
+Loaders bridge the Image component and your image CDN provider. They offer
+out-of-the-box integrations with popular services—just pass the appropriate
+loader to the `loader` prop. 
+
+Using Cloudinary as an example:
 
 ```tsx
 import { Image } from "@lonik/oh-image/react";
@@ -121,6 +130,7 @@ import { useCloudinaryLoader } from "@lonik/oh-image/cloudinary";
 
 function App() {
   const loader = useCloudinaryLoader({
+    path:"https://res.cloudinary.com/example"
     transform: {
       rotate: 180,
     },
@@ -139,23 +149,25 @@ function App() {
 }
 ```
 
-the image component will create all the necessary attributes out of the box and use the loader
-to generate proper url for proper CDN. in addition to the main src url it will also generate
-srcSet urls based on the loader and placeholderUrl for example the
-src attribute url will looke like
-`https://res.cloudinary.com/example/image/upload/w_600,h_400,f_webp,r_180/car.jpg`
-and it will return image with rotated 180 deg
+The Image component creates all required attributes and uses the loader to build
+the correct URLs for the CDN. In addition to the main `src`, it generates `srcset`
+entries and placeholder URLs. In the example above, the `src` might look like
+`https://res.cloudinary.com/example/image/upload/w_600,h_400,f_webp,r_180/car.jpg`,
+which returns a 600 × 400 WebP image rotated by 180 degrees.
 
-Currently we support three providers I know it's not a lot, but many will come more really soon. Also custom loader is simple as creating
-a function that accepts some options and return string url
+We currently support three providers, with more on the roadmap. Creating a
+custom loader is as simple as writing a function that accepts options and
+returns the desired URL.
 
-I hope you get the idea about the library. in next guides we will explore more in depth
+Hopefully this gives you a sense of what the library offers. The next guides
+will explore these ideas in more depth.
 
 ## Why?
 
-If you are used to creating `<img>` tags with only `src` and `alt` attributes,
-you might question why you should use this library. Although you will still get benefits even with such small requirements
-(like automatically generating optimized images for you or easily fetching them from your favorite CDN),
-the real power comes when you understand how images work on the web. I strongly recommend you read [Web.dev Images](https://web.dev/learn/images)—it is an
-excellent guide you can read in your free time, and it will give you the knowledge and confidence to use this library instead of a simple `<img>` tag
-that needs to perform optimally across all different devices
+If you're used to creating `<img>` tags with only `src` and `alt`, you might
+wonder why you need a library at all. Even with minimal requirements, you'll
+benefit from automatic optimization and effortless CDN fetching. The real power
+shows up once you understand how images work on the web. I highly recommend
+reading [Web.dev Images](https://web.dev/learn/images)—it's an excellent guide
+that will give you the knowledge and confidence to rely on this library instead
+of a plain `<img>` tag when you need consistent performance across devices.
