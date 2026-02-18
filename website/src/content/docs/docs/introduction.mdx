@@ -3,9 +3,27 @@ title: Introduction
 description: Introduction for oh-image
 ---
 
-<span className="project-title pr-1">Oh Image</span> is a tiny but powerful
-image component for React. It is highly optimized and includes all the features
-you would need for production-grade applications. The feature list includes:
+<span className="project-title pr-1">Oh Image</span> is an Image component 
+library that is used for React and Vite apps. It ships with tiny but powerful Image component and Vite optimizer plugin
+that automatically optimizes Static images on the website. Depending on the status of your image if it is static or fetched remotely
+from the CDN provider, you would use one of the two. Let me give you quick examples so you get taste of the project
+
+## Vite plugin
+vite plugin main purpose is to generate Image component automatically for you based on static images. So let's say you want
+to load hero image on the homepage from the assets folder:
+
+```tsx
+  import HeroImage from "./assets/hero.jpg"; // this will return image url
+
+  function App(){
+    return <img src={HeroImage} />
+  }
+
+```
+now in this case the src value will be simple url for the image and you have tu manually do lot's of the things to make this 
+image responsive and optimized. Now let's try the vite plugin version, all we have to do is add query param`$oh` suffix to the import
+and oh-image vite plugin will take care of the rest.
+
 
 - Automatically generating `srcSets`.
 - Using sensible defaults for `sizes` attributes for different aspect ratios.
