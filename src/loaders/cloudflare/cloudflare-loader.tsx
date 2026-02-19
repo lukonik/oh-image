@@ -21,6 +21,7 @@ export const {
   {
     optionSeparator: "=",
     paramSeparator: ",",
+    passBooleanValue: true,
   },
   ({ path, params, imageOptions }) =>
     `${path}/cdn-cgi/image/${params}/${imageOptions.src}`,
