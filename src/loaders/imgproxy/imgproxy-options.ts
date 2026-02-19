@@ -208,9 +208,6 @@ export type ImgproxyTransforms = BaseLoaderTransforms &
      */
     gravity: GravityOptions;
 
-    /**
-     * Defines an area of the image to be processed (crop before resize).
-     */
     crop: CropOptions;
 
     /**
@@ -448,6 +445,11 @@ export type ImgproxyTransforms = BaseLoaderTransforms &
       intensity?: number;
       color1?: string;
       color2?: string;
+    };
+
+    extend_aspect_ratio: {
+      extend: boolean;
+      gravity?: GravityOptions;
     };
   }>;
 

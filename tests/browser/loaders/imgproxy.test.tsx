@@ -305,6 +305,136 @@ describe("imgproxy", () => {
           );
         });
       });
+
+      describe("Expires", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              expires: Date.now(),
+            },
+            "expires",
+            true,
+          );
+        });
+
+        it("Applies Modifier (Date)", async () => {
+          const date = new Date();
+          await expectParam(
+            {
+              expires: date.getTime(),
+            },
+            `expires:${Math.floor(date.getTime())}`,
+          );
+        });
+
+        it("Applies Modifier (Epoch)", async () => {
+          await expectParam(
+            {
+              expires: 123,
+            },
+            `expires:123`,
+          );
+        });
+      });
+
+      describe("Extend", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              extend: true,
+            },
+            `extend`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              extend: true,
+            },
+            `extend:true`,
+          );
+        });
+      });
+
+      describe("Extend Aspect Ratio", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              extend_aspect_ratio: {
+                extend: true,
+              },
+            },
+            `extend_aspect_ratio`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              extend_aspect_ratio: {
+                extend: true,
+              },
+            },
+            `extend_aspect_ratio:true:`,
+          );
+        });
+
+        it("Applies Gravity Type", async () => {
+          await expectParam(
+            {
+              extend_aspect_ratio: {
+                extend: true,
+                gravity: {
+                  type: "no",
+                },
+              },
+            },
+            `extend_aspect_ratio:true:no::`,
+          );
+        });
+
+        it("Applies Gravity Offset", async () => {
+          await expectParam(
+            {
+              extend_aspect_ratio: {
+                extend: true,
+                gravity: {
+                  type: "ce",
+                  x_offset: 50,
+                  y_offset: 10,
+                },
+              },
+            },
+            `extend_aspect_ratio:true:ce:50:10`,
+          );
+        });
+      });
+
+      describe("Fallback Image URL", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              fallback_image_url: "http://test.test",
+            },
+            `fallback_image_url`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          const url = "https://test.test";
+
+          await expectParam(
+            {
+              fallback_image_url: url,
+            },
+            `fallback_image_url:${encodeURIComponent(url)}`,
+          );
+        });
+      });
     });
   });
 });

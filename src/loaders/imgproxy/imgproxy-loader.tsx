@@ -26,6 +26,14 @@ export const {
       duotone: {
         orders: ["intensity", "color1", "color2"],
       },
+      extend_aspect_ratio: {
+        orders: ["extend", "gravity"],
+        childrenOrders: {
+          gravity: {
+            orders: ["type", "x_offset", "y_offset"],
+          },
+        },
+      },
       resize: {
         orders: ["resizing_type", "width", "height", "enlarge", "extend"],
       },
