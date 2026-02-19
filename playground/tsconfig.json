@@ -17,10 +17,11 @@
       "@lonik/oh-image/cloudflare": ["../src/loaders/cloudflare/index.ts"],
       "@lonik/oh-image/cloudinary": ["../src/loaders/cloudinary/index.ts"],
       "@lonik/oh-image/imgproxy": ["../src/loaders/imgproxy/index.ts"],
+      "@lonik/oh-image/kontent": ["../src/loaders/kontent/index.ts"],
       "@lonik/oh-image/client": ["../src/client.d.ts"]
     },
     "types": ["../src/client.d.ts", "vite/client"],
     "verbatimModuleSyntax": true
   },
-  "include": ["src","../src/client.d.ts"]
+  "include": ["src", "../src/client.d.ts"]
 }

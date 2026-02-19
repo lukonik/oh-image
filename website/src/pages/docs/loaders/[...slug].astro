@@ -2,7 +2,7 @@
 import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
 import { Aside } from "@astrojs/starlight/components";
 import { Code } from "@astrojs/starlight/components";
-import { loaders } from "../../../../data/loaders/loaders";
+import { loaders } from "../../../data/loaders/loaders";
 
 export function getStaticPaths() {
   return loaders.map((loader) => ({
@@ -29,7 +29,7 @@ const useContextName = `use${loaderName}Context`;
   <h2>Module import</h2>
   <Code
     lang={"ts"}
-    code={`import * from '@lonik/oh-image/${loader.name.toLowerCase()}'`}
+    code={`import * as ${loader.name} from '@lonik/oh-image/${loader.name.toLowerCase()}'`}
   />
   <h2>URL Schema</h2>
   <p>The loader generates URLs following this pattern:</p>
@@ -46,10 +46,7 @@ const useContextName = `use${loaderName}Context`;
 import { Image } from '@lonik/oh-image/react'
 
 function MyComponent() {
-  const loader = ${useLoaderName}({
-    transforms: { format: 'webp' },
-    placeholder: { blur: 20, quality: 10 }
-  });
+  const loader = ${useLoaderName}(${loader.defaults});
 
   return (
     <Image
@@ -76,8 +73,8 @@ function App() {
   return (
     <${providerName}
       path="https://example.com/images"
-      transforms={{ quality: 80 }}
-      placeholder={{ blur: 10 }}
+      transforms={OPTIONS}
+      placeholder={PLACEHOLDER_OPTIONS}
     >
       <MyApp />
     </${providerName}>

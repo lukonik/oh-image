@@ -1,10 +1,10 @@
 export interface BaseLoaderOptions<T> {
   path?: string;
-  transforms?: T;
+  transforms?: T & BaseLoaderTransforms;
 }
 
 export interface BaseGlobalLoaderOptions<T> extends BaseLoaderOptions<T> {
-  placeholder?: T;
+  placeholder?: T & BaseLoaderTransforms;
 }
 
 export interface BaseLoaderTransforms {
