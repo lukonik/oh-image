@@ -391,12 +391,6 @@ export type ImgproxyTransforms = BaseLoaderTransforms &
     format: string;
 
     /**
-     * When a source image supports pagination or animation, this option allows specifying the page to use it on.
-     * Default: 0
-     */
-    page: number;
-
-    /**
      * Allows redefining IMGPROXY_VIDEO_THUMBNAIL_SECOND config.
      */
     video_thumbnail_second: number;
@@ -467,6 +461,8 @@ export type ImgproxyTransforms = BaseLoaderTransforms &
       intensity: number;
       color?: string;
     };
+
+    raw: boolean;
   }>;
 
 export type ImgproxyOptions = BaseLoaderOptions<ImgproxyTransforms>;

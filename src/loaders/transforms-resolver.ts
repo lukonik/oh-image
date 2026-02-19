@@ -123,14 +123,18 @@ export function resolveTransform<T extends BaseLoaderTransforms>(
         break;
       }
       case "object": {
-        const objectParams = resolveObjectParam(
-          key,
-          value as Record<string, unknown>,
-          config?.orders?.[key],
-          config.optionSeparator,
-        );
-        if (objectParams) {
-          params.push(objectParams);
+        if (Array.isArray(value)) {
+          params.push(stringifyOptions(key, [value], config.optionSeparator));
+        } else {
+          const objectParams = resolveObjectParam(
+            key,
+            value as Record<string, unknown>,
+            config?.orders?.[key],
+            config.optionSeparator,
+          );
+          if (objectParams) {
+            params.push(objectParams);
+          }
         }
         break;
       }

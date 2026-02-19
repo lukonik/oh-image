@@ -579,6 +579,27 @@ describe("imgproxy", () => {
         });
       });
 
+      describe("Padding", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              padding: { top: 12 },
+            },
+            `padding`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              padding: { top: 12, right: 34, left: 56, bottom: 78 },
+            },
+            `padding:12:34:78:56`,
+          );
+        });
+      });
+
       describe("Gravity", () => {
         it("Uses Proper Identifier", async () => {
           await expectParam(
@@ -766,6 +787,299 @@ describe("imgproxy", () => {
               "min-width": 148,
             },
             `min-width:148`,
+          );
+        });
+      });
+
+      describe("Pixelate", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              pixelate: 147,
+            },
+            `pixelate`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              pixelate: 148,
+            },
+            `pixelate:148`,
+          );
+        });
+      });
+
+      describe("PNG Options", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              png_options: {
+                interlaced: true,
+              },
+            },
+            `png_options`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              png_options: {
+                interlaced: true,
+                quantization_colors: 3,
+                quantize: true,
+              },
+            },
+            `png_options:true:true:3`,
+          );
+        });
+      });
+
+      describe("Preset", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              preset: ["foobar"],
+            },
+            `preset`,
+            true,
+          );
+        });
+
+        it("Applies Modifier (Single Preset)", async () => {
+          await expectParam(
+            {
+              preset: ["foobar"],
+            },
+            `preset:foobar`,
+          );
+        });
+
+        it("Applies Modifier (Multiple Presets)", async () => {
+          await expectParam(
+            {
+              preset: ["foobar1", "foobar2"],
+            },
+            `preset:foobar1:foobar2`,
+          );
+        });
+      });
+
+      describe("Raw", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              raw: true,
+            },
+            `raw`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              raw: true,
+            },
+            `raw:true`,
+          );
+        });
+      });
+
+      describe("Return Attachment", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              return_attachment: true,
+            },
+            `return_attachment`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              return_attachment: true,
+            },
+            `return_attachment:true`,
+          );
+        });
+      });
+
+      describe("Quality", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              quality: 150,
+            },
+            `quality`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              quality: 350,
+            },
+            `quality:350`,
+          );
+        });
+      });
+
+      describe("Resize", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              resize: {},
+            },
+            `resize`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              resize: {
+                resizing_type: "fill",
+                width: 12,
+                height: 34,
+              },
+            },
+            `resize:fill:12:34`,
+            true,
+          );
+        });
+      });
+
+      describe("Resizing Algorithm", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              resizing_algorithm: "lanczos3",
+            },
+            `resizing_algorithm`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              resizing_algorithm: "lanczos2",
+            },
+            `resizing_algorithm:lanczos2`,
+          );
+        });
+      });
+
+      describe("Rotate", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              rotate: 196,
+            },
+            `rotate`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              rotate: 266,
+            },
+            `rotate:266`,
+          );
+        });
+      });
+
+      describe("Saturation", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              saturation: 196,
+            },
+            `saturation`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              saturation: 266,
+            },
+            `saturation:266`,
+          );
+        });
+      });
+
+      describe("Sharpen", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              sharpen: 196,
+            },
+            `sharpen`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              sharpen: 266,
+            },
+            `sharpen:266`,
+          );
+        });
+      });
+
+      describe("Skip Processing", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              skip_processing: [],
+            },
+            `skip_processing`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              skip_processing: ["png", "jpg"],
+            },
+            `skip_processing:png:jpg`,
+          );
+        });
+      });
+
+      describe("Strip Color Profile", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              strip_color_profile: true,
+            },
+            `strip_color_profile`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              strip_color_profile: true,
+            },
+            `strip_color_profile:true`,
           );
         });
       });
