@@ -29,9 +29,11 @@ function RootComponent() {
   };
 
   return (
-    <ContentfulLoaderProvider path="https://images.ctfassets.net/4iyujxih0l6d/5ckmBIuM67FI7TUMBxfLHk/07c8444199e67d6adf751d9e92d8f3fa">
+    <ContentfulLoaderProvider path={import.meta.env["VITE_CONTENTFUL_PATH"]}>
       <KontentLoaderProvider path="http://kontent.ai">
-        <CloudinaryLoaderProvider path="https://res.cloudinary.com/dovmucqi8">
+        <CloudinaryLoaderProvider
+          path={import.meta.env["VITE_CLOUDINARY_PATH"]}
+        >
           <CloudflareLoaderProvider path="http://cloudflare.com">
             <ImgproxyLoaderProvider path="http://localhost:8080/insecure">
               <div className="container mx-auto pt-20 flex justify-center">
