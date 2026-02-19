@@ -2,7 +2,7 @@
 import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
 import { Aside } from "@astrojs/starlight/components";
 import { Code } from "@astrojs/starlight/components";
-import { loaders } from "../../../../data/loaders/loaders";
+import { loaders } from "../../../data/loaders/loaders";
 
 export function getStaticPaths() {
   return loaders.map((loader) => ({
