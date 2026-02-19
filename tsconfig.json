@@ -12,13 +12,14 @@
     "emitDeclarationOnly": true,
     "verbatimModuleSyntax": true,
     "paths": {
+      "@lonik/oh-image/client": ["../src/client.d.ts"],
       "@lonik/oh-image/react": ["../src/react/index.ts"],
       "@lonik/oh-image/plugin": ["../src/plugin/index.ts"],
       "@lonik/oh-image/cloudflare": ["../src/loaders/cloudflare/index.ts"],
       "@lonik/oh-image/cloudinary": ["../src/loaders/cloudinary/index.ts"],
       "@lonik/oh-image/imgproxy": ["../src/loaders/imgproxy/index.ts"],
       "@lonik/oh-image/kontent": ["../src/loaders/kontent/index.ts"],
-      "@lonik/oh-image/client": ["../src/client.d.ts"]
+      "@lonik/oh-image/contentful": ["../src/loaders/contentful/index.ts"],
     }
   },
   "include": ["src"]

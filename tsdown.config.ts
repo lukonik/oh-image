@@ -10,6 +10,7 @@ export default defineConfig({
     cloudinary: "src/loaders/cloudinary/index.ts",
     imgproxy: "src/loaders/imgproxy/index.ts",
     kontent: "src/loaders/kontent/index.ts",
+    contentful: "src/loaders/contentful/index.ts",
   },
   dts: true,
   external: [
