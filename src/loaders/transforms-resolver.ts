@@ -113,10 +113,10 @@ export function resolveTransform<T extends BaseLoaderTransforms>(
 
     switch (type) {
       case "boolean": {
-        if (config.passBooleanValue) {
-          params.push(stringifyOptions(key, [value], config.optionSeparator));
-        } else {
-          if (value === true) {
+        if (value === true) {
+          if (config.passBooleanValue) {
+            params.push(stringifyOptions(key, [value], config.optionSeparator));
+          } else {
             params.push(key);
           }
         }
