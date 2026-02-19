@@ -195,3 +195,56 @@ export function createAnyDescribeTest<T>(
     });
   };
 }
+
+export function createImageOptionsDescribeTest<T>(
+  hook: (transform: BaseLoaderOptions<T>) => any,
+  wKey: string,
+  hKey: string,
+  optionSeparator: string,
+) {
+  describe("ImageOptions", () => {
+    it("src should be passed", async () => {
+      const { result } = await renderHook(() =>
+        hook({
+          path: "http://mock.com",
+        }),
+      );
+
+      const url = result.current({
+        src: "test.png",
+      });
+
+      expect(url).includes("test.png");
+    });
+
+    it("should pass the width", async () => {
+      const { result } = await renderHook(() =>
+        hook({
+          path: "http://mock.com",
+        }),
+      );
+
+      const url = result.current({
+        src: "test.png",
+        width: 600,
+      });
+
+      expect(url).includes(`${wKey}${optionSeparator}${600}`);
+    });
+
+    it("should pass the width", async () => {
+      const { result } = await renderHook(() =>
+        hook({
+          path: "http://mock.com",
+        }),
+      );
+
+      const url = result.current({
+        src: "test.png",
+        height: 900,
+      });
+
+      expect(url).includes(`${hKey}${optionSeparator}${900}`);
+    });
+  });
+}
