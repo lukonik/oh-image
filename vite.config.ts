@@ -7,16 +7,14 @@ import { ohImage } from "./src/plugin";
 import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import Inspect from "vite-plugin-inspect";
+import { playwright } from "@vitest/browser-playwright";
 
 export default defineConfig({
   root: "./playground",
   plugins: [
     Inspect(),
     ohImage(),
-    tsconfigPaths({
-      logFile: true,
-      projects: [path.resolve(__dirname, "tsconfig.playground.json")], // Explicitly point to the root config
-    }),
+    tsconfigPaths(),
     tailwindcss(),
     tanstackRouter({
       routesDirectory: path.resolve(__dirname, "./playground/src/routes"),
@@ -39,8 +37,12 @@ export default defineConfig({
       },
       {
         test: {
-          include: ["tests/browser/*.test.{ts,tsx}"],
-          environment: "happy-dom",
+          include: ["tests/browser/**/*.test.{ts,tsx}"],
+          browser: {
+            enabled: true,
+            provider: playwright(),
+            instances: [{ browser: "chromium" }],
+          },
         },
       },
     ],
