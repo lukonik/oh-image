@@ -29,35 +29,121 @@ export function expectLoaderToPassParamFactory<T>(
       ? checkValue
       : `${paramSeparator}${checkValue}/`;
 
-    const singleParamValue = includesParam
-      ? checkValue
-      : `/${paramSeparator}${checkValue}/`;
+    const singleParamValue = includesParam ? checkValue : `/${checkValue}/`;
 
-    if (!(expectedValue && startValue && endValue && singleParamValue)) {
-      expect.fail(`Expected: ${url}, Got: ${expectedValue}`)
+    if (
+      !url.includes(expectedValue) &&
+      !url.includes(startValue) &&
+      !url.includes(endValue) &&
+      !url.includes(singleParamValue)
+    ) {
+      expect.fail(`Expected: ${url} to contain: ${checkValue}`);
     }
     return url;
   };
 }
 
-export function createOptionDescribeTests<T>(
+export function createBooleanDescribeTest<T>(
   hook: (transform: BaseLoaderOptions<T>) => any,
   paramSeparator: string,
   optionsSeparator: string,
   passBooleanValue: boolean,
 ) {
-  return (key: keyof T, value?: boolean) => {
+  return (key: keyof T) => {
     describe(key.toString(), () => {
       it("Uses Proper Identifier", async () => {
         const checker = expectLoaderToPassParamFactory(hook, paramSeparator);
-        const resolvedValue = value ?? true;
+        const resolvedValue = true;
         const expectedValue = `${key as string}${optionsSeparator}${resolvedValue}`;
         checker(
           {
-            [key as keyof T]: true,
+            [key as keyof T]: resolvedValue,
           } as any,
           expectedValue,
           true,
+        );
+      });
+
+      it("Applies Modifier", async () => {
+        const checker = expectLoaderToPassParamFactory(hook, paramSeparator);
+        const resolvedValue = true;
+        const expectedValue = `${key as string}${optionsSeparator}${resolvedValue}`;
+        checker(
+          {
+            [key as keyof T]: resolvedValue,
+          } as any,
+          expectedValue,
+        );
+      });
+    });
+  };
+}
+
+export function createNumberDescribeTest<T>(
+  hook: (transform: BaseLoaderOptions<T>) => any,
+  paramSeparator: string,
+  optionsSeparator: string,
+) {
+  return (key: keyof T, value: number) => {
+    describe(key.toString(), () => {
+      it("Uses Proper Identifier", async () => {
+        const checker = expectLoaderToPassParamFactory(hook, paramSeparator);
+        const resolvedValue = value;
+        const expectedValue = `${key as string}${optionsSeparator}${resolvedValue}`;
+        checker(
+          {
+            [key as keyof T]: value,
+          } as any,
+          expectedValue,
+          true,
+        );
+      });
+
+      it("Applies Modifier", async () => {
+        const checker = expectLoaderToPassParamFactory(hook, paramSeparator);
+        const resolvedValue = value;
+        const expectedValue = `${key as string}${optionsSeparator}${resolvedValue}`;
+        checker(
+          {
+            [key as keyof T]: resolvedValue,
+          } as any,
+          expectedValue,
+        );
+      });
+    });
+  };
+}
+
+
+export function createStringDescribeTest<T>(
+  hook: (transform: BaseLoaderOptions<T>) => any,
+  paramSeparator: string,
+  optionsSeparator: string,
+) {
+  return (key: keyof T, value: string) => {
+    describe(key.toString(), () => {
+      it("Uses Proper Identifier", async () => {
+        const checker = expectLoaderToPassParamFactory(hook, paramSeparator);
+        const resolvedValue = value;
+        const expectedValue = `${key as string}${optionsSeparator}${resolvedValue}`;
+        checker(
+          {
+            [key as keyof T]: value,
+          } as any,
+          expectedValue,
+          true,
+        );
+      });
+
+      it("Applies Modifier", async () => {
+        const checker = expectLoaderToPassParamFactory(hook, paramSeparator);
+        const resolvedValue = value;
+        const expectedValue = `${key as string}${optionsSeparator}${resolvedValue}`;
+        checker(
+          {
+            [key as keyof T]: resolvedValue,
+          } as any,
+          expectedValue,
         );
       });
     });

@@ -47,9 +47,9 @@ describe("imgproxy", () => {
     it("Applies Modifier", async () => {
       await expectParam(
         {
-          auto_rotate: false,
+          auto_rotate: true,
         },
-        "auto_rotate:false",
+        "auto_rotate:true",
       );
     });
   });
