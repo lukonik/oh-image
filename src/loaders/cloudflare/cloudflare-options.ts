@@ -13,7 +13,6 @@ export type CloudflareTransforms = BaseLoaderTransforms &
     compression: "fast";
     contrast: number;
     dpr: number;
-    dprs: number[];
     flip: "h" | "v" | "hv";
     fit: "scale-down" | "contain" | "cover" | "crop" | "pad" | "squeeze";
     format: "auto" | "avif" | "webp" | "jpeg" | "baseline-jpeg";
