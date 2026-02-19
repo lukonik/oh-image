@@ -82,7 +82,7 @@ interface BlurDetectionsOptions {
 
 interface DrawDetectionsOptions {
   draw: boolean;
-  class_names: string[];
+  class_names?: string[];
 }
 
 interface WatermarkOptions {
@@ -443,6 +443,12 @@ export type ImgproxyTransforms = BaseLoaderTransforms &
     preset: string[];
 
     dpi: number;
+
+    duotone: {
+      intensity?: number;
+      color1?: string;
+      color2?: string;
+    };
   }>;
 
 export type ImgproxyOptions = BaseLoaderOptions<ImgproxyTransforms>;

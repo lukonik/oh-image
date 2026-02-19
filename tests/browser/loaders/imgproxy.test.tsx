@@ -191,6 +191,120 @@ describe("imgproxy", () => {
           );
         });
       });
+
+      describe("DPR", () => {
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              dpr: 2,
+            },
+            "dpr:2",
+          );
+        });
+      });
+
+      describe("Draw Detection", () => {
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              draw_detections: {
+                draw: true,
+                class_names: ["foo", "bar"],
+              },
+            },
+            "draw_detections:true:foo:bar",
+          );
+        });
+
+        it("Applies Empty Modifier", async () => {
+          await expectParam(
+            {
+              draw_detections: {
+                draw: true,
+              },
+            },
+            "draw_detections:true:",
+          );
+        });
+      });
+
+      describe("Duotone", () => {
+        it("Applies default modifier", async () => {
+          await expectParam(
+            {
+              duotone: {},
+            },
+            "duotone:::",
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              duotone: {
+                intensity: 0.7,
+                color1: "ff0000",
+                color2: "00ff00",
+              },
+            },
+            "duotone:0.7:ff0000:00ff00",
+          );
+        });
+
+        it("Applies Modifier with partial intensity", async () => {
+          await expectParam(
+            {
+              duotone: {
+                intensity: 1.0,
+                color2: "ffffff",
+              },
+            },
+            "duotone:1::ffffff",
+          );
+        });
+      });
+
+      describe("Enforce Thumbnail", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              enforce_thumbnail: true,
+            },
+            "enforce_thumbnail",
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              enforce_thumbnail: true,
+            },
+            "enforce_thumbnail:true",
+          );
+        });
+      });
+
+      describe("Enlarge", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              enlarge: true,
+            },
+            "enlarge",
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              enlarge: true,
+            },
+            "enlarge:true",
+          );
+        });
+      });
     });
   });
 });

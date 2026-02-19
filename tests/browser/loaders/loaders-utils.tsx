@@ -6,7 +6,7 @@ export function expectLoaderToPassParamFactory<T>(
   hook: (transform: BaseLoaderOptions<T>) => any,
   paramSeparator: string,
 ) {
-  return async (transform: T, checkValue: string) => {
+  return async (transform: T, checkValue: string, includesParam?: boolean) => {
     const { result } = await renderHook(() =>
       hook({
         transforms: transform,
@@ -17,7 +17,11 @@ export function expectLoaderToPassParamFactory<T>(
       src: "test",
     });
 
-    expect(url).includes(`${paramSeparator}${checkValue}${paramSeparator}`);
+    const expectedValue = includesParam
+      ? checkValue
+      : `${paramSeparator}${checkValue}${paramSeparator}`;
+
+    expect(url).includes(expectedValue);
     return url;
   };
 }

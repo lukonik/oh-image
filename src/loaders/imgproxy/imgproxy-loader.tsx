@@ -23,6 +23,9 @@ export const {
     optionSeparator: ":",
     paramSeparator: "/",
     orders: {
+      duotone: {
+        orders: ["intensity", "color1", "color2"],
+      },
       resize: {
         orders: ["resizing_type", "width", "height", "enlarge", "extend"],
       },
