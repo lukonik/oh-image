@@ -36,6 +36,10 @@
       "types": "./dist/imgproxy.d.ts",
       "default": "./dist/imgproxy.js"
     },
+    "./kontent": {
+      "types": "./dist/kontent.d.ts",
+      "default": "./dist/kontent.js"
+    },
     "./client": {
       "types": "./dist/client.d.ts"
     }
