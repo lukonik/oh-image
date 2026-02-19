@@ -5,188 +5,201 @@ description: Import and use optimized images directly with the oh-image Vite plu
 
 import { Tabs, TabItem } from "@astrojs/starlight/components";
 
-The `oh-image` Vite plugin handles all the image optimization for the library. It takes your image imports, processes them using [Sharp](https://sharp.pixelplumbing.com/), and creates optimized files ready for the web.
+The `oh-image` Vite plugin handles static image optimization for the library. It intercepts your image imports, processes them using [Sharp](https://sharp.pixelplumbing.com/), and generates optimized assets ready for the web.
 
-## Overview
+## Integration
 
-Unlike standard Vite image handling which returns a simple URL string, the `oh-image` plugin transforms your image imports into rich data objects. This allows for:
+To integrate the `oh-image` plugin into your project, add it to the `plugins` array in your `vite.config.ts`.
 
-- **Automatic Format Conversion**: Convert images to modern formats like WebP or AVIF.
-- **Responsive Images**: Automatically generate `srcSet` for different screen sizes.
-- **Lazy Loading Placeholders**: Create blurred low-quality placeholders (LQIP) for smooth loading experiences.
-- **On-the-fly Processing**: Resize, crop, rotate, and adjust images directly via import parameters.
+```ts
+import { ohImage } from "@lonik/oh-image/plugin";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [ohImage()],
+});
+```
 
 ## Usage
 
-Using the plugin involves two main steps: configuration in Vite and importing images in your code.
+The `oh-image` plugin does not automatically process every image in your project; it is an opt-in behavior.
+To instruct the plugin to process an image, append the `$oh` query parameter to your import statement:
 
-### 1. Vite Configuration
+```tsx
+import SomeImage from "./assets/photo.jpg?$oh";
+```
 
-Add the `ohImage` plugin to your `vite.config.ts`:
+### Important Caveat
+
+**Note:** The plugin can only process images located within your project's source directory (e.g., `src/assets/`, `src/images/`).
+
+Images placed in the `public/` folder are served as-is by Vite and bypass the build process, meaning `oh-image` cannot optimize them. Move any images you wish to optimize into your `src/` folder.
+
+## How it Works
+
+When the plugin encounters an image import with the `?$oh` query, it optimizes the image, generates necessary metadata (like dimensions and a placeholder), and wraps it in an `<Image />` component.
+
+The imported entity is a regular Image component that can be used directly in your application:
+
+```tsx
+import SomeImage from "./assets/photo.jpg?$oh";
+
+function App() {
+  return <SomeImage />;
+}
+```
+
+Since `SomeImage` is a Image component, you can pass any standard `Image` props to it, in addition to the ones pre-configured by the plugin.
+
+The plugin automatically sets the following properties for you:
+
+- `width`
+- `height`
+- `src`
+- `srcSet`
+- `placeholder`
+
+Because the image is static, the plugin can pre-calculate these values during the build process.
+
+## Configuration
+
+The plugin can be configured globally in your Vite config or locally via query parameters.
+
+### Local Configuration
+
+You can override processing options on a per-import basis by adding additional query parameters.
+
+```tsx
+// Convert to AVIF and apply a blur
+import SomeImage from "./assets/photo.jpg?blur=50&format=avif&$oh";
+
+function App() {
+  return <SomeImage />;
+}
+```
+
+### Global Configuration
+
+You can configure the plugin in `vite.config.ts` to apply global defaults.
 
 ```ts
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
 import { ohImage } from "@lonik/oh-image/plugin";
+import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [
     ohImage({
-      // Global configuration (optional)
-      format: "webp",
-      placeholder: true,
+      // Default output format
+      format: "avif",
+      placeholder: false,
+      breakpoints: [640, 768, 1024],
     }),
-    react(),
   ],
 });
 ```
 
-### 2. Importing Images
+## Processing Options
 
-To trigger the plugin, simply append `?oh` to your image import path:
+These options can be passed globally or as query parameters.
 
-```ts
-import myImage from "./assets/photo.jpg?oh";
-```
+| Option        | Type       | Description                                       |
+| :------------ | :--------- | :------------------------------------------------ |
+| `blur`        | `number`   | Blur the image with the specified sigma.          |
+| `flip`        | `boolean`  | Flip the image vertically.                        |
+| `flop`        | `boolean`  | Flop the image horizontally.                      |
+| `rotate`      | `number`   | Rotate the image by the specified angle.          |
+| `sharpen`     | `number`   | Sharpen the image with the specified sigma.       |
+| `median`      | `number`   | Apply a median filter with the specified size.    |
+| `gamma`       | `number`   | Apply gamma correction.                           |
+| `negate`      | `boolean`  | Negate the image colors.                          |
+| `normalize`   | `boolean`  | Normalize the image contrast.                     |
+| `threshold`   | `number`   | Apply a threshold with the specified value.       |
+| `placeholder` | `boolean`  | Generate a blurred placeholder? (`true`/`false`). |
+| `breakpoints` | `number[]` | Comma-separated list of widths for `srcSet`.      |
 
-You can also pass query parameters to customize the output for a specific image:
+For more details on image operations, refer to the [Sharp documentation](https://sharp.pixelplumbing.com/api-operation).
 
-```ts
-// Convert to AVIF and resize to 800px width
-import hero from "./assets/hero.jpg?oh&format=avif&width=800";
-```
+### Global-Only Options
 
-## Using Imported Images
+In addition to the processing options, the global configuration accepts:
 
-When you import an image with `?oh`, the plugin returns a **ready-to-use React component**. This component wraps the underlying `<Image />` primitive and automatically supplies all the optimized properties (src, srcSet, placeholder, dimensions).
+| Option    | Type     | Default     | Description                                                           |
+| :-------- | :------- | :---------- | :-------------------------------------------------------------------- |
+| `distDir` | `string` | `oh-images` | The subdirectory within your build output where images will be saved. |
 
-You **do not** pass this import to the `Image` component. You render it directly.
+### Default Configuration
 
-```tsx
-// 1. Import the component (Component name usually starts with Uppercase)
-import MyImage from "./assets/photo.jpg?oh";
+By default, the plugin uses the following settings:
 
-export function App() {
-  // 2. Render it directly
-  return <MyImage alt="My Photo" />;
-}
-```
+- `distDir`: `"oh-images"`
+- `breakpoints`: `[16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920]`
+- `format`: `"webp"`
+- `placeholder`: `true`
 
-The component accepts all standard `<Image />` props (like `className`, `style`, `onClick`, `priority`, etc.), which will be passed down to the internal image element.
+## Passing Parameters via Query String
 
-```tsx
-<MyImage 
-  alt="Hero Background" 
-  className="hero-img" 
-  priority={true} 
-/>
-```
+You can pass various data types as query parameters in your imports:
 
-## Public Folder Restriction
+### String
 
-**Important:** The plugin can only process images located within your project's source directory (e.g., `src/assets/`, `src/images/`).
-
-Images placed in the `public/` folder are served as-is by Vite and bypass the build process, meaning `oh-image` cannot optimize them. Move any images you wish to optimize into your `src/` folder.
-
-## Import Options
-
-You can configure image processing on a per-file basis using query parameters. Append these to the import URL after `?oh`.
-
-### Basic Options
-
-| Option        | Type       | Description                                                                 |
-| :------------ | :--------- | :-------------------------------------------------------------------------- |
-| `width`       | `number`   | Resize image to this width (maintains aspect ratio if height is omitted).   |
-| `height`      | `number`   | Resize image to this height (maintains aspect ratio if width is omitted).   |
-| `format`      | `string`   | Output format (`webp`, `avif`, `png`, `jpg`). Overrides global setting.     |
-| `placeholder` | `boolean`  | Generate a blurred placeholder? (`true`/`false`). Overrides global setting. |
-| `breakpoints` | `number[]` | Comma-separated list of widths for `srcSet`. Overrides global setting.      |
-
-### Transformation Options
-
-The plugin exposes many powerful [Sharp](https://sharp.pixelplumbing.com/api-operation) operations directly:
-
-| Option      | Type      | Description                                    |
-| :---------- | :-------- | :--------------------------------------------- |
-| `blur`      | `number`  | Blur the image with the specified sigma.       |
-| `flip`      | `boolean` | Flip the image vertically.                     |
-| `flop`      | `boolean` | Flop the image horizontally.                   |
-| `rotate`    | `number`  | Rotate the image by the specified angle.       |
-| `sharpen`   | `number`  | Sharpen the image with the specified sigma.    |
-| `median`    | `number`  | Apply a median filter with the specified size. |
-| `gamma`     | `number`  | Apply gamma correction.                        |
-| `negate`    | `boolean` | Negate the image colors.                       |
-| `normalize` | `boolean` | Normalize the image contrast.                  |
-| `threshold` | `number`  | Apply a threshold with the specified value.    |
-
-### Examples
+Pass the value directly.
 
 ```ts
-// Resize to 500x500 and flip vertically
-import Avatar from "./avatar.png?oh&width=500&height=500&flip=true";
-
-// Apply a blur effect
-import Background from "./bg.jpg?oh&blur=10";
-
-// Disable placeholder for a specific icon
-import Icon from "./icon.png?oh&placeholder=false";
+import image from "./assets/image.png?format=png&$oh";
 ```
 
-### Resetting Global Defaults
+### Number
 
-You can explicitly unset a global option by passing it without a value:
+Pass a numeric value.
 
 ```ts
-// Use original format instead of global default (e.g. WebP)
-import Original from "./photo.jpg?oh&format";
+import image from "./assets/image.png?blur=50&$oh";
 ```
 
-## Global Configuration
+### Array
 
-You can set default behavior for all images in your `vite.config.ts`.
+Pass comma-separated values.
 
 ```ts
-ohImage({
-  // Default output format
-  format: "webp",
-
-  // Enable/disable placeholders globally
-  placeholder: true,
-
-  // Default breakpoints for responsive images
-  breakpoints: [640, 768, 1024, 1280, 1536],
-
-  // Output directory for build assets
-  distDir: "oh-images",
-});
+import image from "./assets/image.png?breakpoints=16,32,64,128&$oh";
 ```
 
-### Global Options Reference
+To pass an empty array (e.g., to disable breakpoints), pass the key without a value:
 
-| Option        | Type       | Default                                                   | Description                                                   |
-| :------------ | :--------- | :-------------------------------------------------------- | :------------------------------------------------------------ |
-| `format`      | `string`   | `"webp"`                                                  | Default output format.                                        |
-| `placeholder` | `boolean`  | `true`                                                    | Generate placeholders by default.                             |
-| `breakpoints` | `number[]` | `[16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920]` | Default widths for `srcSet` generation.                       |
-| `distDir`     | `string`   | `"oh-images"`                                             | Folder name inside `dist/assets/` where images will be saved. |
+```ts
+import image from "./assets/image.png?breakpoints&$oh";
+```
 
-## Build vs Dev Mode
+### Boolean
+
+Pass `true` or `false`.
+
+```ts
+import image from "./assets/image.png?placeholder=true&$oh";
+```
+
+```ts
+import image from "./assets/image.png?placeholder=false&$oh";
+```
+
+### Unset a Value
+
+To unset a default option (effectively setting it to `undefined` or `null`), pass the key name only.
+
+```ts
+// Prevent Sharp from changing the format (uses original)
+import image from "./assets/image.png?format&$oh";
+```
+
+## Build vs. Dev Mode
 
 The plugin operates differently depending on your environment to balance speed and performance.
 
 ### Development (Lazy Processing)
 
 In development, images are processed **lazily**.
-
-1.  When you import an image, the plugin returns a URL pointing to a virtual dev server path.
-2.  Processing (resizing, conversion) only happens when the browser actually requests that image.
-3.  The result is cached in `node_modules/.cache` to speed up subsequent reloads.
+Images are only processed when requested by the browser and are cached in the Vite cache directory. This ensures fast startup times.
 
 ### Production Build (Eager Processing)
 
-During `vite build`, images are processed **eagerly**.
-
-1.  The plugin scans your code for all `?oh` imports.
-2.  It processes all images and their generated variants (breakpoints, placeholders) in parallel.
-3.  Optimized files are written to the output directory (`dist/`).
-4.  Import paths are rewritten to point to these optimized assets.
+During the build process, the plugin **eagerly** optimizes all imported images with `$oh` query parameter. It automatically generates the main image, responsive variants (`srcSet`), and placeholders based on your configuration.
