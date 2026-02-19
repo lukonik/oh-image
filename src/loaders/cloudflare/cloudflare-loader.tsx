@@ -22,6 +22,9 @@ export const {
     optionSeparator: "=",
     paramSeparator: ",",
     passBooleanValue: true,
+    customResolver: {
+      trim: (key, value) => `${key}=${value.join(";")}`,
+    },
   },
   ({ path, params, imageOptions }) =>
     `${path}/cdn-cgi/image/${params}/${imageOptions.src}`,

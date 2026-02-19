@@ -1,4 +1,5 @@
 import {
+    createAnyDescribeTest,
     createBooleanDescribeTest,
     createNumberDescribeTest,
     createStringDescribeTest,
@@ -30,6 +31,12 @@ describe("cloudflare", () => {
     optionSeparator,
   );
 
+  let anyDescribe = createAnyDescribeTest<CloudflareTransforms>(
+    (options) => useCloudflareLoader(options),
+    paramSeparator,
+    optionSeparator,
+  );
+
   booleanDescribe("anim");
   stringDescribe("background", "black");
   numberDescribe("blur", 120);
@@ -48,4 +55,10 @@ describe("cloudflare", () => {
   stringDescribe("quality", "medium-high");
   numberDescribe("quality", 50);
   numberDescribe("rotate", 180);
+  numberDescribe("saturation", 10);
+  stringDescribe("segment", "foreground");
+  numberDescribe("sharpen", 500);
+  numberDescribe("slow-connection-quality", 50);
+  numberDescribe("zoom", 100);
+  anyDescribe("trim", [24, 27, 16, 14], "24;27;16;14");
 });

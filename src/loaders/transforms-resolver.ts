@@ -12,7 +12,7 @@ export function resolveTransforms(
 
 const stringifyOptions = (
   opCode: string,
-  values: Array<string | number | boolean | undefined>,
+  values: any[],
   separator: string,
 ): string => {
   return [

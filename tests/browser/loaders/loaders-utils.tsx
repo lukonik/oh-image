@@ -114,7 +114,6 @@ export function createNumberDescribeTest<T>(
   };
 }
 
-
 export function createStringDescribeTest<T>(
   hook: (transform: BaseLoaderOptions<T>) => any,
   paramSeparator: string,
@@ -139,6 +138,41 @@ export function createStringDescribeTest<T>(
         const checker = expectLoaderToPassParamFactory(hook, paramSeparator);
         const resolvedValue = value;
         const expectedValue = `${key as string}${optionsSeparator}${resolvedValue}`;
+        checker(
+          {
+            [key as keyof T]: resolvedValue,
+          } as any,
+          expectedValue,
+        );
+      });
+    });
+  };
+}
+
+export function createAnyDescribeTest<T>(
+  hook: (transform: BaseLoaderOptions<T>) => any,
+  paramSeparator: string,
+  optionsSeparator: string,
+) {
+  return <K extends keyof T>(key: K, value: T[K], checkAgainst: string) => {
+    describe(key.toString(), () => {
+      it("Uses Proper Identifier", async () => {
+        const checker = expectLoaderToPassParamFactory(hook, paramSeparator);
+        const resolvedValue = value;
+        const expectedValue = `${key as string}${optionsSeparator}${checkAgainst}`;
+        checker(
+          {
+            [key as keyof T]: value,
+          } as any,
+          expectedValue,
+          true,
+        );
+      });
+
+      it("Applies Modifier", async () => {
+        const checker = expectLoaderToPassParamFactory(hook, paramSeparator);
+        const resolvedValue = value;
+        const expectedValue = `${key as string}${optionsSeparator}${checkAgainst}`;
         checker(
           {
             [key as keyof T]: resolvedValue,
