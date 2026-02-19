@@ -462,6 +462,11 @@ export type ImgproxyTransforms = BaseLoaderTransforms &
       type: HashSumTypes;
       hashsum: string;
     };
+
+    monochrome: {
+      intensity: number;
+      color?: string;
+    };
   }>;
 
 export type ImgproxyOptions = BaseLoaderOptions<ImgproxyTransforms>;

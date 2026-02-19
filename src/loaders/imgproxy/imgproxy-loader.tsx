@@ -40,6 +40,9 @@ export const {
       gradient: {
         orders: ["opacity", "color", "direction", "start", "stop"],
       },
+      monochrome: {
+        orders: ["intensity", "color"],
+      },
       extend_aspect_ratio: {
         orders: ["extend", "gravity"],
         childrenOrders: {

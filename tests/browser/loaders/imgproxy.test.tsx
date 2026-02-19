@@ -542,6 +542,43 @@ describe("imgproxy", () => {
         });
       });
 
+      describe("Monochrome", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              monochrome: {
+                intensity: 0,
+              },
+            },
+            `monochrome`,
+            true,
+          );
+        });
+
+        it("Applies Modifier Without Color", async () => {
+          await expectParam(
+            {
+              monochrome: {
+                intensity: 0.3,
+              },
+            },
+            `monochrome:0.3:`,
+          );
+        });
+
+        it("Applies Modifier With Color", async () => {
+          await expectParam(
+            {
+              monochrome: {
+                intensity: 0.3,
+                color: "ff0000",
+              },
+            },
+            `monochrome:0.3:ff0000`,
+          );
+        });
+      });
+
       describe("Gravity", () => {
         it("Uses Proper Identifier", async () => {
           await expectParam(
@@ -645,6 +682,90 @@ describe("imgproxy", () => {
               },
             },
             `jpeg_options:true:true:true:true:true:2`,
+          );
+        });
+      });
+
+      describe("Keep Copyright", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              keep_copyright: true,
+            },
+            `keep_copyright`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              keep_copyright: true,
+            },
+            `keep_copyright:true`,
+          );
+        });
+      });
+
+      describe("Max Bytes", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              max_bytes: 150,
+            },
+            `max_bytes`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              max_bytes: 250,
+            },
+            `max_bytes:250`,
+          );
+        });
+      });
+
+      describe("Min Height", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              "min-height": 500,
+            },
+            `min-height`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              "min-height": 500,
+            },
+            `min-height:500`,
+          );
+        });
+      });
+
+      describe("Min Width", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              "min-width": 147,
+            },
+            `min-width`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              "min-width": 148,
+            },
+            `min-width:148`,
           );
         });
       });
