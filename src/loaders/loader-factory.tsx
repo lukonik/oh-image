@@ -49,20 +49,25 @@ export default function loaderFactory<
       const optionTransforms = imageOptions.isPlaceholder
         ? options?.placeholder
         : options?.transforms;
-      const transforms = {
-        ...defaultTransform,
-        ...optionTransforms,
-      } as K;
+
       const params: string[] = [];
+      const sizes: Record<string, number> = {};
+
       if (imageOptions.width) {
         const widthKey = config.widthKey ?? "width";
-        params.push(widthKey + config.optionSeparator + imageOptions.width);
+        sizes[widthKey] = imageOptions.width;
       }
 
       if (imageOptions.height) {
         const heightKey = config.heightKey ?? "height";
-        params.push(heightKey + config.optionSeparator + imageOptions.height);
+        sizes[heightKey] = imageOptions.height;
       }
+
+      const transforms = {
+        ...sizes,
+        ...defaultTransform,
+        ...optionTransforms,
+      } as K;
 
       const resolvedTransforms = resolveTransform<K>(transforms, config);
 

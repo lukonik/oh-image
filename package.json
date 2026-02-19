@@ -40,6 +40,10 @@
       "types": "./dist/kontent.d.ts",
       "default": "./dist/kontent.js"
     },
+     "./contentful": {
+      "types": "./dist/contentful.d.ts",
+      "default": "./dist/contentful.js"
+    },
     "./client": {
       "types": "./dist/client.d.ts"
     }
