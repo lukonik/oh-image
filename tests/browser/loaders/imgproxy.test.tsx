@@ -435,6 +435,219 @@ describe("imgproxy", () => {
           );
         });
       });
+
+      describe("Filename", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              filename: "foo.png",
+            },
+            `filename`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              filename: "foo.png",
+            },
+            `filename:foo.png`,
+          );
+        });
+      });
+
+      describe("Format Quality", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              format_quality: {},
+            },
+            `format_quality`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              format_quality: {
+                png: 10,
+                jpeg: 14,
+              },
+            },
+            `format_quality:png:10:jpeg:14`,
+          );
+        });
+      });
+
+      describe("Format", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              format: "png",
+            },
+            `format`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              format: "png",
+            },
+            `format:png`,
+          );
+        });
+      });
+
+      describe("Gradient", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              gradient: {
+                opacity: 1,
+              },
+            },
+            `gradient`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              gradient: {
+                opacity: 1,
+                direction: "up",
+                color: "ff0000",
+                start: 1.3,
+                stop: 1.6,
+              },
+            },
+            `gradient:1:ff0000:up:1.3:1.6`,
+          );
+        });
+
+        it("Applies default values", async () => {
+          await expectParam(
+            {
+              gradient: {
+                opacity: 1,
+              },
+            },
+            `gradient:1::::`,
+          );
+        });
+      });
+
+      describe("Gravity", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              gravity: {
+                type: "no",
+              },
+            },
+            `gravity`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              gravity: {
+                type: "nowe",
+                x_offset: 12,
+                y_offset: 34,
+              },
+            },
+            `gravity:nowe:12:34`,
+          );
+        });
+
+        it("Omits offsets if not specified", async () => {
+          await expectParam(
+            {
+              gravity: {
+                type: "nowe",
+              },
+            },
+            `gravity:nowe::`,
+          );
+        });
+      });
+
+      describe("hashsum", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              hashsum: {
+                hashsum: "abc",
+                type: "md5",
+              },
+            },
+            `hashsum`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              hashsum: {
+                hashsum: "abc",
+                type: "sha256",
+              },
+            },
+            `hashsum:sha256:abc`,
+          );
+        });
+
+        it("Applies Defaults", async () => {
+          await expectParam(
+            {
+              hashsum: {
+                hashsum: "abc",
+                type: "none",
+              },
+            },
+            `hashsum:none:abc`,
+          );
+        });
+      });
+
+      describe("JPEG Options", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              jpeg_options: {
+                quant_table: 2,
+              },
+            },
+            `jpeg_options`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              jpeg_options: {
+                progressive: true,
+                no_subsample: true,
+                trellis_quant: true,
+                overshoot_deringing: true,
+                optimize_scans: true,
+                quant_table: 2,
+              },
+            },
+            `jpeg_options:true:true:true:true:true:2`,
+          );
+        });
+      });
     });
   });
 });

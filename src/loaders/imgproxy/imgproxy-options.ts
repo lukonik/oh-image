@@ -17,6 +17,8 @@ type GravityType =
   | "sowe"
   | "ce";
 
+type HashSumTypes = "none" | "md5" | "sha1" | "sha256" | "sha512";
+
 interface ResizeOptions {
   resizing_type?: ResizeType;
   width?: number;
@@ -202,10 +204,6 @@ export type ImgproxyTransforms = BaseLoaderTransforms &
      */
     extend: boolean | ExtendOptions;
 
-    /**
-     * When imgproxy needs to cut some parts of the image, it is guided by the gravity option.
-     * Default: ce:0:0
-     */
     gravity: GravityOptions;
 
     crop: CropOptions;
@@ -450,6 +448,19 @@ export type ImgproxyTransforms = BaseLoaderTransforms &
     extend_aspect_ratio: {
       extend: boolean;
       gravity?: GravityOptions;
+    };
+
+    gradient: {
+      opacity: number;
+      color?: string;
+      direction?: string;
+      start?: number;
+      stop?: number;
+    };
+
+    hashsum: {
+      type: HashSumTypes;
+      hashsum: string;
     };
   }>;
 

@@ -22,9 +22,23 @@ export const {
     passBooleanValue: true,
     optionSeparator: ":",
     paramSeparator: "/",
+    customResolver: {
+      format_quality: (key, value) => {
+        const values = Object.entries(value)
+          .flatMap((entry) => entry)
+          .join(":");
+        return `${key}:${values}`;
+      },
+    },
     orders: {
+      hashsum: {
+        orders: ["type", "hashsum"],
+      },
       duotone: {
         orders: ["intensity", "color1", "color2"],
+      },
+      gradient: {
+        orders: ["opacity", "color", "direction", "start", "stop"],
       },
       extend_aspect_ratio: {
         orders: ["extend", "gravity"],
