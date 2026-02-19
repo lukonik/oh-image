@@ -28,7 +28,7 @@ export type KontentTransforms = Partial<{
   /** * Select a sub-region of the source image to use for processing.
    * Expected format: "x,y,width,height"
    */
-  rect?: string;
+  rect?: [number, number, number, number];
 
   /** * Focal point crop: Choose the point of interest (x, y coordinates and zoom).
    * fp-x and fp-y are typically 0.0 to 1.0.

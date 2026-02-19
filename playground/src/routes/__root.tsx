@@ -4,6 +4,7 @@ import { CloudflareLoaderProvider } from "@lonik/oh-image/cloudflare";
 import { ImgproxyLoaderProvider } from "@lonik/oh-image/imgproxy";
 
 import { CloudinaryLoaderProvider } from "@lonik/oh-image/cloudinary";
+import { KontentLoaderProvider } from "@lonik/oh-image/kontent";
 export const Route = createRootRoute({
   component: RootComponent,
 });
@@ -27,57 +28,66 @@ function RootComponent() {
   };
 
   return (
-    <CloudinaryLoaderProvider path="https://res.cloudinary.com/dovmucqi8">
-      <CloudflareLoaderProvider path="http://cloudflare.com">
-        <ImgproxyLoaderProvider path="http://localhost:8080/insecure">
-          <div className="container mx-auto pt-20 flex justify-center">
-            <div>
-              <header>
-                <nav className="flex items-center gap-4 mb-20">
-                  <Link
-                    to="/image"
-                    style={buttonStyle}
-                    activeProps={{ style: activeButtonStyle }}
-                  >
-                    Image Component
-                  </Link>
-                  <Link
-                    to="/cloudflare"
-                    style={buttonStyle}
-                    activeProps={{ style: activeButtonStyle }}
-                  >
-                    Cloudflare Loader
-                  </Link>
-                  <Link
-                    to="/cloudinary"
-                    style={buttonStyle}
-                    activeProps={{ style: activeButtonStyle }}
-                  >
-                    Cloudinary Loader
-                  </Link>
-                  <Link
-                    to="/imgproxy"
-                    style={buttonStyle}
-                    activeProps={{ style: activeButtonStyle }}
-                  >
-                    Imgproxy Loader
-                  </Link>
-                  <Link
-                    to="/vite-image"
-                    style={buttonStyle}
-                    activeProps={{ style: activeButtonStyle }}
-                  >
-                    Vite Image
-                  </Link>
-                </nav>
-              </header>
-              <main>
-                <Outlet />
-              </main>
+    <KontentLoaderProvider path="http://kontent.ai">
+      <CloudinaryLoaderProvider path="https://res.cloudinary.com/dovmucqi8">
+        <CloudflareLoaderProvider path="http://cloudflare.com">
+          <ImgproxyLoaderProvider path="http://localhost:8080/insecure">
+            <div className="container mx-auto pt-20 flex justify-center">
+              <div>
+                <header>
+                  <nav className="flex items-center gap-4 mb-20">
+                    <Link
+                      to="/image"
+                      style={buttonStyle}
+                      activeProps={{ style: activeButtonStyle }}
+                    >
+                      Image Component
+                    </Link>
+                    <Link
+                      to="/cloudflare"
+                      style={buttonStyle}
+                      activeProps={{ style: activeButtonStyle }}
+                    >
+                      Cloudflare Loader
+                    </Link>
+                    <Link
+                      to="/cloudinary"
+                      style={buttonStyle}
+                      activeProps={{ style: activeButtonStyle }}
+                    >
+                      Cloudinary Loader
+                    </Link>
+                    <Link
+                      to="/imgproxy"
+                      style={buttonStyle}
+                      activeProps={{ style: activeButtonStyle }}
+                    >
+                      Imgproxy Loader
+                    </Link>
+                    <Link
+                      to="/vite-image"
+                      style={buttonStyle}
+                      activeProps={{ style: activeButtonStyle }}
+                    >
+                      Vite Image
+                    </Link>
+                    <Link
+                      to="/kontent"
+                      style={buttonStyle}
+                      activeProps={{ style: activeButtonStyle }}
+                    >
+                      Kontent
+                    </Link>
+                  </nav>
+                </header>
+                <main>
+                  <Outlet />
+                </main>
+              </div>
             </div>
-          </div>
-        </ImgproxyLoaderProvider>
-      </CloudflareLoaderProvider>
-    </CloudinaryLoaderProvider>
+          </ImgproxyLoaderProvider>
+        </CloudflareLoaderProvider>
+      </CloudinaryLoaderProvider>
+    </KontentLoaderProvider>
   );
 }

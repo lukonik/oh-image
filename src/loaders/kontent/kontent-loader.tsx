@@ -22,6 +22,9 @@ export const {
     optionSeparator: "=",
     paramSeparator: "&",
     passBooleanValue: true,
+    customResolver: {
+      rect: (key, value: number[]) => `${key}=${value.join(",")}`,
+    },
   },
   ({ path, params, imageOptions }) => `${path}/${imageOptions.src}?${params}`,
 );
