@@ -180,7 +180,7 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
           return `
                import { __imageFactory } from "@lonik/oh-image/react";
 
-           export default __imageFactory(${JSON.stringify({ width: src.width, height: src.height, src: src.src, srcSet: src.srcSet, placeholder: src.placeholder, alt: "" })})
+           export default __imageFactory(${JSON.stringify({ width: src.width, height: src.height, src: src.src, srcSet: src.srcSet, placeholder: src.placeholder })})
 `;
         } catch (err) {
           console.error(`Couldn't load image with id: ${id} error:${err}`);
