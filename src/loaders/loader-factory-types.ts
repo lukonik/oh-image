@@ -32,4 +32,15 @@ export type LoaderUrlResolved = (options: {
   path: string;
 }) => string;
 
-export type LoaderOrders = Record<string, string[]>;
+export type LoaderOrders = Record<
+  string,
+  {
+    orders: string[];
+    childrenOrders?: Record<
+      string,
+      {
+        orders: string[];
+      }
+    >;
+  }
+>;

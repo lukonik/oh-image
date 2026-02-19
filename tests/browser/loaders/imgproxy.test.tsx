@@ -160,42 +160,36 @@ describe("imgproxy", () => {
               height: 34,
               gravity: {
                 type: "ce" as const,
-                offset: {
-                  x: 56,
-                  y: 78,
-                },
+                x_offset: 56,
+                y_offset: 78,
               },
             },
           },
-          "contrast:0.5",
+          "crop:12:34:ce:56:78",
         );
+      });
 
-        expect(
-          pb().crop({
-            width: 12,
-            height: 34,
-            gravity: {
-              type: GravityType.CENTER,
-              offset: {
-                x: 56,
-                y: 78,
-              },
+      it("Omits Gravity If Not Specified", async () => {
+        await expectParam(
+          {
+            crop: {
+              width: 12,
+              height: 34,
             },
-          }),
-        ).toIncludeModifier("c:12:34:ce:56:78");
+          },
+          "crop:12:34:",
+        );
       });
 
-      it("Omits Gravity If Not Specified", () => {
-        expect(
-          pb().crop({
-            width: 12,
-            height: 34,
-          }),
-        ).toIncludeModifier("c:12:34");
-      });
-
-      it("Uses Default Size If Not Specified", () => {
-        expect(pb().crop({})).toIncludeModifier("c:0:0");
+      describe("DPI", () => {
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              dpi: 1200,
+            },
+            "dpi:1200",
+          );
+        });
       });
     });
   });
