@@ -1,4 +1,4 @@
-export const cloudinary = {
+export const kontent = {
   slug: "kontent",
   name: "Kontent",
   title: "Kontent Loader",
