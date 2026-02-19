@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
   type CloudinaryTransforms,
-  useCloudinaryLoader
+  useCloudinaryLoader,
 } from "@lonik/oh-image/cloudinary";
 import { Image } from "@lonik/oh-image/react";
 import { useState } from "react";

@@ -9,6 +9,7 @@ export default defineConfig({
     cloudflare: "src/loaders/cloudflare/index.ts",
     cloudinary: "src/loaders/cloudinary/index.ts",
     imgproxy: "src/loaders/imgproxy/index.ts",
+    kontent: "src/loaders/kontent/index.ts",
   },
   dts: true,
   external: [
