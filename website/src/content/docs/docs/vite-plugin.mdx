@@ -5,41 +5,41 @@ description: Import and use optimized images directly with the oh-image Vite plu
 
 import { Tabs, TabItem } from "@astrojs/starlight/components";
 
-The `oh-image` Vite plugin handles all the static image optimization for the library. It takes your image imports, processes them using [Sharp](https://sharp.pixelplumbing.com/), and creates optimized files ready for the web.
+The `oh-image` Vite plugin handles static image optimization for the library. It intercepts your image imports, processes them using [Sharp](https://sharp.pixelplumbing.com/), and generates optimized assets ready for the web.
 
 ## Integration
 
-to integrate `oh-image` plugin to your project, add `ohImage` plugin to the `vite.config.ts` plugins array
+To integrate the `oh-image` plugin into your project, add it to the `plugins` array in your `vite.config.ts`.
 
 ```ts
 import { ohImage } from "@lonik/oh-image/plugin";
+import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [ohImage()],
 });
 ```
 
-## Identify images
+## Usage
 
-`oh-image` plugin doesn't automatically processes any image you import to your project. it is an opt-in behavior.
-To command the plugin to process the image you have to add `$oh` query param to your import statement, like this
+The `oh-image` plugin does not automatically process every image in your project; it is an opt-in behavior.
+To instruct the plugin to process an image, append the `$oh` query parameter to your import statement:
 
 ```tsx
 import SomeImage from "./assets/photo.jpg?$oh";
 ```
 
-## Important caveat
+### Important Caveat
 
-**Important:** The plugin can only process images located within your project's source directory (e.g., `src/assets/`, `src/images/`).
+**Note:** The plugin can only process images located within your project's source directory (e.g., `src/assets/`, `src/images/`).
 
 Images placed in the `public/` folder are served as-is by Vite and bypass the build process, meaning `oh-image` cannot optimize them. Move any images you wish to optimize into your `src/` folder.
 
-## How it works
+## How it Works
 
-Whenever plugin gets the url of the image,
-it reads the image optimizes it wraps it in `Image` component and returns it. the returned entity can
-is a regular React component and can be used in React App.
-For example, like this
+When the plugin encounters an image import with the `?$oh` query, it optimizes the image, generates necessary metadata (like dimensions and a placeholder), and wraps it in an `<Image />` component.
+
+The imported entity is a regular Image component that can be used directly in your application:
 
 ```tsx
 import SomeImage from "./assets/photo.jpg?$oh";
@@ -49,31 +49,28 @@ function App() {
 }
 ```
 
-`SomeImage` is a regular component, then import name can be anything would you like it's just a name.
+Since `SomeImage` is a Image component, you can pass any standard `Image` props to it, in addition to the ones pre-configured by the plugin.
 
-more on that you can use any props on SomeImage component besides the preconfigured ones that was preconfigures
-by the plugin.
+The plugin automatically sets the following properties for you:
 
-Plugin sets the following properties automatically
+- `width`
+- `height`
+- `src`
+- `srcSet`
+- `placeholder`
 
-- width
-- height
-- src
-- srcSet
-- placeholder
-
-because this is static image plugin can know lot's of the things about image in advance and do it for you.
+Because the image is static, the plugin can pre-calculate these values during the build process.
 
 ## Configuration
 
-Plugin can be configured in two different ways, local and global configuration
+The plugin can be configured globally in your Vite config or locally via query parameters.
 
 ### Local Configuration
 
-you can pass and overides processing options per import level, via adding additional query parameters.
+You can override processing options on a per-import basis by adding additional query parameters.
 
 ```tsx
-// format to avif and blur the image
+// Convert to AVIF and apply a blur
 import SomeImage from "./assets/photo.jpg?blur=50&format=avif&$oh";
 
 function App() {
@@ -81,14 +78,13 @@ function App() {
 }
 ```
 
-you can find all the options below
-
 ### Global Configuration
 
-you can also configure plugin in `vite.config.ts` to apply global level configuration
+You can configure the plugin in `vite.config.ts` to apply global defaults.
 
 ```ts
 import { ohImage } from "@lonik/oh-image/plugin";
+import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [
@@ -96,13 +92,15 @@ export default defineConfig({
       // Default output format
       format: "avif",
       placeholder: false,
-      breakpoints: [640, 768, 1024, 1],
+      breakpoints: [640, 768, 1024],
     }),
   ],
 });
 ```
 
 ## Processing Options
+
+These options can be passed globally or as query parameters.
 
 | Option        | Type       | Description                                       |
 | :------------ | :--------- | :------------------------------------------------ |
@@ -119,92 +117,89 @@ export default defineConfig({
 | `placeholder` | `boolean`  | Generate a blurred placeholder? (`true`/`false`). |
 | `breakpoints` | `number[]` | Comma-separated list of widths for `srcSet`.      |
 
-Check more details on [Sharp](https://sharp.pixelplumbing.com/api-operation)
+For more details on image operations, refer to the [Sharp documentation](https://sharp.pixelplumbing.com/api-operation).
 
-### Global Options
+### Global-Only Options
 
-everything in Processing Options plus
-| Option | Type | Description |
-| :---------- | :-------- | :--------------------------------------------- |
-| `distDir` | `string` | assets sub directory name where processed images will be output during build |
+In addition to the processing options, the global configuration accepts:
 
-### Global Defaults
+| Option    | Type     | Default     | Description                                                           |
+| :-------- | :------- | :---------- | :-------------------------------------------------------------------- |
+| `distDir` | `string` | `oh-images` | The subdirectory within your build output where images will be saved. |
 
-by default plugin has following options:
+### Default Configuration
 
-- distDir: "oh-images"
-- breakpoints: [16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920]
-- format: "web
-- placeholder: true,
+By default, the plugin uses the following settings:
 
-## Passing Parameters as query parameters
+- `distDir`: `"oh-images"`
+- `breakpoints`: `[16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920]`
+- `format`: `"webp"`
+- `placeholder`: `true`
 
-there are different types that you can pass parameters to vite plugin:
+## Passing Parameters via Query String
 
-### string
+You can pass various data types as query parameters in your imports:
 
-no quotes required just pass it as a constant example:
+### String
 
-```ts
-import image from "@lonik/oh-image?format=png&$oh
-```
-
-### number
-
-pass value
+Pass the value directly.
 
 ```ts
-import image from "@lonik/oh-image?blur=50&$oh
+import image from "./assets/image.png?format=png&$oh";
 ```
 
-### array
+### Number
 
-pass comma separated values
+Pass a numeric value.
 
 ```ts
-import image from "@lonik/oh-image?breakpoints=16,32,64,128&$oh
+import image from "./assets/image.png?blur=50&$oh";
 ```
 
-if you want to pass an empty array for example to disable default configuration, pass only keyname
+### Array
+
+Pass comma-separated values.
 
 ```ts
-import image from "@lonik/oh-image?breakpoints8&$oh
+import image from "./assets/image.png?breakpoints=16,32,64,128&$oh";
 ```
 
-### boolean
-
-pass boolean value
+To pass an empty array (e.g., to disable breakpoints), pass the key without a value:
 
 ```ts
-import image from "@lonik/oh-image?placeholder=true&$oh
+import image from "./assets/image.png?breakpoints&$oh";
+```
+
+### Boolean
+
+Pass `true` or `false`.
+
+```ts
+import image from "./assets/image.png?placeholder=true&$oh";
 ```
 
 ```ts
-import image from "@lonik/oh-image?placeholder=false&$oh
+import image from "./assets/image.png?placeholder=false&$oh";
 ```
 
-### Unset any value
+### Unset a Value
 
-if you want to undo any value, for example nullify default option, pass the key name only
+To unset a default option (effectively setting it to `undefined` or `null`), pass the key name only.
 
 ```ts
-// sharp won't format the image anymore
-import image from "@lonik/oh-image?format&$oh 
+// Prevent Sharp from changing the format (uses original)
+import image from "./assets/image.png?format&$oh";
 ```
 
-## Build vs Dev Mode
+## Build vs. Dev Mode
 
 The plugin operates differently depending on your environment to balance speed and performance.
 
 ### Development (Lazy Processing)
 
 In development, images are processed **lazily**.
-
-Images are only processed on request and cached in vite cache directory. So you get great performance out of the box
-
+Images are only processed when requested by the browser and are cached in the Vite cache directory. This ensures fast startup times.
 
 ### Production Build (Eager Processing)
 
-During build the plugin optimized imported images suffix with `$oh` and automatically generates 
-placeholder ans srcSet images based on configuration. Also image URLs are properly configured 
-so the app will properly fetch images from static folder
+During the build process, the plugin **eagerly** optimizes all imported images with `$oh` query parameter. It automatically generates the main image, responsive variants (`srcSet`), and placeholders based on your configuration.
