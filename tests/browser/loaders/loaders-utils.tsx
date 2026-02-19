@@ -84,7 +84,7 @@ export function createNumberDescribeTest<T>(
   paramSeparator: string,
   optionsSeparator: string,
 ) {
-  return (key: keyof T, value: number) => {
+  return <K extends keyof T>(key: K, value: T[K]) => {
     describe(key.toString(), () => {
       it("Uses Proper Identifier", async () => {
         const checker = expectLoaderToPassParamFactory(hook, paramSeparator);
@@ -120,7 +120,7 @@ export function createStringDescribeTest<T>(
   paramSeparator: string,
   optionsSeparator: string,
 ) {
-  return (key: keyof T, value: string) => {
+  return <K extends keyof T>(key: K, value: T[K]) => {
     describe(key.toString(), () => {
       it("Uses Proper Identifier", async () => {
         const checker = expectLoaderToPassParamFactory(hook, paramSeparator);

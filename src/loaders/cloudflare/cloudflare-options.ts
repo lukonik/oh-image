@@ -10,12 +10,13 @@ export type CloudflareTransforms = BaseLoaderTransforms &
     background?: string;
     blur?: number;
     brightness?: number;
-    compression?: boolean;
+    compression?: "fast";
     contrast?: number;
     dpr?: number;
     dprs?: number[];
-    fit?: "scale-down" | "contain" | "cover" | "crop" | "pad";
-    format?: "auto" | "avif" | "webp" | "json";
+    flip?: "h" | "v" | "hv";
+    fit?: "scale-down" | "contain" | "cover" | "crop" | "pad" | "squeeze";
+    format?: "auto" | "avif" | "webp" | "jpeg" | "baseline-jpeg";
     gamma?: number;
     gravity?: "auto" | "left" | "right" | "top" | "bottom" | string;
     height?: number;
@@ -23,10 +24,11 @@ export type CloudflareTransforms = BaseLoaderTransforms &
     widths?: number[];
     maxWidth?: number;
     metadata?: "keep" | "copyright" | "none";
-    quality?: number;
+    quality?: number | "high" | "medium-high" | "medium-low" | "low";
     rotate?: number;
     sharpen?: number;
     trim?: string;
+    onerror: "redirect";
   }>;
 
 export type CloudflareOptions = BaseLoaderOptions<CloudflareTransforms>;

@@ -35,4 +35,17 @@ describe("cloudflare", () => {
   numberDescribe("blur", 120);
   numberDescribe("brightness", 77);
   stringDescribe("compression", "fast");
+  numberDescribe("contrast", 55);
+  numberDescribe("dpr", 1);
+  stringDescribe("fit", "scale-down");
+  stringDescribe("flip", "h");
+  stringDescribe("format", "baseline-jpeg");
+  numberDescribe("gamma", 5);
+  stringDescribe("gravity", "top");
+  numberDescribe("height", 120);
+  stringDescribe("metadata", "copyright");
+  stringDescribe("onerror", "redirect");
+  stringDescribe("quality", "medium-high");
+  numberDescribe("quality", 50);
+  numberDescribe("rotate", 180);
 });
