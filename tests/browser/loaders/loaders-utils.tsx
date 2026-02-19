@@ -31,12 +31,24 @@ export function expectLoaderToPassParamFactory<T>(
 
     const singleParamValue = includesParam ? checkValue : `/${checkValue}/`;
 
-    if (
-      !url.includes(expectedValue) &&
-      !url.includes(startValue) &&
-      !url.includes(endValue) &&
-      !url.includes(singleParamValue)
-    ) {
+    let passed =
+      url.includes(expectedValue) ||
+      url.includes(startValue) ||
+      url.includes(endValue) ||
+      url.includes(singleParamValue);
+
+    if (!passed && !includesParam && paramSeparator === "&") {
+      const queryStart = `?${checkValue}${paramSeparator}`;
+      const queryEnd = `${paramSeparator}${checkValue}`;
+      const querySingle = `?${checkValue}`;
+
+      passed =
+        url.includes(queryStart) ||
+        url.endsWith(queryEnd) ||
+        url.endsWith(querySingle);
+    }
+
+    if (!passed) {
       expect.fail(`Expected: ${url} to contain: ${checkValue}`);
     }
     return url;

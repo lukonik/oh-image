@@ -45,7 +45,7 @@ describe("Kontent", () => {
   numberDescribe("fp-y", 0.5);
   numberDescribe("fp-z", 30);
   stringDescribe("smart", "edges");
-  stringDescribe("bg", "#fff");
+  stringDescribe("bg", "fff");
   stringDescribe("fm", "webp");
   numberDescribe("q", 50);
   booleanDescribe("lossless");
