@@ -1083,6 +1083,256 @@ describe("imgproxy", () => {
           );
         });
       });
+
+      describe("Strip Metadata", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              strip_metadata: true,
+            },
+            `strip_metadata`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              strip_metadata: true,
+            },
+            `strip_metadata:true`,
+          );
+        });
+      });
+
+      describe("Style", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              style: "",
+            },
+            `style`,
+            true,
+          );
+        });
+
+        it("Applies Modifier (String)", async () => {
+          await expectParam(
+            {
+              style: "foo,bar",
+            },
+            `style:${encodeURIComponent("foo,bar")}`,
+          );
+          // expect(pb().style("foobar")).toIncludeModifier(
+          //   "st:" + base64urlEncode(utf8encode("foobar")),
+          // );
+        });
+      });
+
+      describe("Trim", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              trim: {
+                threshold: 12,
+              },
+            },
+            `trim`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              trim: {
+                threshold: 12,
+                color: "123123",
+                equal_hor: true,
+                equal_ver: false,
+              },
+            },
+            `trim:12:123123:true:false`,
+          );
+        });
+      });
+
+      describe("Unsharpen Masking", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              unsharpening: {
+                mode: "always",
+              },
+            },
+            `unsharpening`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              unsharpening: {
+                mode: "sharpen",
+                weight: 12,
+                dividor: 34,
+              },
+            },
+            `unsharpening:sharpen:12:34`,
+          );
+        });
+      });
+
+      describe("Watermark Shadow", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              watermark_shadow: 0.5,
+            },
+            `watermark_shadow`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              watermark_shadow: 0.5,
+            },
+            `watermark_shadow:0.5`,
+          );
+        });
+      });
+
+      describe("Watermark Size", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              watermark_size: {
+                width: 12,
+                height: 34,
+              },
+            },
+            `watermark_size`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              watermark_size: {
+                width: 12,
+                height: 34,
+              },
+            },
+            `watermark_size:12:34`,
+          );
+        });
+      });
+
+      describe("Watermark Text", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              watermark_text: "test",
+            },
+            `watermark_text`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              watermark_text: "test",
+            },
+            `watermark_text:test`,
+          );
+        });
+      });
+
+      describe("Watermark URL", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              watermark_url: "test",
+            },
+            `watermark_url`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              watermark_url: "test",
+            },
+            `watermark_url:test`,
+          );
+        });
+      });
+
+      describe("Zoom", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              zoom: 5,
+            },
+            `zoom`,
+            true,
+          );
+        });
+
+        it("Applies Modifier (X/Y)", async () => {
+          await expectParam(
+            {
+              zoom: 12,
+            },
+            `zoom:12`,
+          );
+        });
+
+        it("Applies Modifier (X, Y)", async () => {
+          await expectParam(
+            {
+              zoom: {
+                x: 14,
+                y: 27,
+              },
+            },
+            `zoom:14:27`,
+          );
+        });
+      });
+
+      describe("Watermark", () => {
+        it("Uses Proper Identifier", async () => {
+          await expectParam(
+            {
+              watermark: {
+                opacity: 5,
+              },
+            },
+            `watermark`,
+            true,
+          );
+        });
+
+        it("Applies Modifier", async () => {
+          await expectParam(
+            {
+              watermark: {
+                opacity: 14,
+                position: "re",
+              },
+            },
+            `watermark:14:re`,
+            true,
+          );
+        });
+      });
     });
   });
 });

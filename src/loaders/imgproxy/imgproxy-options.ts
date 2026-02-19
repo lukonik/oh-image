@@ -101,7 +101,7 @@ interface WatermarkSizeOptions {
 }
 
 interface UnsharpeningOptions {
-  mode?: string;
+  mode: "auto" | "sharpen" | "none" | "always";
   weight?: number;
   dividor?: number;
 }
@@ -321,10 +321,6 @@ export type ImgproxyTransforms = BaseLoaderTransforms &
      */
     watermark_size: WatermarkSizeOptions;
 
-    /**
-     * When set, imgproxy will prepend a <style> node with the provided content to the <svg> node.
-     * Default: blank
-     */
     style: string;
 
     /**
@@ -463,6 +459,8 @@ export type ImgproxyTransforms = BaseLoaderTransforms &
     };
 
     raw: boolean;
+
+    watermark_shadow: number;
   }>;
 
 export type ImgproxyOptions = BaseLoaderOptions<ImgproxyTransforms>;
