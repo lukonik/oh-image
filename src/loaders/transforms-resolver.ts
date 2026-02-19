@@ -1,5 +1,5 @@
 import type { BaseLoaderTransforms } from "./base-loader-options";
-import type { LoaderFactoryConfig } from "./loader-factory-types";
+import type { LoaderFactoryConfig, LoaderOrders } from "./loader-factory-types";
 
 export function resolveTransforms(
   params: Record<string, string>,
@@ -17,21 +17,71 @@ const stringifyOptions = (
 ): string => {
   return [
     opCode,
-    ...values.map((v) => (v == null ? "" : encodeURIComponent(v))),
+    ...values.map((v) => {
+      if (v == null) {
+        return "";
+      }
+      if (Array.isArray(v)) {
+        return v.map((val) => encodeURIComponent(val)).join(separator);
+      }
+
+      return encodeURIComponent(v);
+    }),
   ].join(separator);
 };
 
 const resolveObjectParam = (
   key: string,
   value: Record<string, unknown>,
-  order: string[] | undefined,
+  orderConfig: LoaderOrders[string] | undefined,
   separator: string,
 ): string | undefined => {
-  if (!order) {
+  if (!orderConfig) {
     return;
   }
-  const values = order.map((k) => value[k]) as string[];
-  return stringifyOptions(key, values, separator);
+  const { orders, childrenOrders } = orderConfig;
+
+  const values = orders.map((k) => {
+    const val = value[k];
+
+    if (val === undefined || val === null) {
+      return "";
+    }
+
+    if (
+      childrenOrders &&
+      childrenOrders[k] &&
+      typeof val === "object" &&
+      !Array.isArray(val)
+    ) {
+      const childOrder = childrenOrders[k];
+      const childValues = childOrder.orders.map(
+        (childKey) => (val as Record<string, unknown>)[childKey],
+      );
+
+      return childValues
+        .map((v) => {
+          if (v == null) {
+            return "";
+          }
+          if (Array.isArray(v)) {
+            return v
+              .map((val) => encodeURIComponent(String(val)))
+              .join(separator);
+          }
+          return encodeURIComponent(String(v));
+        })
+        .join(separator);
+    }
+
+    if (Array.isArray(val)) {
+      return val.map((v) => encodeURIComponent(String(v))).join(separator);
+    }
+
+    return encodeURIComponent(String(val));
+  });
+
+  return [key, ...values].join(separator);
 };
 
 export function resolveTransform<T extends BaseLoaderTransforms>(
@@ -63,20 +113,28 @@ export function resolveTransform<T extends BaseLoaderTransforms>(
 
     switch (type) {
       case "boolean": {
-        if (value === true) {
-          params.push(key);
+        if (config.passBooleanValue) {
+          params.push(stringifyOptions(key, [value], config.optionSeparator));
+        } else {
+          if (value === true) {
+            params.push(key);
+          }
         }
         break;
       }
       case "object": {
-        const objectParams = resolveObjectParam(
-          key,
-          value,
-          config?.orders?.[key],
-          config.optionSeparator,
-        );
-        if (objectParams) {
-          params.push(objectParams);
+        if (Array.isArray(value)) {
+          params.push(stringifyOptions(key, [value], config.optionSeparator));
+        } else {
+          const objectParams = resolveObjectParam(
+            key,
+            value as Record<string, unknown>,
+            config?.orders?.[key],
+            config.optionSeparator,
+          );
+          if (objectParams) {
+            params.push(objectParams);
+          }
         }
         break;
       }

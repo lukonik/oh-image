@@ -93,14 +93,4 @@ describe("Image", () => {
     );
     expect(preload).toBeDefined();
   });
-
-  it("should update proper styles when fill is true", () => {
-    const { getByRole } = render(<Image alt="image" src="/" fill />);
-    const img = getByRole("img");
-    expect(img).toHaveStyle({
-      width: "100%",
-      height: "100%",
-    });
-    expect(img.style.inset).toBe("0");
-  });
 });

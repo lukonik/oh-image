@@ -97,9 +97,11 @@
     "vite": "^7.3.0",
     "vite-plugin-inspect": "^11.3.3",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.16",
+    "vitest-browser-react": "^2.0.5"
   },
   "dependencies": {
+    "@vitest/browser-playwright": "^4.0.18",
     "p-limit": "^7.3.0",
     "query-string": "^9.3.1"
   },

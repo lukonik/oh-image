@@ -31,8 +31,8 @@ export const {
     widthKey: "w",
     heightKey: "h",
     orders: {
-      b_auto: ["mode", "number", "direction", "color"],
-      b_gen_fill: ["prompt", "seed"],
+      b_auto: { orders: ["mode", "number", "direction", "color"] },
+      b_gen_fill: { orders: ["prompt", "seed"] },
     },
     customResolver: {
       art: customResolver,
