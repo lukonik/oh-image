@@ -19,6 +19,7 @@ export const {
     },
   },
   {
+    passBooleanValue: true,
     optionSeparator: ":",
     paramSeparator: "/",
     orders: {

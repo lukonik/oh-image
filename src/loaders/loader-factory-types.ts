@@ -11,6 +11,10 @@ export interface LoaderFactoryConfig {
   customResolver?: LoaderCustomResolver;
   widthKey?: string;
   heightKey?: string;
+  /* if true passes param value true/false instead of passing just key
+     @example: true /rotate:true/ instead of /rotate
+  */
+  passBooleanValue?: boolean; 
 }
 
 export type LoaderParamsResolver<K> = (options: {

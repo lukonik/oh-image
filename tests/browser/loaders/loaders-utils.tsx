@@ -18,5 +18,6 @@ export function expectLoaderToPassParamFactory<T>(
     });
 
     expect(url).includes(`${paramSeparator}${checkValue}${paramSeparator}`);
+    return url;
   };
 }

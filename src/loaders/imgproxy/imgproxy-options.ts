@@ -77,7 +77,7 @@ interface AdjustOptions {
 
 interface BlurDetectionsOptions {
   sigma: number;
-  class_names: string[];
+  class_names?: string[];
 }
 
 interface DrawDetectionsOptions {

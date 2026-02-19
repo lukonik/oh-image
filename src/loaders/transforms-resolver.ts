@@ -17,7 +17,16 @@ const stringifyOptions = (
 ): string => {
   return [
     opCode,
-    ...values.map((v) => (v == null ? "" : encodeURIComponent(v))),
+    ...values.map((v) => {
+      if (v == null) {
+        return "";
+      }
+      if (Array.isArray(v)) {
+        return v.map((val) => encodeURIComponent(val)).join(separator);
+      }
+
+      return encodeURIComponent(v);
+    }),
   ].join(separator);
 };
 
@@ -63,8 +72,12 @@ export function resolveTransform<T extends BaseLoaderTransforms>(
 
     switch (type) {
       case "boolean": {
-        if (value === true) {
-          params.push(key);
+        if (config.passBooleanValue) {
+          params.push(stringifyOptions(key, [value], config.optionSeparator));
+        } else {
+          if (value === true) {
+            params.push(key);
+          }
         }
         break;
       }

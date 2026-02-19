@@ -43,6 +43,9 @@ export default defineConfig({
             provider: playwright(),
             instances: [{ browser: "chromium" }],
           },
+          chaiConfig: {
+            truncateThreshold: 1000,
+          },
         },
       },
     ],
