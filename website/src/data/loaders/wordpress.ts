@@ -5,7 +5,7 @@ export const wordpress = {
   urlSchema: "<path>/<src>?<params>",
   defaults: `
   {
-    transforms: {
+   transforms: {
       format: "webp",
     },
     placeholder: {
@@ -16,34 +16,60 @@ export const wordpress = {
   `,
   link: "https://developer.wordpress.com/docs/developer-tools/site-accelerator-api/",
   interface: `{
-  /** image width in pixels */
+  /* image width in pixels */
   w: number;
 
-  /** image height in pixels */
+  /* image height in pixels */
   h: number;
 
-  /** crop mode; accepts common values such as true, false, center, top, left */
-  crop: string | boolean;
+  /* crop mode; accepts number values as percentages or, string values as pixels, example:160px */
+  crop: [number | string, number | string, number | string, number | string];
 
-  /** resize to exact dimensions, e.g. "300,200" */
-  resize: string;
+  /* resize to exact dimensions, e.g. "300,200" */
+  resize: [number, number];
 
-  /** fit image within dimensions, e.g. "300,200" */
-  fit: string;
+  /* fit image within dimensions, e.g. "300,200" */
+  fit: [number, number];
 
-  /** image quality (1-100) */
-  quality: number;
+  /* Add black letterboxing effect to images */
+  lb: [number, number];
 
-  /** output format */
-  format: "jpg" | "png" | "webp" | "avif";
+  /* Remove black letterboxing effect from images with ulb */
+  ulb: boolean;
 
-  /** strip image metadata */
-  strip: "all" | "info";
+  /* The filter parameter is used to apply one of multiple filters */
+  filter:
+    | "negate"
+    | "grayscale"
+    | "sepia"
+    | "edgedetect"
+    | "emboss"
+    | "blurgaussian"
+    | "blurselective"
+    | "meanremoval";
 
-  /** zoom multiplier */
+  /* Adjust the brightness of an image */
+  brightness: number;
+
+  /* Adjust the contrast of an image */
+  contrast: number;
+
+  /* Add color hues to an image with colorize by passing a comma separated list of red, green, and blue (RGB) */
+  colorize: [number, number, number];
+
+  /* The smooth parameter can be used to smooth out the image. */
+  smooth: number;
+
+  /*  zoom the image. */
   zoom: number;
 
-  /** enforce HTTPS in result URL */
-  ssl: 0 | 1;
+  /* the quality output of the images */
+  quality: number;
+
+  /* parameter to control whether the Image CDN may serve a lossy-compressed version of an image */
+  allow_lossy: 1;
+
+  /* strip image metadata */
+  strip: "all" | "none";
 }`,
 };
