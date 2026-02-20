@@ -31,7 +31,7 @@ export default defineConfig({
 
 ```tsx
 import { Image } from "@lonik/oh-image/react";
-import heroImg from "./hero.jpg?oh";
+import heroImg from "./hero.jpg?$oh";
 
 function App() {
   return <Image src={heroImg} alt="Hero" />;

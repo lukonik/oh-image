@@ -12,6 +12,7 @@ export default defineConfig({
     kontent: "src/loaders/kontent/index.ts",
     contentful: "src/loaders/contentful/index.ts",
     wordpress: "src/loaders/wordpress/index.ts",
+    netlify: "src/loaders/netlify/index.ts",
   },
   dts: true,
   external: [
