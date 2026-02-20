@@ -1,43 +1,37 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  type CloudinaryTransforms,
-  useCloudinaryLoader,
-} from "@lonik/oh-image/cloudinary";
+import { useCloudinaryLoader } from "@lonik/oh-image/cloudinary";
 import { Image } from "@lonik/oh-image/react";
-import { useState } from "react";
-import ControlsPanel from "../../components/controls-panel";
-import { JsonEditor } from "json-edit-react";
+import { sepia } from "@cloudinary/url-gen/actions/effect";
+
 export const Route = createFileRoute("/cloudinary/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const [transform, setTransform] = useState<CloudinaryTransforms>({
-    q: 1,
-    o: 70,
-    e_accelerate: 30,
-    e_auto_brightness: 10,
-  });
-  const loader = useCloudinaryLoader({
-    transforms: transform,
-  });
+  const loader = useCloudinaryLoader();
+  const sepiaLoader = useCloudinaryLoader((img) => img.effect(sepia()));
 
   return (
-    <div className="flex ">
-      <ControlsPanel>
-        <JsonEditor
-          data={transform}
-          setData={(data) => setTransform(data as any)}
-        />
-      </ControlsPanel>
-      <div className="flex flex-col gap-4 border-b border-gray-300">
+    <div className="flex flex-col gap-8 items-center">
+      <div className="flex flex-col gap-4 border-b border-gray-300 pb-8">
+        <h2 className="text-xl font-bold">Default Loader</h2>
         <Image
-          className="w-1/2 h-[300px]"
-          width={1920}
-          height={1080}
-          src={"cld-sample.jpg"}
-          alt="Imgproxy Example"
+          className="w-[500px]"
+          width={500}
+          src={"cld-sample"}
+          alt="Cloudinary Default"
           loader={loader}
+        />
+      </div>
+
+      <div className="flex flex-col gap-4 border-b border-gray-300 pb-8">
+        <h2 className="text-xl font-bold">Sepia Effect Loader</h2>
+        <Image
+          className="w-[500px]"
+          width={500}
+          src={"cld-sample"}
+          alt="Cloudinary Sepia"
+          loader={sepiaLoader}
         />
       </div>
     </div>

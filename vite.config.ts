@@ -11,6 +11,9 @@ import { playwright } from "@vitest/browser-playwright";
 
 export default defineConfig({
   root: "./playground",
+  optimizeDeps: {
+    include: ["@cloudinary/url-gen"],
+  },
   plugins: [
     Inspect(),
     ohImage(),

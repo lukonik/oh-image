@@ -1,43 +1,54 @@
-import { describe } from "vitest";
-import { useCloudinaryLoader } from "../../../src/loaders/cloudinary/cloudinary-loader";
-import type { CloudinaryTransforms } from "../../../src/loaders/cloudinary/cloudinary-options";
+import { describe, it, expect } from "vitest";
+import { renderHook } from "@testing-library/react";
+import { Cloudinary } from "@cloudinary/url-gen";
+import { sepia } from "@cloudinary/url-gen/actions/effect";
 import {
-    createBooleanDescribeTest,
-    createNumberDescribeTest,
-    createStringDescribeTest,
-    createAnyDescribeTest,
-} from "./loaders-utils";
+  useCloudinaryLoader,
+  CloudinaryLoaderProvider,
+} from "../../../src/loaders/cloudinary/cloudinary-loader";
 
-describe("cloudinary", () => {
-  const optionSeparator = "_";
-  const paramSeparator = ",";
-  let booleanDescribe = createBooleanDescribeTest<CloudinaryTransforms>(
-    (options) => useCloudinaryLoader(options),
-    paramSeparator,
-    optionSeparator,
-    true,
+describe("Cloudinary Loader", () => {
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName: "demo",
+    },
+  });
+
+  const wrapper = ({ children }: { children: React.ReactNode }) => (
+    <CloudinaryLoaderProvider client={cld}>
+      {children}
+    </CloudinaryLoaderProvider>
   );
 
-  let numberDescribe = createNumberDescribeTest<CloudinaryTransforms>(
-    (options) => useCloudinaryLoader(options),
-    paramSeparator,
-    optionSeparator,
-  );
+  it("generates a basic URL", () => {
+    const { result } = renderHook(() => useCloudinaryLoader(), { wrapper });
+    const loader = result.current;
 
-  let stringDescribe = createStringDescribeTest<CloudinaryTransforms>(
-    (options) => useCloudinaryLoader(options),
-    paramSeparator,
-    optionSeparator,
-  );
+    const url = loader({ src: "sample" });
+    expect(url).toContain("https://res.cloudinary.com/demo/image/upload");
+    expect(url).toContain("/sample");
+  });
 
-  let anyDescribe = createAnyDescribeTest<CloudinaryTransforms>(
-    (options) => useCloudinaryLoader(options),
-    paramSeparator,
-    optionSeparator,
-  );
+  it("applies width resize", () => {
+    const { result } = renderHook(() => useCloudinaryLoader(), { wrapper });
+    const loader = result.current;
 
-  stringDescribe("a", "vflip.50");
-  stringDescribe("ar", "10");
-  numberDescribe("ar", 20);
-  stringDescribe("b", "red");
+    const url = loader({ src: "sample", width: 100 });
+    // Check for resize action
+    // scale().width(100) -> c_scale,w_100
+    expect(url).toContain("c_scale");
+    expect(url).toContain("w_100");
+  });
+
+  it("applies custom transforms via hook options", () => {
+    const { result } = renderHook(
+      () => useCloudinaryLoader((img) => img.effect(sepia())),
+      { wrapper },
+    );
+    const loader = result.current;
+
+    const url = loader({ src: "sample" });
+    expect(url).toContain("e_sepia");
+  });
+
 });
