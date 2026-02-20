@@ -14,7 +14,9 @@ export interface LoaderFactoryConfig {
   /* if true passes param value true/false instead of passing just key
      @example: true /rotate:true/ instead of /rotate
   */
-  passBooleanValue?: boolean; 
+  passBooleanValue?: boolean;
+
+  arrayItemSeparator?: string;
 }
 
 export type LoaderParamsResolver<K> = (options: {

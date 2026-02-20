@@ -1,8 +1,7 @@
 import {
-  createAnyDescribeTest,
   createBooleanDescribeTest,
   createNumberDescribeTest,
-  createStringDescribeTest,
+  createStringDescribeTest
 } from "./loaders-utils";
 import type { KontentTransforms } from "../../../src/loaders/kontent/kontent-options";
 import { useKontentLoader } from "../../../src/loaders/kontent/kontent-loader";
@@ -25,12 +24,6 @@ describe("Kontent", () => {
   );
 
   let stringDescribe = createStringDescribeTest<KontentTransforms>(
-    (options) => useKontentLoader(options),
-    paramSeparator,
-    optionSeparator,
-  );
-
-  let anyDescribe = createAnyDescribeTest<KontentTransforms>(
     (options) => useKontentLoader(options),
     paramSeparator,
     optionSeparator,

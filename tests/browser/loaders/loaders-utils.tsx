@@ -1,6 +1,49 @@
 import { renderHook } from "vitest-browser-react";
 import type { BaseLoaderOptions } from "../../../src/loaders/base-loader-options";
 import { describe, expect, it } from "vitest";
+import type { ImageLoader } from "../../../src/react/types";
+
+type ExpectOption<T> = <K extends keyof T & string>(
+  key: K,
+  value: T[K],
+) => Promise<string | undefined>;
+
+type HookFactory<T> = ({
+  transforms,
+  path,
+}: {
+  transforms: Partial<T>;
+  path: string;
+}) => ImageLoader;
+
+export function optionExpectFactory<T extends Record<string, unknown>>(
+  hook: HookFactory<T>,
+  optionSeparator: string,
+) {
+  const expectOption: ExpectOption<T> = async (
+    key,
+    value,
+    expectedValue?: string,
+  ) => {
+    const { result } = await renderHook(() =>
+      hook({
+        transforms: { [key]: value } as unknown as Partial<T>,
+        path: "http://mock.com",
+      }),
+    );
+    // if expectedValue is not present we get the value to check
+    const resolvedExpectedValue = `${key}${optionSeparator}${expectedValue ?? value}`;
+
+    const url = result.current({
+      src: "test",
+    });
+    expect(url).includes(resolvedExpectedValue);
+
+    return url;
+  };
+
+  return expectOption;
+}
 
 export function expectLoaderToPassParamFactory<T>(
   hook: (transform: BaseLoaderOptions<T>) => any,

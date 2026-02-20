@@ -14,6 +14,7 @@ const stringifyOptions = (
   opCode: string,
   values: Array<string | number | boolean | undefined>,
   separator: string,
+  arraySeparator?: string,
 ): string => {
   return [
     opCode,
@@ -22,10 +23,12 @@ const stringifyOptions = (
         return "";
       }
       if (Array.isArray(v)) {
-        return v.map((val) => encodeURIComponent(val)).join(separator);
+        return v
+          .map((val) => (val))
+          .join(arraySeparator ?? separator);
       }
 
-      return encodeURIComponent(v);
+      return (v);
     }),
   ].join(separator);
 };
@@ -66,19 +69,19 @@ const resolveObjectParam = (
           }
           if (Array.isArray(v)) {
             return v
-              .map((val) => encodeURIComponent(String(val)))
+              .map((val) => (String(val)))
               .join(separator);
           }
-          return encodeURIComponent(String(v));
+          return (String(v));
         })
         .join(separator);
     }
 
     if (Array.isArray(val)) {
-      return val.map((v) => encodeURIComponent(String(v))).join(separator);
+      return val.map((v) => (String(v))).join(separator);
     }
 
-    return encodeURIComponent(String(val));
+    return (String(val));
   });
 
   return [key, ...values].join(separator);
@@ -124,7 +127,14 @@ export function resolveTransform<T extends BaseLoaderTransforms>(
       }
       case "object": {
         if (Array.isArray(value)) {
-          params.push(stringifyOptions(key, [value], config.optionSeparator));
+          params.push(
+            stringifyOptions(
+              key,
+              [value],
+              config.optionSeparator,
+              config.arrayItemSeparator,
+            ),
+          );
         } else {
           const objectParams = resolveObjectParam(
             key,

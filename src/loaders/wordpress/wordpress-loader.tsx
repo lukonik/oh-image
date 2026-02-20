@@ -21,6 +21,7 @@ export const {
   {
     optionSeparator: "=",
     paramSeparator: "&",
+    arrayItemSeparator: ",",
     widthKey: "w",
     heightKey: "h",
     passBooleanValue: true,

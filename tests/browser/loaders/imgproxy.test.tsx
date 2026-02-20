@@ -1,5 +1,8 @@
 import { describe, it } from "vitest";
-import { expectLoaderToPassParamFactory } from "./loaders-utils";
+import {
+  expectLoaderToPassParamFactory,
+  optionExpectFactory,
+} from "./loaders-utils";
 import { useImgproxyLoader } from "../../../src/loaders/imgproxy/imgproxy-loader";
 import type { ImgproxyTransforms } from "../../../src/loaders/imgproxy/imgproxy-options";
 import { chai } from "vitest";
@@ -8,6 +11,11 @@ describe("imgproxy", () => {
   let expectParam = expectLoaderToPassParamFactory<ImgproxyTransforms>(
     (options) => useImgproxyLoader(options),
     "/",
+  );
+
+  let optionExpect = optionExpectFactory<ImgproxyTransforms>(
+    (options) => useImgproxyLoader(options),
+    ":",
   );
 
   describe("Adjust", () => {
@@ -1117,12 +1125,13 @@ describe("imgproxy", () => {
         });
 
         it("Applies Modifier (String)", async () => {
-          await expectParam(
-            {
-              style: "foo,bar",
-            },
-            `style:${encodeURIComponent("foo,bar")}`,
-          );
+          const result = await optionExpect("style", "foo,bar");
+          // await expectParam(
+          //   {
+          //     style: "foo,bar",
+          //   },
+          //   `style:${encodeURIComponent("foo,bar")}`,
+          // );
           // expect(pb().style("foobar")).toIncludeModifier(
           //   "st:" + base64urlEncode(utf8encode("foobar")),
           // );
