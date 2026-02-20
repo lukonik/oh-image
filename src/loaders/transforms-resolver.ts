@@ -1,15 +1,6 @@
 import type { BaseLoaderTransforms } from "./base-loader-options";
 import type { LoaderFactoryConfig, LoaderOrders } from "./loader-factory-types";
 
-export function resolveTransforms(
-  params: Record<string, string>,
-  separator: string,
-): string[] {
-  return Object.entries(params).map(
-    ([key, value]) => `${key}${separator}${value}`,
-  );
-}
-
 const stringifyOptions = (
   opCode: string,
   values: Array<string | number | boolean | undefined>,
@@ -24,11 +15,11 @@ const stringifyOptions = (
       }
       if (Array.isArray(v)) {
         return v
-          .map((val) => (val))
+          .map((val) => encodeURIComponent(val))
           .join(arraySeparator ?? separator);
       }
 
-      return (v);
+      return v;
     }),
   ].join(separator);
 };
@@ -69,19 +60,19 @@ const resolveObjectParam = (
           }
           if (Array.isArray(v)) {
             return v
-              .map((val) => (String(val)))
+              .map((val) => encodeURIComponent(String(val)))
               .join(separator);
           }
-          return (String(v));
+          return String(v);
         })
         .join(separator);
     }
 
     if (Array.isArray(val)) {
-      return val.map((v) => (String(v))).join(separator);
+      return val.map((v) => encodeURIComponent(String(v))).join(separator);
     }
 
-    return (String(val));
+    return String(val);
   });
 
   return [key, ...values].join(separator);

@@ -71,8 +71,8 @@ export default function loaderFactory<
 
       const resolvedTransforms = resolveTransform<K>(transforms, config);
 
-      const resolvedParams = encodeURI(
-        [...params, ...resolvedTransforms].join(config.paramSeparator),
+      const resolvedParams = [...params, ...resolvedTransforms].join(
+        config.paramSeparator,
       );
 
       return urlResolver({

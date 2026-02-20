@@ -32,7 +32,9 @@ export function optionExpectFactory<T extends Record<string, unknown>>(
       }),
     );
     // if expectedValue is not present we get the value to check
-    const resolvedExpectedValue = `${key}${optionSeparator}${expectedValue ?? value}`;
+    const resolvedExpectedValue = encodeURI(
+      `${key}${optionSeparator}${expectedValue ?? value}`,
+    );
 
     const url = result.current({
       src: "test",
@@ -60,19 +62,21 @@ export function expectLoaderToPassParamFactory<T>(
       src: "test",
     });
 
+    let encodedExpectedValue = encodeURIComponent(checkValue);
+
     const expectedValue = includesParam
       ? checkValue
-      : `${paramSeparator}${checkValue}${paramSeparator}`;
+      : `${paramSeparator}${encodedExpectedValue}${paramSeparator}`;
 
     const startValue = includesParam
-      ? checkValue
-      : `/${checkValue}${paramSeparator}`;
+      ? encodedExpectedValue
+      : `/${encodedExpectedValue}${paramSeparator}`;
 
     const endValue = includesParam
-      ? checkValue
-      : `${paramSeparator}${checkValue}/`;
+      ? encodedExpectedValue
+      : `${paramSeparator}${encodedExpectedValue}/`;
 
-    const singleParamValue = includesParam ? checkValue : `/${checkValue}/`;
+    const singleParamValue = includesParam ? encodedExpectedValue : `/${encodedExpectedValue}/`;
 
     let passed =
       url.includes(expectedValue) ||
@@ -81,9 +85,9 @@ export function expectLoaderToPassParamFactory<T>(
       url.includes(singleParamValue);
 
     if (!passed && !includesParam && paramSeparator === "&") {
-      const queryStart = `?${checkValue}${paramSeparator}`;
-      const queryEnd = `${paramSeparator}${checkValue}`;
-      const querySingle = `?${checkValue}`;
+      const queryStart = `?${encodedExpectedValue}${paramSeparator}`;
+      const queryEnd = `${paramSeparator}${encodedExpectedValue}`;
+      const querySingle = `?${encodedExpectedValue}`;
 
       passed =
         url.includes(queryStart) ||
