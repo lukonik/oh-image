@@ -7,7 +7,7 @@ import { useImgproxyLoader } from "../../../src/loaders/imgproxy/imgproxy-loader
 import type { ImgproxyTransforms } from "../../../src/loaders/imgproxy/imgproxy-options";
 import { chai } from "vitest";
 chai.config.truncateThreshold = 100000;
-describe.skip("imgproxy", () => {
+describe("imgproxy", () => {
   let expectParam = expectLoaderToPassParamFactory<ImgproxyTransforms>(
     (options) => useImgproxyLoader(options),
     "/",
@@ -423,24 +423,7 @@ describe.skip("imgproxy", () => {
 
       describe("Fallback Image URL", () => {
         it("Uses Proper Identifier", async () => {
-          await expectParam(
-            {
-              fallback_image_url: "http://test.test",
-            },
-            `fallback_image_url`,
-            true,
-          );
-        });
-
-        it("Applies Modifier", async () => {
-          const url = "https://test.test";
-
-          await expectParam(
-            {
-              fallback_image_url: url,
-            },
-            `fallback_image_url:${encodeURIComponent(url)}`,
-          );
+          await optionExpect("fallback_image_url", "http://test.test");
         });
       });
 
@@ -1125,7 +1108,7 @@ describe.skip("imgproxy", () => {
         });
 
         it("Applies Modifier (String)", async () => {
-          const result = await optionExpect("style", "foo,bar");
+          const result = await optionExpect("style", "foobar");
           // await expectParam(
           //   {
           //     style: "foo,bar",

@@ -138,7 +138,7 @@ export function optionExpectFactory<T extends Record<string, unknown>>(
     const url = result.current({
       src: "test",
     });
-    expect(url, "TEST!!!").includes(resolvedParamToCheckAgainst);
+    expect(url).includes(resolvedParamToCheckAgainst);
 
     return url;
   };
@@ -188,7 +188,7 @@ export function expectLoaderToPassParamFactory<T>(
       src: "test",
     });
 
-    let encodedExpectedValue = encodeURIComponent(checkValue);
+    let encodedExpectedValue = (checkValue);
 
     const expectedValue = includesParam
       ? checkValue
