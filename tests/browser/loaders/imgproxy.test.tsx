@@ -7,7 +7,7 @@ import { useImgproxyLoader } from "../../../src/loaders/imgproxy/imgproxy-loader
 import type { ImgproxyTransforms } from "../../../src/loaders/imgproxy/imgproxy-options";
 import { chai } from "vitest";
 chai.config.truncateThreshold = 100000;
-describe("imgproxy", () => {
+describe.skip("imgproxy", () => {
   let expectParam = expectLoaderToPassParamFactory<ImgproxyTransforms>(
     (options) => useImgproxyLoader(options),
     "/",

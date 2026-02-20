@@ -1,15 +1,15 @@
 import { describe } from "vitest";
 import {
-    createImageOptionsDescribeTest,
-    createNumberDescribeTest,
-    createStringDescribeTest,
+  describeImageOptions,
+  createNumberDescribeTest,
+  createStringDescribeTest,
 } from "./loaders-utils";
 import { useContentfulLoader } from "../../../src/loaders/contentful/contentful-loader";
 import type { ContentfulTransforms } from "../../../src/loaders/contentful/contentful-options";
 describe("Contentful", () => {
   const optionSeparator = "=";
   const paramSeparator = "&";
-  createImageOptionsDescribeTest(
+  describeImageOptions(
     () =>
       useContentfulLoader({
         path: "http://contentful.com",

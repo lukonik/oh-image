@@ -3,9 +3,92 @@ import type { BaseLoaderOptions } from "../../../src/loaders/base-loader-options
 import { describe, expect, it } from "vitest";
 import type { ImageLoader } from "../../../src/react/types";
 
+export function describeBooleanOption<T>(
+  hook: (transform: BaseLoaderOptions<T>) => any,
+  optionSeparator: string,
+  passBooleanValue: boolean,
+) {
+  describe("Boolean Option", () => {
+    it("should correctly pass boolean value", async () => {
+      const { result } = await renderHook(() =>
+        hook({
+          path: "http://mock.com",
+          transforms: {
+            foo: true,
+          } as any,
+        }),
+      );
+
+      const url = result.current({
+        src: "test.png",
+      });
+
+      if (passBooleanValue) {
+        expect(url).includes("foo" + optionSeparator + "true");
+      } else {
+        expect(url).includes("foo").and.not.includes("true");
+      }
+    });
+  });
+}
+
+export function describeImageOptions<T>(
+  hook: (transform: BaseLoaderOptions<T>) => any,
+  wKey: string,
+  hKey: string,
+  optionSeparator: string,
+) {
+  describe("ImageOptions", () => {
+    it("src should be passed", async () => {
+      const { result } = await renderHook(() =>
+        hook({
+          path: "http://mock.com",
+        }),
+      );
+
+      const url = result.current({
+        src: "test.png",
+      });
+
+      expect(url).includes("test.png");
+    });
+
+    it("should pass the width", async () => {
+      const { result } = await renderHook(() =>
+        hook({
+          path: "http://mock.com",
+        }),
+      );
+
+      const url = result.current({
+        src: "test.png",
+        width: 600,
+      });
+
+      expect(url).includes(`${wKey}${optionSeparator}${600}`);
+    });
+
+    it("should pass the width", async () => {
+      const { result } = await renderHook(() =>
+        hook({
+          path: "http://mock.com",
+        }),
+      );
+
+      const url = result.current({
+        src: "test.png",
+        height: 900,
+      });
+
+      expect(url).includes(`${hKey}${optionSeparator}${900}`);
+    });
+  });
+}
+
 type ExpectOption<T> = <K extends keyof T & string>(
   key: K,
   value: T[K],
+  expectedValue?: string,
 ) => Promise<string | undefined>;
 
 type HookFactory<T> = ({
@@ -19,6 +102,7 @@ type HookFactory<T> = ({
 export function optionExpectFactory<T extends Record<string, unknown>>(
   hook: HookFactory<T>,
   optionSeparator: string,
+  arraySeparator?: string,
 ) {
   const expectOption: ExpectOption<T> = async (
     key,
@@ -32,19 +116,61 @@ export function optionExpectFactory<T extends Record<string, unknown>>(
       }),
     );
     // if expectedValue is not present we get the value to check
-    const resolvedExpectedValue = encodeURI(
-      `${key}${optionSeparator}${expectedValue ?? value}`,
-    );
 
+    let valueToCheckAgainst = value as string;
+    if (expectedValue) {
+      valueToCheckAgainst = expectedValue;
+    }
+    if (Array.isArray(valueToCheckAgainst)) {
+      if (!arraySeparator) {
+        throw new Error(
+          `got array with key: ${key}, value:${value} with no array separator`,
+        );
+      }
+      valueToCheckAgainst = valueToCheckAgainst
+        .map(encodeURIComponent)
+        .join(arraySeparator);
+    } else {
+      valueToCheckAgainst = encodeURIComponent(valueToCheckAgainst);
+    }
+
+    const resolvedParamToCheckAgainst = `${key}${optionSeparator}${valueToCheckAgainst}`;
     const url = result.current({
       src: "test",
     });
-    expect(url).includes(resolvedExpectedValue);
+    expect(url, "TEST!!!").includes(resolvedParamToCheckAgainst);
 
     return url;
   };
 
   return expectOption;
+}
+
+export function describeOptionFactory<T extends Record<string, unknown>>(
+  hook: HookFactory<T>,
+  optionSeparator: string,
+  arraySeparator?: string,
+) {
+  const describeExpect: ExpectOption<T> = (
+    key,
+    value,
+    expectedValue?: string,
+  ) => {
+    describe(key, () => {
+      it("applies modifiers", async () => {
+        const optionExpect = optionExpectFactory<T>(
+          hook,
+          optionSeparator,
+          arraySeparator,
+        );
+
+        await optionExpect(key, value, expectedValue);
+      });
+    });
+
+    return Promise.resolve("");
+  };
+  return describeExpect;
 }
 
 export function expectLoaderToPassParamFactory<T>(
@@ -76,28 +202,32 @@ export function expectLoaderToPassParamFactory<T>(
       ? encodedExpectedValue
       : `${paramSeparator}${encodedExpectedValue}/`;
 
-    const singleParamValue = includesParam ? encodedExpectedValue : `/${encodedExpectedValue}/`;
+    const singleParamValue = includesParam
+      ? encodedExpectedValue
+      : `/${encodedExpectedValue}/`;
 
-    let passed =
-      url.includes(expectedValue) ||
-      url.includes(startValue) ||
-      url.includes(endValue) ||
-      url.includes(singleParamValue);
+    expect(url).includes(checkValue);
 
-    if (!passed && !includesParam && paramSeparator === "&") {
-      const queryStart = `?${encodedExpectedValue}${paramSeparator}`;
-      const queryEnd = `${paramSeparator}${encodedExpectedValue}`;
-      const querySingle = `?${encodedExpectedValue}`;
+    // let passed =
+    //   url.includes(expectedValue) ||
+    //   url.includes(startValue) ||
+    //   url.includes(endValue) ||
+    //   url.includes(singleParamValue);
 
-      passed =
-        url.includes(queryStart) ||
-        url.endsWith(queryEnd) ||
-        url.endsWith(querySingle);
-    }
+    // if (!passed && !includesParam && paramSeparator === "&") {
+    //   const queryStart = `?${encodedExpectedValue}${paramSeparator}`;
+    //   const queryEnd = `${paramSeparator}${encodedExpectedValue}`;
+    //   const querySingle = `?${encodedExpectedValue}`;
 
-    if (!passed) {
-      expect.fail(`Expected: ${url} to contain: ${checkValue}`);
-    }
+    //   passed =
+    //     url.includes(queryStart) ||
+    //     url.endsWith(queryEnd) ||
+    //     url.endsWith(querySingle);
+    // }
+
+    // if (!passed) {
+    //   expect.fail(`Expected: ${url} to contain: ${checkValue}`);
+    // }
     return url;
   };
 }
@@ -241,57 +371,4 @@ export function createAnyDescribeTest<T>(
       });
     });
   };
-}
-
-export function createImageOptionsDescribeTest<T>(
-  hook: (transform: BaseLoaderOptions<T>) => any,
-  wKey: string,
-  hKey: string,
-  optionSeparator: string,
-) {
-  describe("ImageOptions", () => {
-    it("src should be passed", async () => {
-      const { result } = await renderHook(() =>
-        hook({
-          path: "http://mock.com",
-        }),
-      );
-
-      const url = result.current({
-        src: "test.png",
-      });
-
-      expect(url).includes("test.png");
-    });
-
-    it("should pass the width", async () => {
-      const { result } = await renderHook(() =>
-        hook({
-          path: "http://mock.com",
-        }),
-      );
-
-      const url = result.current({
-        src: "test.png",
-        width: 600,
-      });
-
-      expect(url).includes(`${wKey}${optionSeparator}${600}`);
-    });
-
-    it("should pass the width", async () => {
-      const { result } = await renderHook(() =>
-        hook({
-          path: "http://mock.com",
-        }),
-      );
-
-      const url = result.current({
-        src: "test.png",
-        height: 900,
-      });
-
-      expect(url).includes(`${hKey}${optionSeparator}${900}`);
-    });
-  });
 }

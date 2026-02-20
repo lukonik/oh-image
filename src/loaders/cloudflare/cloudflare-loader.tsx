@@ -23,6 +23,8 @@ export const {
     paramSeparator: ",",
     passBooleanValue: true,
     arrayItemSeparator: ";",
+    widthKey: "width",
+    heightKey: "height",
   },
   ({ path, params, imageOptions }) =>
     `${path}/cdn-cgi/image/${params}/${imageOptions.src}`,

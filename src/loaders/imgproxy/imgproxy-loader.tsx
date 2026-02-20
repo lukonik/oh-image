@@ -19,6 +19,8 @@ export const {
     },
   },
   {
+    widthKey: "width",
+    heightKey: "height",
     passBooleanValue: true,
     optionSeparator: ":",
     paramSeparator: "/",
