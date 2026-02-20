@@ -1,5 +1,9 @@
 import queryString from "query-string";
-import type { ImageTransforms } from "./types";
+import type {
+  ImageQueryParamsTransforms,
+  ImageTransforms,
+  PlaceholderTransforms,
+} from "./types";
 
 /**
  * Strips query string from path to get the clean file path
@@ -9,18 +13,25 @@ export function stripQueryString(path: string): string {
   return queryIndex === -1 ? path : path.slice(0, queryIndex);
 }
 
+type QueryOptionsReturn =
+  | {
+      shouldProcess: false;
+    }
+  | {
+      shouldProcess: true;
+      path: string;
+      queryString: string;
+      transforms: ImageTransforms;
+      placeholder: PlaceholderTransforms;
+    };
+
 export function queryToOptions(
   processKey: string,
   uri: string,
-): {
-  shouldProcess: boolean;
-  path: string;
-  options?: Partial<ImageTransforms>;
-  queryString: string;
-} {
+): QueryOptionsReturn {
   const [path, query] = uri.split("?");
   if (!query || !path) {
-    return { shouldProcess: false, path: "", queryString: "" };
+    return { shouldProcess: false };
   }
   const parsed = queryString.parse(query, {
     parseBooleans: true,
@@ -43,20 +54,52 @@ export function queryToOptions(
       normalize: "boolean",
       threshold: "number",
       quality: "number",
+
+      ph_width: "number",
+      ph_height: "number",
+      ph_format: "string",
+      ph_blur: "number",
+      ph_flip: "boolean",
+      ph_flop: "boolean",
+      ph_rotate: "number",
+      ph_sharpen: "number",
+      ph_median: "number",
+      ph_gamma: "number",
+      ph_negate: "boolean",
+      ph_normalize: "boolean",
+      ph_threshold: "number",
+      ph_quality: "number",
     } satisfies Record<
-      keyof Required<ImageTransforms>,
+      keyof Required<ImageQueryParamsTransforms>,
       "boolean" | "number" | "string" | "string[]" | "number[]"
     >,
-  });
+  }) as unknown as ImageQueryParamsTransforms;
 
   if (processKey in parsed) {
+    const transforms: ImageTransforms = {};
+    const placeholder: PlaceholderTransforms = {};
+
+    // Filter and split keys
+    Object.entries(parsed).forEach(([key, value]) => {
+      if (key.startsWith("ph_")) {
+        // Remove 'ph_' prefix and add to placeholder object
+        const cleanKey = key.replace("ph_", "") as keyof PlaceholderTransforms;
+        placeholder[cleanKey] = value;
+      } else {
+        // Add standard keys to transforms object
+        const transformKey = key as keyof ImageTransforms;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (transforms as any)[transformKey] = value;
+      }
+    });
     return {
       shouldProcess: true,
-      options: parsed,
+      transforms: transforms,
+      placeholder: placeholder,
       path: path,
       queryString: query,
     };
   } else {
-    return { shouldProcess: false, path: "", queryString: query };
+    return { shouldProcess: false };
   }
 }

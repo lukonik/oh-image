@@ -89,13 +89,17 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
 
           const hash = await getFileHash(origin, parsed.queryString);
 
-          const mergedOptions = {
-            ...config,
-            ...parsed.options,
+          const transformOptions = {
+            ...config.transforms,
+            ...parsed.transforms,
+          };
+          const placeholderTransforms = {
+            ...config.placeholder,
+            ...parsed.placeholder,
           };
 
           const format =
-            mergedOptions.format ?? (ext.slice(1) as keyof FormatEnum);
+            transformOptions.format ?? (ext.slice(1) as keyof FormatEnum);
           const identifier = createImageIdentifier(name, hash, {
             isBuild,
             devDir: DEV_DIR,
@@ -105,21 +109,21 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
 
           const mainIdentifier = identifier.main(format);
           imageEntries.createMainEntry(mainIdentifier, {
-            width: mergedOptions.width,
-            height: mergedOptions.height,
-            format: mergedOptions.format,
+            width: transformOptions.width,
+            height: transformOptions.height,
+            format: transformOptions.format,
             origin: origin,
-            blur: mergedOptions.blur,
-            flip: mergedOptions.flip,
-            flop: mergedOptions.flop,
-            rotate: mergedOptions.rotate,
-            sharpen: mergedOptions.sharpen,
-            median: mergedOptions.median,
-            gamma: mergedOptions.gamma,
-            negate: mergedOptions.negate,
-            normalize: mergedOptions.normalize,
-            threshold: mergedOptions.threshold,
-            quality: mergedOptions.quality,
+            blur: transformOptions.blur,
+            flip: transformOptions.flip,
+            flop: transformOptions.flop,
+            rotate: transformOptions.rotate,
+            sharpen: transformOptions.sharpen,
+            median: transformOptions.median,
+            gamma: transformOptions.gamma,
+            negate: transformOptions.negate,
+            normalize: transformOptions.normalize,
+            threshold: transformOptions.threshold,
+            quality: transformOptions.quality,
           });
 
           const src: ImageSrc = {
@@ -130,7 +134,7 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
           };
 
           // if placeholder is specified as placeholder as well
-          if (mergedOptions.placeholder) {
+          if (transformOptions.placeholder) {
             const placeholderIdentifier =
               identifier.placeholder(DEFAULT_IMAGE_FORMAT);
             imageEntries.createPlaceholderEntry(placeholderIdentifier, {
@@ -138,7 +142,7 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
               height: metadata.height!,
               format: DEFAULT_IMAGE_FORMAT,
               origin: origin,
-              flip: mergedOptions.flip,
+              flip: placeholderTransforms.flip,
               flop: mergedOptions.flop,
               rotate: mergedOptions.rotate,
               sharpen: mergedOptions.sharpen,
