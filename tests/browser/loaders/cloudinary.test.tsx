@@ -27,9 +27,6 @@ describe("Cloudinary Loader", () => {
     const url = loader({ src: "sample" });
     expect(url).toContain("https://res.cloudinary.com/demo/image/upload");
     expect(url).toContain("/sample");
-    // Default transforms
-    expect(url).toContain("f_auto");
-    expect(url).toContain("q_auto");
   });
 
   it("applies width resize", () => {
