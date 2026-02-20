@@ -9,11 +9,10 @@ import { describe } from "vitest";
 
 describe("Kontent", () => {
   const optionSeparator = "=";
-  const paramSeparator = "&";
 
   const describeOption = describeOptionFactory<KontentTransforms>(
     (options) => useKontentLoader(options),
-    "=",
+    optionSeparator,
     ",",
   );
 
