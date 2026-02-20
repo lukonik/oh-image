@@ -1,29 +1,7 @@
-import { ImageOptions } from "../../src/plugin/types";
+import type { ImageOptions } from "../../src/plugin/types";
 import { queryToOptions } from "../../src/plugin/utils";
 import { describe, expect, it } from "vitest";
 const PROCESS_KEY = "$oh";
-
-//  types: {
-//       breakpoints: "number[]",
-//       blur: "number",
-//       flip: "boolean",
-//       flop: "boolean",
-//       rotate: "number",
-//       sharpen: "number",
-//       median: "number",
-//       gamma: "number",
-//       negate: "boolean",
-//       normalize: "boolean",
-//       threshold: "number",
-//     },
-
-// RETURN TYPE
-//  {
-//   shouldProcess: boolean;
-//   path: string;
-//   options?: Partial<ImageOptions>;
-//   queryString: string;
-// }
 
 describe("queryToOptions", () => {
   function qs(uri: string) {
@@ -69,6 +47,12 @@ describe("queryToOptions", () => {
   it("should not return path, when $oh is not provided", () => {
     expect(qs("image.jpg").path).toBe("");
     expect(qs("image.jpg?blur=50").path).toBe("");
+  });
+
+  it("quality", () => {
+    qsParam("quality", undefined, "image.jpg?$oh");
+    qsParam("quality", null, "image.jpg?$oh&quality");
+    qsParam("quality", 100, "image.jpg?$oh&quality=100");
   });
 
   it("width", () => {

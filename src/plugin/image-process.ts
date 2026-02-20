@@ -14,7 +14,9 @@ export async function processImage(
     });
   }
   if (options.format) {
-    processed = processed.toFormat(options.format);
+    processed = processed.toFormat(options.format, {
+      quality: options.quality ?? undefined,
+    });
   }
 
   if (options.blur) {

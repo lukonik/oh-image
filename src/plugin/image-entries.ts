@@ -33,6 +33,7 @@ export function createImageEntries() {
         negate: entry.negate,
         normalize: entry.normalize,
         threshold: entry.threshold,
+        quality: entry.quality,
       };
       this.set(identifier, mainEntry);
     },
