@@ -63,6 +63,12 @@ describe("createImageEntries", () => {
       store.createMainEntry("main-id", makeEntry({ blur: 50 }));
       expect(store.get("main-id")).toHaveProperty("blur");
     });
+
+    it("includes quality in main entry", () => {
+      const store = createImageEntries();
+      store.createMainEntry("main-id", makeEntry({ quality: 90 }));
+      expect(store.get("main-id")?.quality).toBe(90);
+    });
   });
 
   describe("createPlaceholderEntry", () => {

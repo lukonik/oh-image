@@ -119,6 +119,7 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
             negate: mergedOptions.negate,
             normalize: mergedOptions.normalize,
             threshold: mergedOptions.threshold,
+            quality: mergedOptions.quality,
           });
 
           const src: ImageSrc = {
@@ -171,6 +172,7 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
                 negate: mergedOptions.negate,
                 normalize: mergedOptions.normalize,
                 threshold: mergedOptions.threshold,
+                quality: mergedOptions.quality,
               });
               srcSets.push(`${srcSetIdentifier} ${breakpoint}w`);
             }

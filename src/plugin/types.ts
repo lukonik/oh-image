@@ -1,7 +1,7 @@
 import type { FormatEnum } from "sharp";
 
 export interface PluginConfig extends Required<
-  Pick<ImageOptions, "placeholder" | "breakpoints" | "format">
+  Pick<ImageOptions, "placeholder" | "breakpoints" | "format" | "quality">
 > {
   /** Directory name where processed images will be output during build */
   distDir: string;
@@ -23,6 +23,7 @@ export interface ImageEntry {
   negate?: boolean | null | undefined;
   normalize?: boolean | null | undefined;
   threshold?: number | null | undefined;
+  quality?:number | null | undefined;
 }
 
 export interface ImageOptions {
@@ -70,6 +71,9 @@ export interface ImageOptions {
 
   /** Apply threshold */
   threshold?: number | null;
+
+  /** Apply quality */
+  quality?:number | null;
 }
 
 export interface ImageSrc {

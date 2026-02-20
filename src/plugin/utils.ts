@@ -42,6 +42,7 @@ export function queryToOptions(
       negate: "boolean",
       normalize: "boolean",
       threshold: "number",
+      quality: "number",
     } satisfies Record<
       keyof Required<ImageOptions>,
       "boolean" | "number" | "string" | "string[]" | "number[]"
