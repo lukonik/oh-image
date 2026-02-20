@@ -1,7 +1,7 @@
 import type { FormatEnum } from "sharp";
 
 export interface PluginConfig extends Required<
-  Pick<ImageOptions, "placeholder" | "breakpoints" | "format">
+  Pick<ImageOptions, "placeholder" | "breakpoints" | "format" | "quality">
 > {
   /** Directory name where processed images will be output during build */
   distDir: string;
