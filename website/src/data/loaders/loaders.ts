@@ -9,7 +9,6 @@ export const loaders = [
   kontent,
   cloudflare,
   imgproxy,
-  cloudinary,
   contentful,
   wordpress,
   netlify,

@@ -81,6 +81,7 @@
     "sharp": ">=0.34.5"
   },
   "devDependencies": {
+    "@cloudinary/url-gen": "^1.22.0",
     "@commitlint/config-conventional": "^20.4.1",
     "@eslint/js": "^9.39.2",
     "@tailwindcss/vite": "^4.1.18",

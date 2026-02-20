@@ -1,13 +1,19 @@
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { CloudflareLoaderProvider } from "@lonik/oh-image/cloudflare";
-
 import { ImgproxyLoaderProvider } from "@lonik/oh-image/imgproxy";
-
 import { CloudinaryLoaderProvider } from "@lonik/oh-image/cloudinary";
 import { KontentLoaderProvider } from "@lonik/oh-image/kontent";
 import { ContentfulLoaderProvider } from "@lonik/oh-image/contentful";
 import { WordpressLoaderProvider } from "@lonik/oh-image/wordpress";
 import { NetlifyLoaderProvider } from "@lonik/oh-image/netlify";
+import { Cloudinary } from "@cloudinary/url-gen";
+
+const cld = new Cloudinary({
+  cloud: {
+    cloudName: "demo",
+  },
+});
+
 export const Route = createRootRoute({
   component: RootComponent,
 });
@@ -36,7 +42,7 @@ function RootComponent() {
         <ContentfulLoaderProvider path={import.meta.env["VITE_CONTENTFUL_PATH"]}>
           <KontentLoaderProvider path="http://kontent.ai">
             <CloudinaryLoaderProvider
-              path={import.meta.env["VITE_CLOUDINARY_PATH"]}
+              client={cld}
             >
               <CloudflareLoaderProvider path="http://cloudflare.com">
                 <ImgproxyLoaderProvider path="http://localhost:8080/insecure">

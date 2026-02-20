@@ -63,13 +63,13 @@ export default defineConfig({
           items: [
             { label: "Overview", slug: "docs/image/loaders/overview" },
             { label: "Cloudflare", link: "docs/loaders/cloudflare" },
+            { label: "Cloudinary", link: "docs/loaders/cloudinary" },
             { label: "Contentful", link: "docs/loaders/contentful" },
             { label: "Imgproxy", link: "docs/loaders/imgproxy" },
             { label: "Kontent", link: "docs/loaders/kontent" },
             { label: "Netlify", link: "docs/loaders/netlify" },
             { label: "Wordpress", link: "docs/loaders/wordpress" },
 
-            // { label: "Cloudinary", link: "docs/image/loaders/cloudinary" },
             {
               label: "Custom Loader",
               slug: "docs/image/loaders/custom-loader",
