@@ -19,7 +19,8 @@
       "@lonik/oh-image/cloudinary": ["../src/loaders/cloudinary/index.ts"],
       "@lonik/oh-image/imgproxy": ["../src/loaders/imgproxy/index.ts"],
       "@lonik/oh-image/kontent": ["../src/loaders/kontent/index.ts"],
-      "@lonik/oh-image/contentful": ["../src/loaders/contentful/index.ts"]
+      "@lonik/oh-image/contentful": ["../src/loaders/contentful/index.ts"],
+      "@lonik/oh-image/wordpress": ["../src/loaders/wordpress/index.ts"]
     },
     "types": ["../src/client.d.ts", "vite/client"],
     "verbatimModuleSyntax": true

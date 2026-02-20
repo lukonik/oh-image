@@ -66,6 +66,7 @@ export default defineConfig({
             { label: "Cloudflare", link: "docs/loaders/cloudflare" },
             { label: "Kontent", link: "docs/loaders/kontent" },
             { label: "Contentful", link: "docs/loaders/contentful" },
+            { label: "Wordpress", link: "docs/loaders/wordpress" },
 
             // { label: "Cloudinary", link: "docs/image/loaders/cloudinary" },
             {

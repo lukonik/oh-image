@@ -40,9 +40,13 @@
       "types": "./dist/kontent.d.ts",
       "default": "./dist/kontent.js"
     },
-     "./contentful": {
+    "./contentful": {
       "types": "./dist/contentful.d.ts",
       "default": "./dist/contentful.js"
+    },
+    "./wordpress": {
+      "types": "./dist/wordpress.d.ts",
+      "default": "./dist/wordpress.js"
     },
     "./client": {
       "types": "./dist/client.d.ts"
