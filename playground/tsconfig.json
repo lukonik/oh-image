@@ -20,7 +20,8 @@
       "@lonik/oh-image/imgproxy": ["../src/loaders/imgproxy/index.ts"],
       "@lonik/oh-image/kontent": ["../src/loaders/kontent/index.ts"],
       "@lonik/oh-image/contentful": ["../src/loaders/contentful/index.ts"],
-      "@lonik/oh-image/wordpress": ["../src/loaders/wordpress/index.ts"]
+      "@lonik/oh-image/wordpress": ["../src/loaders/wordpress/index.ts"],
+      "@lonik/oh-image/netlify": ["../src/loaders/netlify/index.ts"]
     },
     "types": ["../src/client.d.ts", "vite/client"],
     "verbatimModuleSyntax": true

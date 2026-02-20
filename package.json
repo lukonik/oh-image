@@ -48,6 +48,10 @@
       "types": "./dist/wordpress.d.ts",
       "default": "./dist/wordpress.js"
     },
+    "./netlify": {
+      "types": "./dist/netlify.d.ts",
+      "default": "./dist/netlify.js"
+    },
     "./client": {
       "types": "./dist/client.d.ts"
     }

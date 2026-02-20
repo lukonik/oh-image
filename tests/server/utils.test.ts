@@ -7,7 +7,7 @@ describe("stripQueryString", () => {
   });
 
   it("strips a simple query string", () => {
-    expect(stripQueryString("/images/photo.png?oh")).toBe("/images/photo.png");
+    expect(stripQueryString("/images/photo.png?$oh")).toBe("/images/photo.png");
   });
 
   it("strips a query string with key-value pairs", () => {
