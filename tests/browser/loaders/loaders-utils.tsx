@@ -209,26 +209,6 @@ export function expectLoaderToPassParamFactory<T>(
 
     expect(url).includes(checkValue);
 
-    // let passed =
-    //   url.includes(expectedValue) ||
-    //   url.includes(startValue) ||
-    //   url.includes(endValue) ||
-    //   url.includes(singleParamValue);
-
-    // if (!passed && !includesParam && paramSeparator === "&") {
-    //   const queryStart = `?${encodedExpectedValue}${paramSeparator}`;
-    //   const queryEnd = `${paramSeparator}${encodedExpectedValue}`;
-    //   const querySingle = `?${encodedExpectedValue}`;
-
-    //   passed =
-    //     url.includes(queryStart) ||
-    //     url.endsWith(queryEnd) ||
-    //     url.endsWith(querySingle);
-    // }
-
-    // if (!passed) {
-    //   expect.fail(`Expected: ${url} to contain: ${checkValue}`);
-    // }
     return url;
   };
 }

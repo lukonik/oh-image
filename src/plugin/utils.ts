@@ -27,6 +27,10 @@ export function queryToOptions(
     parseNumbers: true,
     arrayFormat: "comma",
     types: {
+      width: "number",
+      height: "number",
+      format: "string",
+      placeholder: "boolean",
       breakpoints: "number[]",
       blur: "number",
       flip: "boolean",
@@ -38,7 +42,10 @@ export function queryToOptions(
       negate: "boolean",
       normalize: "boolean",
       threshold: "number",
-    },
+    } satisfies Record<
+      keyof Required<ImageOptions>,
+      "boolean" | "number" | "string" | "string[]" | "number[]"
+    >,
   });
 
   if (processKey in parsed) {
@@ -49,6 +56,6 @@ export function queryToOptions(
       queryString: query,
     };
   } else {
-    return { shouldProcess: false, path: path, queryString: query };
+    return { shouldProcess: false, path: "", queryString: query };
   }
 }
