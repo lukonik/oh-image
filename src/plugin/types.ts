@@ -1,31 +1,6 @@
 import type { FormatEnum } from "sharp";
 
-export interface PluginConfig extends Required<
-  Pick<ImageOptions, "placeholder" | "breakpoints" | "format">
-> {
-  /** Directory name where processed images will be output during build */
-  distDir: string;
-}
-
-export interface ImageEntry {
-  origin: string;
-  width?: number | null | undefined;
-  height?: number | null | undefined;
-  format?: keyof FormatEnum | null | undefined;
-  // Transfroms
-  blur?: number | null | undefined;
-  flip?: boolean | null | undefined;
-  flop?: boolean | null | undefined;
-  rotate?: number | null | undefined;
-  sharpen?: number | null | undefined;
-  median?: number | null | undefined;
-  gamma?: number | null | undefined;
-  negate?: boolean | null | undefined;
-  normalize?: boolean | null | undefined;
-  threshold?: number | null | undefined;
-}
-
-export interface ImageOptions {
+export interface ImageTransforms {
   /** Target width for the processed image in pixels */
   width?: number | null;
 
@@ -70,6 +45,36 @@ export interface ImageOptions {
 
   /** Apply threshold */
   threshold?: number | null;
+}
+
+export type PlaceholderTransforms = Omit<
+  ImageTransforms,
+  "placeholder" | "breakpoints"
+>;
+
+export interface PluginConfig extends Required<
+  Pick<ImageTransforms, "placeholder" | "breakpoints" | "format">
+> {
+  /** Directory name where processed images will be output during build */
+  distDir: string;
+}
+
+export interface ImageEntry {
+  origin: string;
+  width?: number | null | undefined;
+  height?: number | null | undefined;
+  format?: keyof FormatEnum | null | undefined;
+  // Transfroms
+  blur?: number | null | undefined;
+  flip?: boolean | null | undefined;
+  flop?: boolean | null | undefined;
+  rotate?: number | null | undefined;
+  sharpen?: number | null | undefined;
+  median?: number | null | undefined;
+  gamma?: number | null | undefined;
+  negate?: boolean | null | undefined;
+  normalize?: boolean | null | undefined;
+  threshold?: number | null | undefined;
 }
 
 export interface ImageSrc {

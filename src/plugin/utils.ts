@@ -1,5 +1,5 @@
 import queryString from "query-string";
-import type { ImageOptions } from "./types";
+import type { ImageTransforms } from "./types";
 
 /**
  * Strips query string from path to get the clean file path
@@ -15,7 +15,7 @@ export function queryToOptions(
 ): {
   shouldProcess: boolean;
   path: string;
-  options?: Partial<ImageOptions>;
+  options?: Partial<ImageTransforms>;
   queryString: string;
 } {
   const [path, query] = uri.split("?");
@@ -43,7 +43,7 @@ export function queryToOptions(
       normalize: "boolean",
       threshold: "number",
     } satisfies Record<
-      keyof Required<ImageOptions>,
+      keyof Required<ImageTransforms>,
       "boolean" | "number" | "string" | "string[]" | "number[]"
     >,
   });

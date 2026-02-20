@@ -1,2 +1,2 @@
 export { ohImage } from "./plugin";
-export type { ImageOptions, PluginConfig } from "./types";
+export type { ImageTransforms as ImageOptions, PluginConfig } from "./types";
