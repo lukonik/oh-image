@@ -10,7 +10,6 @@ chai.config.truncateThreshold = 100000;
 
 describe("cloudflare", () => {
   const optionSeparator = "=";
-  const paramSeparator = ",";
 
   const describeOption = describeOptionFactory<CloudflareTransforms>(
     (options) => useCloudflareLoader(options),

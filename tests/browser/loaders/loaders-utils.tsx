@@ -120,18 +120,19 @@ export function optionExpectFactory<T extends Record<string, unknown>>(
     let valueToCheckAgainst = value as string;
     if (expectedValue) {
       valueToCheckAgainst = expectedValue;
-    }
-    if (Array.isArray(valueToCheckAgainst)) {
-      if (!arraySeparator) {
-        throw new Error(
-          `got array with key: ${key}, value:${value} with no array separator`,
-        );
-      }
-      valueToCheckAgainst = valueToCheckAgainst
-        .map(encodeURIComponent)
-        .join(arraySeparator);
     } else {
-      valueToCheckAgainst = encodeURIComponent(valueToCheckAgainst);
+      if (Array.isArray(valueToCheckAgainst)) {
+        if (!arraySeparator) {
+          throw new Error(
+            `got array with key: ${key}, value:${value} with no array separator`,
+          );
+        }
+        valueToCheckAgainst = valueToCheckAgainst
+          .map(encodeURIComponent)
+          .join(arraySeparator);
+      } else {
+        valueToCheckAgainst = encodeURIComponent(valueToCheckAgainst);
+      }
     }
 
     const resolvedParamToCheckAgainst = `${key}${optionSeparator}${valueToCheckAgainst}`;
@@ -188,7 +189,7 @@ export function expectLoaderToPassParamFactory<T>(
       src: "test",
     });
 
-    let encodedExpectedValue = (checkValue);
+    let encodedExpectedValue = checkValue;
 
     const expectedValue = includesParam
       ? checkValue

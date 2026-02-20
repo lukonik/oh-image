@@ -1,5 +1,7 @@
 import { describe, it } from "vitest";
 import {
+  describeBooleanOption,
+  describeImageOptions,
   describeOptionFactory,
   expectLoaderToPassParamFactory,
   optionExpectFactory,
@@ -9,6 +11,30 @@ import type { ImgproxyTransforms } from "../../../src/loaders/imgproxy/imgproxy-
 import { chai } from "vitest";
 chai.config.truncateThreshold = 100000;
 describe("imgproxy", () => {
+  const optionSeparator = ":";
+
+  const describeOption = describeOptionFactory<ImgproxyTransforms>(
+    (options) => useImgproxyLoader(options),
+    optionSeparator,
+    ",",
+  );
+
+  describeImageOptions(
+    () =>
+      useImgproxyLoader({
+        path: "http://contentful.com",
+      }),
+    "width",
+    "height",
+    optionSeparator,
+  );
+
+  describeBooleanOption(
+    (options) => useImgproxyLoader(options),
+    optionSeparator,
+    true,
+  );
+
   let expectParam = expectLoaderToPassParamFactory<ImgproxyTransforms>(
     (options) => useImgproxyLoader(options),
     "/",
@@ -19,54 +45,18 @@ describe("imgproxy", () => {
     ":",
   );
 
-  const describeOption = describeOptionFactory<ImgproxyTransforms>(
-    (options) => useImgproxyLoader(options),
-    ":",
+  describeOption("adjust", {}, "::");
+  describeOption(
+    "adjust",
+    {
+      brightness: 12,
+      contrast: 34,
+      saturation: 56,
+    },
+    "12:34:56",
   );
 
-  describe("Adjust", () => {
-    it("Uses Proper Identifier", async () => {
-      await expectParam(
-        {
-          adjust: {},
-        },
-        "adjust:::",
-      );
-    });
-
-    it("Applies Modifier", async () => {
-      await expectParam(
-        {
-          adjust: {
-            brightness: 12,
-            contrast: 34,
-            saturation: 56,
-          },
-        },
-        "adjust:12:34:56",
-      );
-    });
-  });
-
-  describe("Auto Rotate", () => {
-    it("Uses Proper Identifier", async () => {
-      await expectParam(
-        {
-          auto_rotate: true,
-        },
-        "auto_rotate:true",
-      );
-    });
-
-    it("Applies Modifier", async () => {
-      await expectParam(
-        {
-          auto_rotate: true,
-        },
-        "auto_rotate:true",
-      );
-    });
-  });
+  describeOption("auto_rotate", true);
 
   describe("Background", () => {
     it("Applies Modifier (RGB)", async () => {
