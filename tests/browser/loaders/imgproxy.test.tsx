@@ -1,5 +1,6 @@
 import { describe, it } from "vitest";
 import {
+  describeOptionFactory,
   expectLoaderToPassParamFactory,
   optionExpectFactory,
 } from "./loaders-utils";
@@ -14,6 +15,11 @@ describe("imgproxy", () => {
   );
 
   let optionExpect = optionExpectFactory<ImgproxyTransforms>(
+    (options) => useImgproxyLoader(options),
+    ":",
+  );
+
+  const describeOption = describeOptionFactory<ImgproxyTransforms>(
     (options) => useImgproxyLoader(options),
     ":",
   );
@@ -421,11 +427,7 @@ describe("imgproxy", () => {
         });
       });
 
-      describe("Fallback Image URL", () => {
-        it("Uses Proper Identifier", async () => {
-          await optionExpect("fallback_image_url", "http://test.test");
-        });
-      });
+      describeOption("fallback_image_url", "http://test.test");
 
       describe("Filename", () => {
         it("Uses Proper Identifier", async () => {
