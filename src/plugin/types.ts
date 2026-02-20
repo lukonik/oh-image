@@ -39,7 +39,7 @@ export interface ImageOptions {
   placeholder?: boolean;
 
   /** Breakpoints array - widths in pixels for responsive srcSet generation */
-  breakpoints?: number[];
+  breakpoints?: number[] | null;
 
   /** Blur the image */
   blur?: number | null;
