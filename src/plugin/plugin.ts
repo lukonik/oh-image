@@ -1,5 +1,5 @@
 import { basename, extname, join, parse } from "node:path";
-import type { PluginConfig, ImageSrc } from "./types";
+import type { PluginConfig, ImageSrc, ImageEntry } from "./types";
 import { queryToOptions } from "./utils";
 import { getFileHash, readFileSafe, saveFileSafe } from "./file-utils";
 import { createImageIdentifier } from "./image-identifier";
@@ -89,17 +89,14 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
 
           const hash = await getFileHash(origin, parsed.queryString);
 
-          const transformOptions = {
+          const transforms = {
             ...config.transforms,
             ...parsed.transforms,
           };
-          const placeholderTransforms = {
-            ...config.placeholder,
-            ...parsed.placeholder,
-          };
 
           const format =
-            transformOptions.format ?? (ext.slice(1) as keyof FormatEnum);
+            transforms.format ?? (ext.slice(1) as keyof FormatEnum);
+
           const identifier = createImageIdentifier(name, hash, {
             isBuild,
             devDir: DEV_DIR,
@@ -108,23 +105,14 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
           });
 
           const mainIdentifier = identifier.main(format);
-          imageEntries.createMainEntry(mainIdentifier, {
-            width: transformOptions.width,
-            height: transformOptions.height,
-            format: transformOptions.format,
+          const mainEntry: ImageEntry = {
+            width: metadata.width,
+            height: metadata.height,
+            format: format,
             origin: origin,
-            blur: transformOptions.blur,
-            flip: transformOptions.flip,
-            flop: transformOptions.flop,
-            rotate: transformOptions.rotate,
-            sharpen: transformOptions.sharpen,
-            median: transformOptions.median,
-            gamma: transformOptions.gamma,
-            negate: transformOptions.negate,
-            normalize: transformOptions.normalize,
-            threshold: transformOptions.threshold,
-            quality: transformOptions.quality,
-          });
+            ...transforms,
+          };
+          imageEntries.createMainEntry(mainIdentifier, mainEntry);
 
           const src: ImageSrc = {
             width: metadata.width,
@@ -132,52 +120,38 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
             src: mainIdentifier,
             srcSet: "",
           };
-
           // if placeholder is specified as placeholder as well
-          if (transformOptions.placeholder) {
+          if (transforms.placeholder) {
+            const placeholderEntry: ImageEntry = {
+              width: metadata.width,
+              height: metadata.height,
+              format: format,
+              origin: origin,
+              ...config.placeholder,
+              ...parsed.placeholder,
+            };
             const placeholderIdentifier =
               identifier.placeholder(DEFAULT_IMAGE_FORMAT);
-            imageEntries.createPlaceholderEntry(placeholderIdentifier, {
-              width: metadata.width!,
-              height: metadata.height!,
-              format: DEFAULT_IMAGE_FORMAT,
-              origin: origin,
-              flip: placeholderTransforms.flip,
-              flop: mergedOptions.flop,
-              rotate: mergedOptions.rotate,
-              sharpen: mergedOptions.sharpen,
-              median: mergedOptions.median,
-              gamma: mergedOptions.gamma,
-              negate: mergedOptions.negate,
-              normalize: mergedOptions.normalize,
-              threshold: mergedOptions.threshold,
-            });
+            imageEntries.createPlaceholderEntry(
+              placeholderIdentifier,
+              placeholderEntry,
+            );
             src.placeholder = placeholderIdentifier;
           }
-
-          if (mergedOptions.breakpoints) {
+          const breakpoints = transforms.breakpoints ?? config.breakpoints;
+          if (breakpoints) {
             const srcSets: string[] = [];
-            for (const breakpoint of mergedOptions.breakpoints) {
+            for (const breakpoint of breakpoints) {
               const srcSetIdentifier = identifier.srcSet(
                 DEFAULT_IMAGE_FORMAT,
                 breakpoint,
               );
-              imageEntries.createSrcSetEntry(srcSetIdentifier, {
-                width: breakpoint,
-                format: DEFAULT_IMAGE_FORMAT,
+              const breakpointEntry: ImageEntry = {
+                ...transforms,
                 origin: origin,
-                blur: mergedOptions.blur,
-                flip: mergedOptions.flip,
-                flop: mergedOptions.flop,
-                rotate: mergedOptions.rotate,
-                sharpen: mergedOptions.sharpen,
-                median: mergedOptions.median,
-                gamma: mergedOptions.gamma,
-                negate: mergedOptions.negate,
-                normalize: mergedOptions.normalize,
-                threshold: mergedOptions.threshold,
-                quality: mergedOptions.quality,
-              });
+                width: breakpoint,
+              };
+              imageEntries.createSrcSetEntry(srcSetIdentifier, breakpointEntry);
               srcSets.push(`${srcSetIdentifier} ${breakpoint}w`);
             }
             src.srcSet = srcSets.join(", ");

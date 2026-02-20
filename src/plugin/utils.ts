@@ -55,20 +55,20 @@ export function queryToOptions(
       threshold: "number",
       quality: "number",
 
-      ph_width: "number",
-      ph_height: "number",
-      ph_format: "string",
-      ph_blur: "number",
-      ph_flip: "boolean",
-      ph_flop: "boolean",
-      ph_rotate: "number",
-      ph_sharpen: "number",
-      ph_median: "number",
-      ph_gamma: "number",
-      ph_negate: "boolean",
-      ph_normalize: "boolean",
-      ph_threshold: "number",
-      ph_quality: "number",
+      pl_width: "number",
+      pl_height: "number",
+      pl_format: "string",
+      pl_blur: "number",
+      pl_flip: "boolean",
+      pl_flop: "boolean",
+      pl_rotate: "number",
+      pl_sharpen: "number",
+      pl_median: "number",
+      pl_gamma: "number",
+      pl_negate: "boolean",
+      pl_normalize: "boolean",
+      pl_threshold: "number",
+      pl_quality: "number",
     } satisfies Record<
       keyof Required<ImageQueryParamsTransforms>,
       "boolean" | "number" | "string" | "string[]" | "number[]"
@@ -81,10 +81,11 @@ export function queryToOptions(
 
     // Filter and split keys
     Object.entries(parsed).forEach(([key, value]) => {
-      if (key.startsWith("ph_")) {
-        // Remove 'ph_' prefix and add to placeholder object
-        const cleanKey = key.replace("ph_", "") as keyof PlaceholderTransforms;
-        placeholder[cleanKey] = value;
+      if (key.startsWith("pl_")) {
+        // Remove 'pl_' prefix and add to placeholder object
+        const cleanKey = key.replace("pl_", "") as keyof PlaceholderTransforms;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (placeholder as any)[cleanKey] = value;
       } else {
         // Add standard keys to transforms object
         const transformKey = key as keyof ImageTransforms;

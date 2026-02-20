@@ -1,7 +1,7 @@
 import type { FormatEnum } from "sharp";
 
 type PrefixedPlaceholderTransforms = {
-  [K in keyof PlaceholderTransforms as `ph_${K & string}`]: PlaceholderTransforms[K];
+  [K in keyof PlaceholderTransforms as `pl_${K & string}`]: PlaceholderTransforms[K];
 };
 
 export type ImageQueryParamsTransforms = ImageTransforms &
@@ -64,8 +64,9 @@ export type PlaceholderTransforms = Omit<
 
 export interface PluginConfig {
   distDir?: string;
-  transforms?: ImageTransforms;
+  transforms?: Omit<ImageTransforms, "breakpoints">;
   placeholder?: PlaceholderTransforms;
+  breakpoints?: number[];
 }
 
 export interface ImageEntry extends Partial<
