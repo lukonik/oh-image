@@ -19,7 +19,7 @@ const stringifyOptions = (
           .join(arraySeparator ?? separator);
       }
 
-      return v;
+      return encodeURIComponent(v);
     }),
   ].join(separator);
 };
