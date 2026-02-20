@@ -15,8 +15,12 @@ const DEFAULT_IMAGE_FORMAT: keyof FormatEnum = "webp";
 const DEFAULT_CONFIGS: PluginConfig = {
   distDir: "oh-images",
   breakpoints: [16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920],
-  format: "webp",
-  placeholder: true,
+  transforms: {
+    format: "webp",
+  },
+  placeholder: {
+    quality: 10,
+  },
 };
 const PROCESS_KEY = "$oh";
 
