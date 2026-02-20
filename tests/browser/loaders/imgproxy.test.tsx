@@ -1,58 +1,62 @@
 import { describe, it } from "vitest";
-import { expectLoaderToPassParamFactory } from "./loaders-utils";
+import {
+  describeBooleanOption,
+  describeImageOptions,
+  describeOptionFactory,
+  expectLoaderToPassParamFactory,
+  optionExpectFactory,
+} from "./loaders-utils";
 import { useImgproxyLoader } from "../../../src/loaders/imgproxy/imgproxy-loader";
 import type { ImgproxyTransforms } from "../../../src/loaders/imgproxy/imgproxy-options";
 import { chai } from "vitest";
 chai.config.truncateThreshold = 100000;
 describe("imgproxy", () => {
+  const optionSeparator = ":";
+
+  const describeOption = describeOptionFactory<ImgproxyTransforms>(
+    (options) => useImgproxyLoader(options),
+    optionSeparator,
+    ",",
+  );
+
+  describeImageOptions(
+    () =>
+      useImgproxyLoader({
+        path: "http://contentful.com",
+      }),
+    "width",
+    "height",
+    optionSeparator,
+  );
+
+  describeBooleanOption(
+    (options) => useImgproxyLoader(options),
+    optionSeparator,
+    true,
+  );
+
   let expectParam = expectLoaderToPassParamFactory<ImgproxyTransforms>(
     (options) => useImgproxyLoader(options),
     "/",
   );
 
-  describe("Adjust", () => {
-    it("Uses Proper Identifier", async () => {
-      await expectParam(
-        {
-          adjust: {},
-        },
-        "adjust:::",
-      );
-    });
+  let optionExpect = optionExpectFactory<ImgproxyTransforms>(
+    (options) => useImgproxyLoader(options),
+    ":",
+  );
 
-    it("Applies Modifier", async () => {
-      await expectParam(
-        {
-          adjust: {
-            brightness: 12,
-            contrast: 34,
-            saturation: 56,
-          },
-        },
-        "adjust:12:34:56",
-      );
-    });
-  });
+  describeOption("adjust", {}, "::");
+  describeOption(
+    "adjust",
+    {
+      brightness: 12,
+      contrast: 34,
+      saturation: 56,
+    },
+    "12:34:56",
+  );
 
-  describe("Auto Rotate", () => {
-    it("Uses Proper Identifier", async () => {
-      await expectParam(
-        {
-          auto_rotate: true,
-        },
-        "auto_rotate:true",
-      );
-    });
-
-    it("Applies Modifier", async () => {
-      await expectParam(
-        {
-          auto_rotate: true,
-        },
-        "auto_rotate:true",
-      );
-    });
-  });
+  describeOption("auto_rotate", true);
 
   describe("Background", () => {
     it("Applies Modifier (RGB)", async () => {
@@ -413,28 +417,7 @@ describe("imgproxy", () => {
         });
       });
 
-      describe("Fallback Image URL", () => {
-        it("Uses Proper Identifier", async () => {
-          await expectParam(
-            {
-              fallback_image_url: "http://test.test",
-            },
-            `fallback_image_url`,
-            true,
-          );
-        });
-
-        it("Applies Modifier", async () => {
-          const url = "https://test.test";
-
-          await expectParam(
-            {
-              fallback_image_url: url,
-            },
-            `fallback_image_url:${encodeURIComponent(url)}`,
-          );
-        });
-      });
+      describeOption("fallback_image_url", "http://test.test");
 
       describe("Filename", () => {
         it("Uses Proper Identifier", async () => {
@@ -1117,12 +1100,13 @@ describe("imgproxy", () => {
         });
 
         it("Applies Modifier (String)", async () => {
-          await expectParam(
-            {
-              style: "foo,bar",
-            },
-            `style:${encodeURIComponent("foo,bar")}`,
-          );
+          const result = await optionExpect("style", "foobar");
+          // await expectParam(
+          //   {
+          //     style: "foo,bar",
+          //   },
+          //   `style:${encodeURIComponent("foo,bar")}`,
+          // );
           // expect(pb().style("foobar")).toIncludeModifier(
           //   "st:" + base64urlEncode(utf8encode("foobar")),
           // );

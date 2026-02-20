@@ -6,6 +6,7 @@ import { ImgproxyLoaderProvider } from "@lonik/oh-image/imgproxy";
 import { CloudinaryLoaderProvider } from "@lonik/oh-image/cloudinary";
 import { KontentLoaderProvider } from "@lonik/oh-image/kontent";
 import { ContentfulLoaderProvider } from "@lonik/oh-image/contentful";
+import { WordpressLoaderProvider } from "@lonik/oh-image/wordpress";
 export const Route = createRootRoute({
   component: RootComponent,
 });
@@ -29,13 +30,14 @@ function RootComponent() {
   };
 
   return (
-    <ContentfulLoaderProvider path={import.meta.env["VITE_CONTENTFUL_PATH"]}>
-      <KontentLoaderProvider path="http://kontent.ai">
-        <CloudinaryLoaderProvider
-          path={import.meta.env["VITE_CLOUDINARY_PATH"]}
-        >
-          <CloudflareLoaderProvider path="http://cloudflare.com">
-            <ImgproxyLoaderProvider path="http://localhost:8080/insecure">
+    <WordpressLoaderProvider path={import.meta.env["VITE_WORDPRESS_PATH"]}>
+      <ContentfulLoaderProvider path={import.meta.env["VITE_CONTENTFUL_PATH"]}>
+        <KontentLoaderProvider path="http://kontent.ai">
+          <CloudinaryLoaderProvider
+            path={import.meta.env["VITE_CLOUDINARY_PATH"]}
+          >
+            <CloudflareLoaderProvider path="http://cloudflare.com">
+              <ImgproxyLoaderProvider path="http://localhost:8080/insecure">
               <div className="container mx-auto pt-20 flex justify-center">
                 <div>
                   <header>
@@ -89,6 +91,13 @@ function RootComponent() {
                       >
                         Contentful
                       </Link>
+                      <Link
+                        to="/wordpress"
+                        style={buttonStyle}
+                        activeProps={{ style: activeButtonStyle }}
+                      >
+                        WordPress
+                      </Link>
                     </nav>
                   </header>
                   <main>
@@ -96,10 +105,11 @@ function RootComponent() {
                   </main>
                 </div>
               </div>
-            </ImgproxyLoaderProvider>
-          </CloudflareLoaderProvider>
-        </CloudinaryLoaderProvider>
-      </KontentLoaderProvider>
-    </ContentfulLoaderProvider>
+              </ImgproxyLoaderProvider>
+            </CloudflareLoaderProvider>
+          </CloudinaryLoaderProvider>
+        </KontentLoaderProvider>
+      </ContentfulLoaderProvider>
+    </WordpressLoaderProvider>
   );
 }

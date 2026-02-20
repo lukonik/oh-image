@@ -11,6 +11,7 @@ export default defineConfig({
     imgproxy: "src/loaders/imgproxy/index.ts",
     kontent: "src/loaders/kontent/index.ts",
     contentful: "src/loaders/contentful/index.ts",
+    wordpress: "src/loaders/wordpress/index.ts",
   },
   dts: true,
   external: [

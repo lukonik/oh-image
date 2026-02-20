@@ -20,6 +20,7 @@
       "@lonik/oh-image/imgproxy": ["../src/loaders/imgproxy/index.ts"],
       "@lonik/oh-image/kontent": ["../src/loaders/kontent/index.ts"],
       "@lonik/oh-image/contentful": ["../src/loaders/contentful/index.ts"],
+      "@lonik/oh-image/wordpress": ["../src/loaders/wordpress/index.ts"]
     }
   },
   "include": ["src"]

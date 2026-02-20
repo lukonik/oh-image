@@ -9,12 +9,14 @@ export interface LoaderFactoryConfig {
   paramSeparator: string;
   orders?: LoaderOrders;
   customResolver?: LoaderCustomResolver;
-  widthKey?: string;
-  heightKey?: string;
+  widthKey: string;
+  heightKey: string;
   /* if true passes param value true/false instead of passing just key
      @example: true /rotate:true/ instead of /rotate
   */
-  passBooleanValue?: boolean; 
+  passBooleanValue?: boolean;
+
+  arrayItemSeparator?: string;
 }
 
 export type LoaderParamsResolver<K> = (options: {

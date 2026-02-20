@@ -1,19 +1,11 @@
 import type { BaseLoaderTransforms } from "./base-loader-options";
 import type { LoaderFactoryConfig, LoaderOrders } from "./loader-factory-types";
 
-export function resolveTransforms(
-  params: Record<string, string>,
-  separator: string,
-): string[] {
-  return Object.entries(params).map(
-    ([key, value]) => `${key}${separator}${value}`,
-  );
-}
-
 const stringifyOptions = (
   opCode: string,
   values: Array<string | number | boolean | undefined>,
   separator: string,
+  arraySeparator?: string,
 ): string => {
   return [
     opCode,
@@ -22,7 +14,9 @@ const stringifyOptions = (
         return "";
       }
       if (Array.isArray(v)) {
-        return v.map((val) => encodeURIComponent(val)).join(separator);
+        return v
+          .map((val) => encodeURIComponent(val))
+          .join(arraySeparator ?? separator);
       }
 
       return encodeURIComponent(v);
@@ -69,7 +63,7 @@ const resolveObjectParam = (
               .map((val) => encodeURIComponent(String(val)))
               .join(separator);
           }
-          return encodeURIComponent(String(v));
+          return String(v);
         })
         .join(separator);
     }
@@ -78,7 +72,7 @@ const resolveObjectParam = (
       return val.map((v) => encodeURIComponent(String(v))).join(separator);
     }
 
-    return encodeURIComponent(String(val));
+    return String(val);
   });
 
   return [key, ...values].join(separator);
@@ -124,7 +118,14 @@ export function resolveTransform<T extends BaseLoaderTransforms>(
       }
       case "object": {
         if (Array.isArray(value)) {
-          params.push(stringifyOptions(key, [value], config.optionSeparator));
+          params.push(
+            stringifyOptions(
+              key,
+              [value],
+              config.optionSeparator,
+              config.arrayItemSeparator,
+            ),
+          );
         } else {
           const objectParams = resolveObjectParam(
             key,

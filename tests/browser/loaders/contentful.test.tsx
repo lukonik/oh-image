@@ -1,15 +1,19 @@
 import { describe } from "vitest";
 import {
-    createImageOptionsDescribeTest,
-    createNumberDescribeTest,
-    createStringDescribeTest,
+  describeImageOptions,
+  describeOptionFactory,
 } from "./loaders-utils";
 import { useContentfulLoader } from "../../../src/loaders/contentful/contentful-loader";
 import type { ContentfulTransforms } from "../../../src/loaders/contentful/contentful-options";
 describe("Contentful", () => {
   const optionSeparator = "=";
-  const paramSeparator = "&";
-  createImageOptionsDescribeTest(
+
+  const describeOption = describeOptionFactory<ContentfulTransforms>(
+    (options) => useContentfulLoader(options),
+    optionSeparator,
+  );
+
+  describeImageOptions(
     () =>
       useContentfulLoader({
         path: "http://contentful.com",
@@ -19,26 +23,14 @@ describe("Contentful", () => {
     optionSeparator,
   );
 
-  let numberDescribe = createNumberDescribeTest<ContentfulTransforms>(
-    (options) => useContentfulLoader(options),
-    paramSeparator,
-    optionSeparator,
-  );
-
-  let stringDescribe = createStringDescribeTest<ContentfulTransforms>(
-    (options) => useContentfulLoader(options),
-    paramSeparator,
-    optionSeparator,
-  );
-
-  stringDescribe("fm", "tiff");
-  stringDescribe("fl", "progressive");
-  numberDescribe("w", 120);
-  numberDescribe("h", 200);
-  stringDescribe("fit", "pad");
-  stringDescribe("f", "bottom_right");
-  stringDescribe("r", "max");
-  numberDescribe("r", 20);
-  numberDescribe("q", 120);
-  stringDescribe("bg", "red");
+  describeOption("fm", "tiff");
+  describeOption("fl", "progressive");
+  describeOption("w", 120);
+  describeOption("h", 200);
+  describeOption("fit", "pad");
+  describeOption("f", "bottom_right");
+  describeOption("r", "max");
+  describeOption("r", 20);
+  describeOption("q", 120);
+  describeOption("bg", "red");
 });

@@ -1,8 +1,7 @@
 import {
-  createAnyDescribeTest,
-  createBooleanDescribeTest,
-  createNumberDescribeTest,
-  createStringDescribeTest,
+  describeBooleanOption,
+  describeImageOptions,
+  describeOptionFactory,
 } from "./loaders-utils";
 import type { KontentTransforms } from "../../../src/loaders/kontent/kontent-options";
 import { useKontentLoader } from "../../../src/loaders/kontent/kontent-loader";
@@ -10,44 +9,41 @@ import { describe } from "vitest";
 
 describe("Kontent", () => {
   const optionSeparator = "=";
-  const paramSeparator = "&";
-  let booleanDescribe = createBooleanDescribeTest<KontentTransforms>(
+
+  const describeOption = describeOptionFactory<KontentTransforms>(
     (options) => useKontentLoader(options),
-    paramSeparator,
+    optionSeparator,
+    ",",
+  );
+
+  describeImageOptions(
+    () =>
+      useKontentLoader({
+        path: "http://contentful.com",
+      }),
+    "w",
+    "h",
+    optionSeparator,
+  );
+
+  describeBooleanOption(
+    (options) => useKontentLoader(options),
     optionSeparator,
     true,
   );
 
-  let numberDescribe = createNumberDescribeTest<KontentTransforms>(
-    (options) => useKontentLoader(options),
-    paramSeparator,
-    optionSeparator,
-  );
-
-  let stringDescribe = createStringDescribeTest<KontentTransforms>(
-    (options) => useKontentLoader(options),
-    paramSeparator,
-    optionSeparator,
-  );
-
-  let anyDescribe = createAnyDescribeTest<KontentTransforms>(
-    (options) => useKontentLoader(options),
-    paramSeparator,
-    optionSeparator,
-  );
-
-  numberDescribe("w", 250);
-  numberDescribe("h", 300);
-  numberDescribe("dpr", 20);
-  stringDescribe("fit", "clamp");
-  // stringDescribe("rect", "23,24,25,6"); // TODO
-  numberDescribe("fp-x", 20);
-  numberDescribe("fp-y", 0.5);
-  numberDescribe("fp-z", 30);
-  stringDescribe("smart", "edges");
-  stringDescribe("bg", "fff");
-  stringDescribe("fm", "webp");
-  numberDescribe("q", 50);
-  booleanDescribe("lossless");
-  stringDescribe("auto", "format");
+  describeOption("w", 250);
+  describeOption("h", 300);
+  describeOption("dpr", 20);
+  describeOption("fit", "clamp");
+  describeOption("rect", [23, 24, 25, 6]);
+  describeOption("fp-x", 20);
+  describeOption("fp-y", 0.5);
+  describeOption("fp-z", 30);
+  describeOption("smart", "edges");
+  describeOption("bg", "fff");
+  describeOption("fm", "webp");
+  describeOption("q", 50);
+  describeOption("lossless", true);
+  describeOption("auto", "format");
 });
