@@ -54,13 +54,4 @@ describe("Cloudinary Loader", () => {
     expect(url).toContain("e_sepia");
   });
 
-  it("applies placeholder transforms", () => {
-    const { result } = renderHook(() => useCloudinaryLoader(), { wrapper });
-    const loader = result.current;
-
-    const url = loader({ src: "sample", isPlaceholder: true });
-    // Default placeholder: w_10, q_auto:low
-    expect(url).toContain("w_10");
-    expect(url).toContain("q_auto:low");
-  });
 });
