@@ -1,6 +1,6 @@
 import type { FormatEnum } from "sharp";
 
-export interface ImageTransforms {
+export interface ImageOptions {
   /** Target width for the processed image in pixels */
   width?: number | null;
 
@@ -45,6 +45,33 @@ export interface ImageTransforms {
 
   /** Apply threshold */
   threshold?: number | null;
+
+  /** Apply quality */
+  quality?: number | null;
+}
+
+export interface PluginConfig extends ImageOptions {
+  /** Directory name where processed images will be output during build */
+  distDir: string;
+}
+
+export interface ImageEntry {
+  origin: string;
+  width?: number | null | undefined;
+  height?: number | null | undefined;
+  format?: keyof FormatEnum | null | undefined;
+  // Transfroms
+  blur?: number | null | undefined;
+  flip?: boolean | null | undefined;
+  flop?: boolean | null | undefined;
+  rotate?: number | null | undefined;
+  sharpen?: number | null | undefined;
+  median?: number | null | undefined;
+  gamma?: number | null | undefined;
+  negate?: boolean | null | undefined;
+  normalize?: boolean | null | undefined;
+  threshold?: number | null | undefined;
+  quality?: number | null | undefined;
 }
 
 export type PlaceholderTransforms = Omit<
