@@ -56,6 +56,6 @@ export function queryToOptions(
       queryString: query,
     };
   } else {
-    return { shouldProcess: false, path: path, queryString: query };
+    return { shouldProcess: false, path: "", queryString: query };
   }
 }

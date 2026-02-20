@@ -14,6 +14,15 @@ export const sharpInstance = {
   blur: vi.fn().mockReturnThis(),
   toBuffer: vi.fn().mockResolvedValue(Buffer.from("")),
   metadata: vi.fn().mockResolvedValue("HELLO"),
+  flip: vi.fn().mockReturnThis(),
+  flop: vi.fn().mockReturnThis(),
+  rotate: vi.fn().mockReturnThis(),
+  sharpen: vi.fn().mockReturnThis(),
+  median: vi.fn().mockReturnThis(),
+  gamma: vi.fn().mockReturnThis(),
+  negate: vi.fn().mockReturnThis(),
+  normalize: vi.fn().mockReturnThis(),
+  threshold: vi.fn().mockReturnThis(),
 };
 
 vi.mock("sharp", () => ({
