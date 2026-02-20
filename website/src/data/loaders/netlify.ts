@@ -10,28 +10,18 @@ export const netlify = {
       fm: "webp",
     },
     placeholder: {
-      q: 10,
-      fm: "webp",
+      fm: "blurhash",
     },
   }
   `,
   link: "https://docs.netlify.com/build/image-cdn/overview/",
   interface: `
-  {
-    w: number;
-    h: number;
-    fit: "cover" | "contain" | "fill" | "inside" | "outside";
-    fm: "avif" | "webp" | "jpg" | "png" | "gif";
-    q: number;
-    position:
-      | "center"
-      | "top"
-      | "bottom"
-      | "left"
-      | "right"
-      | "top_left"
-      | "top_right"
-      | "bottom_left"
-      | "bottom_right";
-  }`,
+{
+  w: number;
+  h: number;
+  fit: "contain" | "cover" | "fill";
+  position: "top" | "bottom" | "left" | "right" | "center";
+  fm: "avif" | "webp" | "jpg" | "png" | "gif" | "blurhash";
+  q: number;
+}`,
 };
