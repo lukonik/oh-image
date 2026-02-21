@@ -1,7 +1,7 @@
 {
   "name": "@lonik/oh-image",
   "type": "module",
-  "version": "0.0.0",
+  "version": "3.0.0",
   "description": "A React component library for optimized image handling.",
   "author": "Luka Onikadze <lukonik@gmail.com>",
   "license": "MIT",
