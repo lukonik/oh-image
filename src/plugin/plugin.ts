@@ -172,7 +172,6 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
             }
             src.srcSet = srcSets.join(", ");
           }
-          console.log(src);
           return `
                import { __imageFactory } from "@lonik/oh-image/react";
 
