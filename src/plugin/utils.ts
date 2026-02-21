@@ -73,6 +73,7 @@ export function queryToOptions(
       pl_normalize: "boolean",
       pl_threshold: "number",
       pl_quality: "number",
+      pl_show: "boolean",
     } satisfies Record<
       keyof Required<ImageQueryParamsTransforms>,
       "boolean" | "number" | "string" | "string[]" | "number[]"
@@ -147,7 +148,7 @@ export function resolveShowPlaceholder(
   parsed: PlaceholderTransforms,
   config: PluginConfig,
 ) {
-  if (parsed.pl_show || config.showPlaceholder) {
+  if (parsed.show || config.showPlaceholder) {
     return true;
   }
   return false;

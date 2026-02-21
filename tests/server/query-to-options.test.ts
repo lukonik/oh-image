@@ -1,4 +1,4 @@
-import type { ImageQueryParamsTransforms } from "../../src/plugin/types";
+import type { ImageQueryParamsTransforms, PlaceholderTransforms } from "../../src/plugin/types";
 import { queryToOptions } from "../../src/plugin/utils";
 import { describe, expect, it } from "vitest";
 const PROCESS_KEY = "$oh";
@@ -25,7 +25,7 @@ describe("queryToOptions", () => {
     }
   };
 
-  const qsParamPL = <T extends ImageQueryParamsTransforms, K extends keyof T>(
+  const qsParamPL = <T extends PlaceholderTransforms, K extends keyof T>(
     key: K,
     value: T[K],
     uri: string,
@@ -62,6 +62,13 @@ describe("queryToOptions", () => {
     qsParam("breakpoints", null, "image.jpg?$oh&breakpoints");
     qsParam("breakpoints", [100, 200], "image.jpg?$oh&breakpoints=100,200");
     qsParam("breakpoints", [200], "image.jpg?$oh&breakpoints=200");
+  });
+
+  it("pl_show", () => {
+    qsParamPL("show", undefined, "image.jpg?$oh");
+    qsParamPL("show", true, `image.jpg?$oh&pl_show`);
+    qsParamPL("show", true, `image.jpg?$oh&pl_show=${true}`);
+    qsParamPL("show", false, `image.jpg?$oh&pl_show=${false}`);
   });
 
   // Params check

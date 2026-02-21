@@ -5,7 +5,7 @@ type PrefixedPlaceholderTransforms = {
 };
 
 export type ImageQueryParamsTransforms = ImageTransforms &
-  PrefixedPlaceholderTransforms & { pl_show?: boolean };
+  PrefixedPlaceholderTransforms;
 
 export type ImageTransforms = Partial<{
   /** Target width for the processed image in pixels */
@@ -60,7 +60,7 @@ export type ImageTransforms = Partial<{
 export type PlaceholderTransforms = Omit<
   ImageTransforms,
   "placeholder" | "breakpoints"
-> & { pl_show?: boolean };
+> & { show?: boolean };
 
 export type PluginTransforms = Omit<ImageTransforms, "breakpoints">;
 export type PluginPlaceholderTransforms = Omit<

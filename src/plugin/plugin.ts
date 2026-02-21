@@ -26,7 +26,8 @@ const DEFAULT_CONFIGS: PluginConfig = {
   showPlaceholder: true,
   placeholder: {
     quality: 10,
-    blur: 100,
+    blur: 50,
+    format: "webp",
   },
 };
 const PROCESS_KEY = "$oh";
@@ -84,110 +85,108 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
         res.end(processed);
       });
     },
-    load: {
-      filter: {
-        id: SUPPORTED_IMAGE_FORMATS,
-      },
-      async handler(id) {
-        try {
-          const parsed = queryToOptions(PROCESS_KEY, id);
-          if (!parsed.shouldProcess) {
-            return null;
-          }
-          const origin = parsed.path; // origin is the actual file path
-          const { name } = parse(parsed.path);
-          const metadata = await sharp(parsed.path).metadata();
-          const ext = getCleanExt(parsed.path);
+    async load(id) {
+      if (!SUPPORTED_IMAGE_FORMATS.test(id)) {
+        return null;
+      }
+      try {
+        const parsed = queryToOptions(PROCESS_KEY, id);
+        if (!parsed.shouldProcess) {
+          return null;
+        }
+        const origin = parsed.path; // origin is the actual file path
+        const { name } = parse(parsed.path);
+        const metadata = await sharp(parsed.path).metadata();
+        const ext = getCleanExt(parsed.path);
 
-          const hash = await getFileHash(origin, parsed.queryString);
+        const hash = await getFileHash(origin, parsed.queryString);
 
-          const transforms = resolveTransforms(
-            parsed.transforms,
-            config.transforms,
+        const transforms = resolveTransforms(
+          parsed.transforms,
+          config.transforms,
+          metadata,
+          ext,
+        );
+
+        const identifier = createImageIdentifier(name, hash, {
+          isBuild,
+          devDir: DEV_DIR,
+          assetsDir,
+          distDir: config.distDir,
+        });
+
+        const mainIdentifier = identifier.main(transforms.format);
+        const mainEntry: ImageEntry = {
+          ...transforms,
+          origin,
+        };
+        imageEntries.createMainEntry(mainIdentifier, mainEntry);
+
+        const src: ImageSrc = {
+          width: transforms.width,
+          height: transforms.height,
+          src: mainIdentifier,
+          srcSet: "",
+        };
+        // if placeholder is specified as placeholder as well
+        const pl_show = resolveShowPlaceholder(parsed.placeholder, config);
+        if (pl_show) {
+          const placeholderTransforms = resolvePlaceholderTransforms(
+            parsed.placeholder,
+            config.placeholder,
             metadata,
-            ext,
           );
-
-          const identifier = createImageIdentifier(name, hash, {
-            isBuild,
-            devDir: DEV_DIR,
-            assetsDir,
-            distDir: config.distDir,
-          });
-
-          const mainIdentifier = identifier.main(transforms.format);
-          const mainEntry: ImageEntry = {
-            ...transforms,
-            origin,
+          const placeholderEntry: ImageEntry = {
+            ...placeholderTransforms,
+            origin: origin,
           };
-          imageEntries.createMainEntry(mainIdentifier, mainEntry);
+          const placeholderIdentifier = identifier.placeholder(
+            placeholderTransforms.format,
+          );
+          imageEntries.createPlaceholderEntry(
+            placeholderIdentifier,
+            placeholderEntry,
+          );
+          src.placeholder = placeholderIdentifier;
+        }
 
-          const src: ImageSrc = {
-            width: transforms.width,
-            height: transforms.height,
-            src: mainIdentifier,
-            srcSet: "",
-          };
-          // if placeholder is specified as placeholder as well
-          const pl_show = resolveShowPlaceholder(parsed.placeholder, config);
-          if (pl_show) {
-            const placeholderTransforms = resolvePlaceholderTransforms(
-              parsed.placeholder,
-              config.placeholder,
-              metadata,
+        const breakpoints = resolveBreakpoints(transforms, config);
+        if (breakpoints) {
+          const srcSets: string[] = [];
+          for (const breakpoint of breakpoints) {
+            const breakpointTransforms = resolveBreakpointTransforms(
+              parsed.transforms,
+              config.transforms,
+              breakpoint,
             );
-            const placeholderEntry: ImageEntry = {
-              ...placeholderTransforms,
+            const srcSetIdentifier = identifier.srcSet(
+              breakpointTransforms.format,
+              breakpoint,
+            );
+            const breakpointEntry: ImageEntry = {
+              ...breakpointTransforms,
               origin: origin,
             };
-            const placeholderIdentifier = identifier.placeholder(
-              placeholderTransforms.format,
-            );
-            imageEntries.createPlaceholderEntry(
-              placeholderIdentifier,
-              placeholderEntry,
-            );
-            src.placeholder = placeholderIdentifier;
+            imageEntries.createSrcSetEntry(srcSetIdentifier, breakpointEntry);
+            srcSets.push(`${srcSetIdentifier} ${breakpoint}w`);
           }
-
-          const breakpoints = resolveBreakpoints(transforms, config);
-          if (breakpoints) {
-            const srcSets: string[] = [];
-            for (const breakpoint of breakpoints) {
-              const breakpointTransforms = resolveBreakpointTransforms(
-                parsed.transforms,
-                config.transforms,
-                breakpoint,
-              );
-              const srcSetIdentifier = identifier.srcSet(
-                breakpointTransforms.format,
-                breakpoint,
-              );
-              const breakpointEntry: ImageEntry = {
-                ...breakpointTransforms,
-                origin: origin,
-              };
-              imageEntries.createSrcSetEntry(srcSetIdentifier, breakpointEntry);
-              srcSets.push(`${srcSetIdentifier} ${breakpoint}w`);
-            }
-            src.srcSet = srcSets.join(", ");
-          }
-          return `
+          src.srcSet = srcSets.join(", ");
+        }
+        return `
                import { __imageFactory } from "@lonik/oh-image/react";
 
            export default __imageFactory(${JSON.stringify({ width: src.width, height: src.height, src: src.src, srcSet: src.srcSet, placeholder: src.placeholder })})
 `;
-        } catch (err) {
-          if (err instanceof Error) {
-            // TypeScript now knows 'err' is an Error object
-            console.error(`Couldn't load image: ${id}. Error: ${err.message}`);
-            this.error(err.message);
-          } else {
-            // Handle cases where something weird was thrown (strings, etc.)
-            this.error(String(err));
-          }
+      } catch (err) {
+        if (err instanceof Error) {
+          // TypeScript now knows 'err' is an Error object
+          console.error(`Couldn't load image: ${id}. Error: ${err.message}`);
+          this.error(err.message);
+        } else {
+          // Handle cases where something weird was thrown (strings, etc.)
+          this.error(String(err));
         }
-      },
+      }
     },
     async writeBundle() {
       const limit = pLimit(30);
