@@ -1,32 +1,13 @@
 import type { FormatEnum } from "sharp";
 
-export interface PluginConfig extends Required<
-  Pick<ImageOptions, "placeholder" | "breakpoints" | "format" | "quality">
-> {
-  /** Directory name where processed images will be output during build */
-  distDir: string;
-}
+type PrefixedPlaceholderTransforms = {
+  [K in keyof PlaceholderTransforms as `pl_${K & string}`]: PlaceholderTransforms[K];
+};
 
-export interface ImageEntry {
-  origin: string;
-  width?: number | null | undefined;
-  height?: number | null | undefined;
-  format?: keyof FormatEnum | null | undefined;
-  // Transfroms
-  blur?: number | null | undefined;
-  flip?: boolean | null | undefined;
-  flop?: boolean | null | undefined;
-  rotate?: number | null | undefined;
-  sharpen?: number | null | undefined;
-  median?: number | null | undefined;
-  gamma?: number | null | undefined;
-  negate?: boolean | null | undefined;
-  normalize?: boolean | null | undefined;
-  threshold?: number | null | undefined;
-  quality?:number | null | undefined;
-}
+export type ImageQueryParamsTransforms = ImageTransforms &
+  PrefixedPlaceholderTransforms;
 
-export interface ImageOptions {
+export type ImageTransforms = Partial<{
   /** Target width for the processed image in pixels */
   width?: number | null;
 
@@ -73,7 +54,32 @@ export interface ImageOptions {
   threshold?: number | null;
 
   /** Apply quality */
-  quality?:number | null;
+  quality?: number | null;
+}>;
+
+export type PlaceholderTransforms = Omit<
+  ImageTransforms,
+  "placeholder" | "breakpoints"
+> & { show?: boolean };
+
+export type PluginTransforms = Omit<ImageTransforms, "breakpoints">;
+export type PluginPlaceholderTransforms = Omit<
+  PlaceholderTransforms,
+  "pl_show"
+>;
+
+export interface PluginConfig {
+  distDir: string;
+  transforms?: PluginTransforms;
+  placeholder?: PluginPlaceholderTransforms;
+  breakpoints?: number[];
+  pl_show?: boolean;
+}
+
+export interface ImageEntry extends Partial<
+  Omit<ImageTransforms, "breakpoints" | "placeholder">
+> {
+  origin: string;
 }
 
 export interface ImageSrc {

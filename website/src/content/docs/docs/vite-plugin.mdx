@@ -81,6 +81,7 @@ function App() {
 ### Global Configuration
 
 You can configure the plugin in `vite.config.ts` to apply global defaults.
+Note the nested structure for `transforms` and `placeholder`.
 
 ```ts
 import { ohImage } from "@lonik/oh-image/plugin";
@@ -89,33 +90,48 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [
     ohImage({
-      // Default output format
-      format: "avif",
-      placeholder: false,
+      distDir: "oh-images",
+      // Default transformations for the main image
+      transforms: {
+        format: "webp",
+        quality: 80,
+      },
+      // Breakpoints for responsive srcSet
       breakpoints: [640, 768, 1024],
+      // Enable/Disable placeholder generation globally
+      pl_show: true,
+      // Default transformations for the placeholder image
+      placeholder: {
+        format: "webp",
+        blur: 20,
+      },
     }),
   ],
 });
 ```
 
-## Processing Options
+## Query Param Options
 
-These options can be passed globally or as query parameters.
+These options can be passed globally (within `transforms` object) or as query parameters.
+When used as query parameters, they apply to the main image. To apply them to the placeholder, prefix the key with `pl_` (e.g., `pl_blur=10`).
 
 | Option        | Type       | Description                                       |
 | :------------ | :--------- | :------------------------------------------------ |
-| `quality`     | `number`   | Change quality of the Image.                      |
-| `blur`        | `number`   | Blur the image with the specified sigma.          |
-| `flip`        | `boolean`  | Flip the image vertically.                        |
-| `flop`        | `boolean`  | Flop the image horizontally.                      |
-| `rotate`      | `number`   | Rotate the image by the specified angle.          |
-| `sharpen`     | `number`   | Sharpen the image with the specified sigma.       |
-| `median`      | `number`   | Apply a median filter with the specified size.    |
-| `gamma`       | `number`   | Apply gamma correction.                           |
-| `negate`      | `boolean`  | Negate the image colors.                          |
-| `normalize`   | `boolean`  | Normalize the image contrast.                     |
-| `threshold`   | `number`   | Apply a threshold with the specified value.       |
-| `placeholder` | `boolean`  | Generate a blurred placeholder? (`true`/`false`). |
+| `[pl_]width`       | `number`   | Target width for the processed image.             |
+| `[pl_]height`      | `number`   | Target height for the processed image.            |
+| `[pl_]format`      | `string`   | Output format (e.g., `webp`, `avif`, `png`).      |
+| `[pl_]quality`     | `number`   | Change quality of the Image (1-100).              |
+| `[pl_]blur`        | `number`   | Blur the image with the specified sigma.          |
+| `[pl_]flip`        | `boolean`  | Flip the image vertically.                        |
+| `[pl_]flop`        | `boolean`  | Flop the image horizontally.                      |
+| `[pl_]rotate`      | `number`   | Rotate the image by the specified angle.          |
+| `[pl_]sharpen`     | `number`   | Sharpen the image with the specified sigma.       |
+| `[pl_]median`      | `number`   | Apply a median filter with the specified size.    |
+| `[pl_]gamma`       | `number`   | Apply gamma correction.                           |
+| `[pl_]negate`      | `boolean`  | Negate the image colors.                          |
+| `[pl_]normalize`   | `boolean`  | Normalize the image contrast.                     |
+| `[pl_]threshold`   | `number`   | Apply a threshold with the specified value.       |
+| `pl_show` | `boolean`  | Generate a placeholder image ? (`true`/`false`).      |
 | `breakpoints` | `number[]` | Comma-separated list of widths for `srcSet`.      |
 
 For more details on image operations, refer to the [Sharp documentation](https://sharp.pixelplumbing.com/api-operation).
@@ -124,18 +140,29 @@ For more details on image operations, refer to the [Sharp documentation](https:/
 
 In addition to the processing options, the global configuration accepts:
 
-| Option    | Type     | Default     | Description                                                           |
-| :-------- | :------- | :---------- | :-------------------------------------------------------------------- |
-| `distDir` | `string` | `oh-images` | The subdirectory within your build output where images will be saved. |
+| Option            | Type      | Default     | Description                                                                 |
+| :---------------- | :-------- | :---------- | :-------------------------------------------------------------------------- |
+| `distDir`         | `string`  | `oh-images` | The subdirectory within your build output where images will be saved.       |
 
 ### Default Configuration
 
 By default, the plugin uses the following settings:
 
-- `distDir`: `"oh-images"`
-- `breakpoints`: `[16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920]`
-- `format`: `"webp"`
-- `placeholder`: `true`
+```js
+{
+  distDir: "oh-images",
+  breakpoints: [16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920],
+  pl_show: true,
+  transforms: {
+    format: "webp",
+  },
+  placeholder: {
+    quality: 10,
+    blur: 50,
+    format: "webp",
+  },
+}
+```
 
 ## Passing Parameters via Query String
 

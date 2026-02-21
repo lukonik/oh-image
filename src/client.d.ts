@@ -6,7 +6,6 @@ declare module "*$oh" {
       | "fetchPriority"
       | "decoding"
       | "loading"
-      | "srcSet"
       | "className"
       | "sizes"
       | "style"
@@ -24,7 +23,6 @@ declare module "*$oh" {
      */
     fill?: boolean;
 
-    breakpoints?: number[];
   }
 
   const component: React.FC<StaticImageProps>;
