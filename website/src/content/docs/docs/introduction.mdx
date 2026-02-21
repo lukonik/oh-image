@@ -20,7 +20,7 @@ from the assets folder:
 import HeroImage from "./assets/hero.jpg"; // this will return image url
 
 function App() {
-  return <img src={HeroImage} />;
+  return <HeroImage />;
 }
 ```
 
@@ -33,7 +33,7 @@ care of the rest:
 import HeroImage from "./assets/hero.jpg?$oh"; // this will return Image component
 
 function App() {
-  return <HeroImage />;
+  return <HeroImage alt="Hero image" />;
 }
 ```
 
@@ -42,6 +42,7 @@ similar to the following:
 
 ```HTML
 <img class="flex" width="1920" height="1280"  loading="lazy" fetchpriority="auto"
+alt="Hero image"
 srcset="/@oh-images/breakpoint-16-deab89be27aab77b-d9c45d4b5795047a-hero.webp 16w,
 /@oh-images/breakpoint-48-deab89be27aab77b-d9c45d4b5795047a-hero.webp 48w,
 /@oh-images/breakpoint-96-deab89be27aab77b-d9c45d4b5795047a-hero.webp 96w,
@@ -131,7 +132,7 @@ import { useCloudinaryLoader } from "@lonik/oh-image/cloudinary";
 function App() {
   const loader = useCloudinaryLoader({
     path:"https://res.cloudinary.com/example"
-    transform: {
+    transforms: {
       rotate: 180,
     },
   });

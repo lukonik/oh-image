@@ -58,6 +58,7 @@ export default defineConfig({
           label: "Image",
           slug: "docs/image/component",
         },
+        { label: "Vite Plugin", slug: "docs/vite-plugin" },
         {
           label: "Loaders",
           items: [
@@ -76,7 +77,6 @@ export default defineConfig({
             },
           ],
         },
-        { label: "Vite Plugin", slug: "docs/vite-plugin" },
       ],
       customCss: ["./src/styles/global.css"],
     }),
