@@ -23,7 +23,7 @@ const DEFAULT_CONFIGS: PluginConfig = {
   transforms: {
     format: "webp",
   },
-  showPlaceholder: true,
+  pl_show: true,
   placeholder: {
     quality: 10,
     blur: 50,

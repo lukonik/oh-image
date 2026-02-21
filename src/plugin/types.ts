@@ -73,7 +73,7 @@ export interface PluginConfig {
   transforms?: PluginTransforms;
   placeholder?: PluginPlaceholderTransforms;
   breakpoints?: number[];
-  showPlaceholder?: boolean;
+  pl_show?: boolean;
 }
 
 export interface ImageEntry extends Partial<

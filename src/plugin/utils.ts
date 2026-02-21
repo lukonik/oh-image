@@ -148,7 +148,7 @@ export function resolveShowPlaceholder(
   parsed: PlaceholderTransforms,
   config: PluginConfig,
 ) {
-  if (parsed.show || config.showPlaceholder) {
+  if (parsed.show || config.pl_show) {
     return true;
   }
   return false;
