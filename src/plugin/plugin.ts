@@ -178,8 +178,14 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
            export default __imageFactory(${JSON.stringify({ width: src.width, height: src.height, src: src.src, srcSet: src.srcSet, placeholder: src.placeholder })})
 `;
         } catch (err) {
-          console.error(`Couldn't load image with id: ${id} error:${err}`);
-          return null;
+          if (err instanceof Error) {
+            // TypeScript now knows 'err' is an Error object
+            console.error(`Couldn't load image: ${id}. Error: ${err.message}`);
+            this.error(err.message);
+          } else {
+            // Handle cases where something weird was thrown (strings, etc.)
+            this.error(String(err));
+          }
         }
       },
     },
