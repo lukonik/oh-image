@@ -3,7 +3,11 @@ import type {
   ImageQueryParamsTransforms,
   ImageTransforms,
   PlaceholderTransforms,
+  PluginConfig,
+  PluginTransforms,
 } from "./types";
+import { extname } from "path";
+import type { FormatEnum } from "sharp";
 
 /**
  * Strips query string from path to get the clean file path
@@ -103,4 +107,110 @@ export function queryToOptions(
   } else {
     return { shouldProcess: false };
   }
+}
+
+/** returns ext of file. removes '.' */
+export function getCleanExt(filepath: string) {
+  const ext = extname(filepath);
+  return ext.startsWith(".") ? ext.slice(1) : ext;
+}
+
+export function resolveTransforms(
+  options: ImageTransforms | undefined,
+  defaults: PluginTransforms | undefined,
+  metadata: { width: number; height: number },
+  fileFormat: string,
+) {
+  const resolved = {
+    ...defaults,
+    ...options,
+  };
+
+  // Ensure these are never null/undefined by falling back to metadata
+  const width = options?.width ?? defaults?.width ?? metadata.width;
+  const height = options?.height ?? defaults?.height ?? metadata.height;
+  const format = options?.format ?? defaults?.format ?? fileFormat ?? "webp";
+
+  return {
+    ...resolved,
+    width,
+    height,
+    format,
+  } as Omit<ImageTransforms, "breakpoints"> & {
+    width: number;
+    height: number;
+    format: keyof FormatEnum;
+  };
+}
+
+export function resolveShowPlaceholder(
+  parsed: PlaceholderTransforms,
+  config: PluginConfig,
+) {
+  if (parsed.pl_show || config.showPlaceholder) {
+    return true;
+  }
+  return false;
+}
+
+export function resolvePlaceholderTransforms(
+  options: PlaceholderTransforms | undefined,
+  defaults: PlaceholderTransforms | undefined,
+  metadata: { width: number; height: number },
+) {
+  const resolved = {
+    ...defaults,
+    ...options,
+  };
+
+  // Ensure these are never null/undefined by falling back to metadata
+  const width = options?.width ?? defaults?.width ?? metadata.width;
+  const height = options?.height ?? defaults?.height ?? metadata.height;
+  const format = options?.format ?? defaults?.format ?? "webp";
+
+  return {
+    ...resolved,
+    width,
+    height,
+    format,
+  } as ImageTransforms & {
+    width: number;
+    height: number;
+    format: keyof FormatEnum;
+  };
+}
+
+export function resolveBreakpointTransforms(
+  options: PlaceholderTransforms | undefined,
+  defaults: PlaceholderTransforms | undefined,
+  width: number,
+) {
+  const resolved = {
+    ...defaults,
+    ...options,
+  };
+
+  // height and width should be deleted
+  // because breakpoin't cant' have a height
+
+  delete resolved["height"];
+  delete resolved["width"];
+
+  const format = "webp";
+
+  return {
+    ...resolved,
+    width,
+    format,
+  } as Omit<ImageTransforms, "width" | "height"> & {
+    width: number;
+    format: keyof FormatEnum;
+  };
+}
+
+export function resolveBreakpoints(
+  options: ImageTransforms | undefined,
+  config: PluginConfig,
+) {
+  return options?.breakpoints ?? config.breakpoints;
 }

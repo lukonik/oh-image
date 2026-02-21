@@ -17,11 +17,10 @@ export default defineConfig({
   plugins: [
     Inspect(),
     ohImage({
-      transforms: {
-        breakpoints: [16, 32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 1920],
-      },
+      breakpoints: [16, 32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 1920],
       placeholder: {
         quality: 10,
+        blur: 100,
       },
     }),
     tsconfigPaths(),

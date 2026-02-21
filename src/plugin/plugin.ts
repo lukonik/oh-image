@@ -1,16 +1,21 @@
 import { basename, extname, join, parse } from "node:path";
 import type { PluginConfig, ImageSrc, ImageEntry } from "./types";
-import { queryToOptions } from "./utils";
+import {
+  getCleanExt,
+  queryToOptions,
+  resolveBreakpoints,
+  resolveBreakpointTransforms,
+  resolvePlaceholderTransforms,
+  resolveShowPlaceholder,
+  resolveTransforms,
+} from "./utils";
 import { getFileHash, readFileSafe, saveFileSafe } from "./file-utils";
 import { createImageIdentifier } from "./image-identifier";
 import { createImageEntries } from "./image-entries";
-import type { FormatEnum } from "sharp";
 import type { Plugin } from "vite";
 import pLimit from "p-limit";
 import sharp from "sharp";
 import { processImage } from "./image-process";
-
-const DEFAULT_IMAGE_FORMAT: keyof FormatEnum = "webp";
 
 const DEFAULT_CONFIGS: PluginConfig = {
   distDir: "oh-images",
@@ -18,8 +23,10 @@ const DEFAULT_CONFIGS: PluginConfig = {
   transforms: {
     format: "webp",
   },
+  showPlaceholder: true,
   placeholder: {
     quality: 10,
+    blur: 100,
   },
 };
 const PROCESS_KEY = "$oh";
@@ -88,18 +95,18 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
             return null;
           }
           const origin = parsed.path; // origin is the actual file path
-          const { name, ext } = parse(parsed.path);
+          const { name } = parse(parsed.path);
           const metadata = await sharp(parsed.path).metadata();
+          const ext = getCleanExt(parsed.path);
 
           const hash = await getFileHash(origin, parsed.queryString);
 
-          const transforms = {
-            ...config.transforms,
-            ...parsed.transforms,
-          };
-
-          const format =
-            transforms.format ?? (ext.slice(1) as keyof FormatEnum);
+          const transforms = resolveTransforms(
+            parsed.transforms,
+            config.transforms,
+            metadata,
+            ext,
+          );
 
           const identifier = createImageIdentifier(name, hash, {
             isBuild,
@@ -108,59 +115,64 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
             distDir: config.distDir,
           });
 
-          const mainIdentifier = identifier.main(format);
+          const mainIdentifier = identifier.main(transforms.format);
           const mainEntry: ImageEntry = {
-            width: metadata.width,
-            height: metadata.height,
-            format: format,
-            origin: origin,
             ...transforms,
+            origin,
           };
           imageEntries.createMainEntry(mainIdentifier, mainEntry);
 
           const src: ImageSrc = {
-            width: metadata.width,
-            height: metadata.height,
+            width: transforms.width,
+            height: transforms.height,
             src: mainIdentifier,
             srcSet: "",
           };
           // if placeholder is specified as placeholder as well
-          if (transforms.placeholder) {
+          const pl_show = resolveShowPlaceholder(parsed.placeholder, config);
+          if (pl_show) {
+            const placeholderTransforms = resolvePlaceholderTransforms(
+              parsed.placeholder,
+              config.placeholder,
+              metadata,
+            );
             const placeholderEntry: ImageEntry = {
-              width: metadata.width,
-              height: metadata.height,
-              format: format,
+              ...placeholderTransforms,
               origin: origin,
-              ...config.placeholder,
-              ...parsed.placeholder,
             };
-            const placeholderIdentifier =
-              identifier.placeholder(DEFAULT_IMAGE_FORMAT);
+            const placeholderIdentifier = identifier.placeholder(
+              placeholderTransforms.format,
+            );
             imageEntries.createPlaceholderEntry(
               placeholderIdentifier,
               placeholderEntry,
             );
             src.placeholder = placeholderIdentifier;
           }
-          const breakpoints = transforms.breakpoints ?? config.breakpoints;
+
+          const breakpoints = resolveBreakpoints(transforms, config);
           if (breakpoints) {
             const srcSets: string[] = [];
             for (const breakpoint of breakpoints) {
+              const breakpointTransforms = resolveBreakpointTransforms(
+                parsed.transforms,
+                config.transforms,
+                breakpoint,
+              );
               const srcSetIdentifier = identifier.srcSet(
-                DEFAULT_IMAGE_FORMAT,
+                breakpointTransforms.format,
                 breakpoint,
               );
               const breakpointEntry: ImageEntry = {
-                ...transforms,
+                ...breakpointTransforms,
                 origin: origin,
-                width: breakpoint,
               };
               imageEntries.createSrcSetEntry(srcSetIdentifier, breakpointEntry);
               srcSets.push(`${srcSetIdentifier} ${breakpoint}w`);
             }
             src.srcSet = srcSets.join(", ");
           }
-
+          console.log(src);
           return `
                import { __imageFactory } from "@lonik/oh-image/react";
 
