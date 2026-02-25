@@ -95,6 +95,14 @@ function App() {
     title={`${loader.title} Default Config`}
   />
 
+  {loader.globalOptions && (
+    <>
+      <h2>Global Options</h2>
+      <p>Everything in transformation options in addition to:</p>
+      <Code code={loader.globalOptions} lang="ts" title={`${loader.title} Global Options`} />
+    </>
+  )}
+
   <h2>Transforms Option</h2>
   <p>
     Below is the transformation

@@ -92,7 +92,8 @@ describe("loaderFactory", () => {
 
     expect(urlResolver).toHaveBeenCalledWith({
       imageOptions,
-      params: "width,100&height,100&q,80", 
+      options: defaults,
+      params: "width,100&height,100&q,80",
       path: defaults.path,
     });
   });

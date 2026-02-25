@@ -28,10 +28,11 @@ export type LoaderParamsResolver<K> = (options: {
   paramSeparator: string;
 }) => string[];
 
-export type LoaderUrlResolved = (options: {
+export type LoaderUrlResolved<T> = (options: {
   imageOptions: ImageLoaderOptions;
   params: string;
   path: string;
+  options: T;
 }) => string;
 
 export type LoaderOrders = Record<

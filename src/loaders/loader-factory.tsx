@@ -13,7 +13,7 @@ import type {
 export default function loaderFactory<
   K extends BaseLoaderTransforms,
   T extends BaseGlobalLoaderOptions<K>,
->(defaults: T, config: LoaderFactoryConfig, urlResolver: LoaderUrlResolved) {
+>(defaults: T, config: LoaderFactoryConfig, urlResolver: LoaderUrlResolved<T>) {
   const loaderContext = createContext<T>(defaults);
 
   function useLoaderContext() {
@@ -42,6 +42,10 @@ export default function loaderFactory<
       console.warn("Path is not provided");
       return () => undefined;
     }
+    const mergedOptions = {
+      ...context,
+      ...options,
+    };
     return (imageOptions: ImageLoaderOptions) => {
       const defaultTransform = imageOptions.isPlaceholder
         ? context.placeholder
@@ -79,6 +83,7 @@ export default function loaderFactory<
         imageOptions,
         params: resolvedParams,
         path,
+        options: mergedOptions,
       });
     };
   };
