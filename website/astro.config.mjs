@@ -2,7 +2,7 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
-
+import starlightLlmsTxt from "starlight-llms-txt";
 // https://astro.build/config
 export default defineConfig({
   site: "https://lukonik.github.io",
@@ -10,7 +10,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "Oh Image",
-      plugins: [],
+      plugins: [starlightLlmsTxt()],
       head: [
         {
           tag: "meta",
@@ -76,7 +76,7 @@ export default defineConfig({
               slug: "docs/image/loaders/custom-loader",
             },
           ],
-        },
+        }
       ],
       customCss: ["./src/styles/global.css"],
     }),
