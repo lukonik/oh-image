@@ -468,5 +468,5 @@ export interface ImgproxyGlobalOptions extends BaseGlobalLoaderOptions<ImgproxyO
    * - \`"insecure"\` sets it to insecure
    * - \`string\` sets the custom signature
    */
-  signature?: "insecure" | (string & {});
+  signature?: "insecure" | (string & {}) | undefined;
 }
