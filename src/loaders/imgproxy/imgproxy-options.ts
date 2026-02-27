@@ -1,6 +1,6 @@
 import type {
   BaseGlobalLoaderOptions,
-  BaseLoaderOptions
+  BaseLoaderOptions,
 } from "../base-loader-options";
 
 type ResizeType = "fit" | "fill" | "fill-down" | "force" | "auto";
@@ -462,4 +462,11 @@ export type ImgproxyTransforms = Partial<{
 }>;
 
 export type ImgproxyOptions = BaseLoaderOptions<ImgproxyTransforms>;
-export type ImgproxyGlobalOptions = BaseGlobalLoaderOptions<ImgproxyTransforms>;
+export interface ImgproxyGlobalOptions extends BaseGlobalLoaderOptions<ImgproxyOptions> {
+  /**
+   * If \`undefined\`, won't set anything (this is for backward compatibility and will be removed in future versions, where by default it will be "insecure").
+   * - \`"insecure"\` sets it to insecure
+   * - \`string\` sets the custom signature
+   */
+  signature?: "insecure" | (string & {}) | undefined;
+}

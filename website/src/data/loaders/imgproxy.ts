@@ -13,6 +13,7 @@ export const imgproxy = {
       quality: 10,
       format: "webp",
     },
+    signature:undefined
   },
   `,
   interface: `type ResizeType = "fit" | "fill" | "fill-down" | "force" | "auto";
@@ -194,5 +195,13 @@ export interface ImgproxyTransforms {
   expires?: number;
   filename?: string;
   preset?: string[];
+}`,
+  globalOptions: `export interface ImgproxyGlobalOptions {
+  /**
+   * If \`undefined\`, won't set anything (this is for backward compatibility and will be removed in future versions, where by default it will be "insecure").
+   * - \`"insecure"\` sets it to insecure
+   * - \`string\` sets the custom signature
+   */
+  signature?: "insecure" | (string & {});
 }`,
 };

@@ -103,6 +103,10 @@ export const {
       zoom: { orders: ["x", "y"] },
     },
   },
-  ({ path, params, imageOptions }) =>
-    `${path}/${params}/plain/${imageOptions.src}`,
+  ({ path, params, imageOptions, options }) => {
+    if (options.signature !== undefined) {
+      return `${path}/${options.signature}/${params}/plain/${imageOptions.src}`;
+    }
+    return `${path}/${params}/plain/${imageOptions.src}`;
+  },
 );

@@ -1,4 +1,4 @@
-import { describe, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
   describeBooleanOption,
   describeImageOptions,
@@ -9,6 +9,7 @@ import {
 import { useImgproxyLoader } from "../../../src/loaders/imgproxy/imgproxy-loader";
 import type { ImgproxyTransforms } from "../../../src/loaders/imgproxy/imgproxy-options";
 import { chai } from "vitest";
+import { renderHook } from "vitest-browser-react";
 chai.config.truncateThreshold = 100000;
 describe("imgproxy", () => {
   const optionSeparator = ":";
@@ -44,6 +45,29 @@ describe("imgproxy", () => {
     (options) => useImgproxyLoader(options),
     ":",
   );
+
+  describe("loader", () => {
+    async function createLoader(signature?: string) {
+      const { result } = await renderHook(() =>
+        useImgproxyLoader({
+          path: "http://imgproxy.net",
+          signature: signature,
+        }),
+      );
+      return result.current({
+        src: "test",
+      });
+    }
+    it("should return insecure when signature is undefined", async () => {
+      expect(await createLoader()).not.toContain("insecure");
+    });
+    it("should return signature when signature is defined", async () => {
+      expect(await createLoader("random_hash")).toContain("random_hash");
+    });
+    it("should return insecure when insecure is set", async () => {
+      expect(await createLoader("insecure")).toContain("insecure");
+    });
+  });
 
   describeOption("adjust", {}, "::");
   describeOption(
