@@ -1,0 +1,155 @@
+---
+title: Image Component
+description: Documentation for the Image component in oh-image
+---
+
+The `Image` component is the heart of the project. It wraps the native `<img>`
+element to add responsiveness and performance enhancements. This wrapper also
+enables automatic Vite optimization and effortless integration with CDN
+providers.
+
+Import the component like this:
+
+`import { Image } from "@lonik/oh-image/react";`
+
+Let's explore the props available on `Image`.
+
+## Props
+
+### `src`
+
+**Type**: `string` (required)
+
+The source URL of the image.
+
+### `alt`
+
+**Type**: `string` (required)
+
+Alternative text for the image. Required for accessibility. Use an empty string `""` for decorative images.
+
+### `width` & `height`
+
+**Type**: `number` (optional)
+
+The intrinsic dimensions of the image.
+These attributes help prevent layout shift (CLS) by reserving space for the image before it loads.
+
+### `fill`
+
+**Type**: `boolean` (optional)
+
+A boolean that causes the image to fill its parent container.
+
+- Sets `width: 100%`, `height: 100%`, and `inset: 0`.
+- Useful for background images or when you want the image to adapt entirely to a container's size.
+
+### `placeholder`
+
+**Type**: `string | boolean | null` (optional)
+
+The URL of the placeholder image to display while loading, or a boolean to enable/disable it.
+
+- It accepts a URL string or a **Base64 data URI string** (e.g. `data:image/...`).
+- The placeholder is displayed as a background image while the main image loads.
+
+### `priority`
+
+**Type**: `boolean` (optional)
+
+Use this for critical images, such as the Largest Contentful Paint (LCP) element (e.g., hero images).
+
+- Sets `loading="eager"`.
+- Sets `fetchPriority="high"`.
+- Sets `decoding="async"`.
+- If supported (React 19+), inserts a `<link rel="preload">` tag to prioritize the resource.
+
+### `loader`
+
+**Type**: `(options: ImageLoaderOptions) => string` (optional)
+
+A function to generate the image URL.
+
+- Useful for using external image CDNs (Cloudinary, Imgproxy, etc.).
+
+### `breakpoints`
+
+**Type**: `number[]` (optional)
+
+An array of widths used to generate the `srcSet` when using a `loader`.
+
+### `sizes`
+
+**Type**: `string` (optional)
+
+The `sizes` attribute of the `<img>` element. By default, the `Image` component
+attempts to set an appropriate value, but **layout-specific needs cannot be
+predicted automatically**. Set this manually whenever your design demands it.
+
+```tsx
+<Image
+  src="https://example.com/photo.jpg"
+  sizes="(max-width: 768px) 100vw, 50vw"
+/>
+```
+
+### `loading`
+
+**Type**: `'lazy' | 'eager'` (optional)
+
+- Defaults to `'lazy'`.
+- If `priority` is `true`, this is forced to `'eager'`.
+
+### `decoding`
+
+**Type**: `'async' | 'auto' | 'sync'` (optional)
+
+- Defaults to `'async'` if `priority` is `true`.
+
+### `fetchPriority`
+
+**Type**: `'high' | 'low' | 'auto'` (optional)
+
+- Defaults to `'auto'`.
+- If `priority` is `true`, this is forced to `'high'`.
+
+### `className`
+
+**Type**: `string` (optional)
+
+classes forwarded to the rendered `<img>` element.
+### `style`
+
+**Type**: `React.CSSProperties` (optional)
+
+styles forwarded to the rendered `<img>` element.
+
+## Global Configuration
+
+You can configure default settings for all `Image` components in your application using the `ImageProvider`.
+
+```tsx
+import { ImageProvider } from "@lonik/oh-image/react";
+
+const customBreakpoints = [320, 640, 1024, 1920];
+
+export function App() {
+  return (
+    <ImageProvider
+      breakpoints={customBreakpoints}
+      placeholder={true}
+    >
+      {/* Your app components */}
+    </ImageProvider>
+  );
+}
+```
+
+## Defaults
+
+If not specified, the `Image` component uses the following defaults (unless
+overridden by `ImageProvider`):
+
+- **placeholder**: `true`
+- **breakpoints**: `[16, 48, 96, 128, 384, 640, 750, 828, 1080, 1200, 1920]`
+- **loader**: null

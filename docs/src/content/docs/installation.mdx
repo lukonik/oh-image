@@ -1,0 +1,27 @@
+---
+title: Installation
+description: Install and configure oh-image in your project
+---
+
+import { PackageManagers } from "starlight-package-managers";
+
+install the package and the `sharp` image processing library using your preferred package manager:
+
+<PackageManagers type="add" pkg="@lonik/oh-image sharp" />
+
+## Setup
+
+add `oh-image` plugin to the plugins array
+
+```ts
+// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { ohImage } from "@lonik/oh-image/plugin";
+
+export default defineConfig({
+  plugins: [ohImage(), react()],
+});
+```
+
+And that’s it; you’re good to go.
