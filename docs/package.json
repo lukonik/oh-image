@@ -12,7 +12,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@lonik/prestige": "link:../../../../Library/pnpm/global/5/node_modules/@lonik/prestige",
+    "@lonik/prestige": "^0.0.5",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-router": "latest",

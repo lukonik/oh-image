@@ -10,17 +10,10 @@ import viteReact from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
 
 const config = defineConfig({
-  ssr: {
-    noExternal: ["@lonik/prestige", "@lonik/themer"],
-  },
   resolve: {
     dedupe: ["react", "react-dom"],
   },
   plugins: [
-    devtools(),
-    nitro({ rollupConfig: { external: [/^@sentry\//] } }),
-    tsconfigPaths({ projects: ["./tsconfig.json"] }),
-    tailwindcss(),
     prestige({
       title: "Oh Image",
       collections: [
@@ -56,9 +49,17 @@ const config = defineConfig({
           ],
         },
       ],
-    }) as any,
-
-    tanstackStart(),
+    }),
+    nitro({ rollupConfig: { external: [/^@sentry\//] } }),
+    tsconfigPaths({ projects: ["./tsconfig.json"] }),
+    tailwindcss(),
+    devtools(),
+    tanstackStart({
+      prerender: {
+        enabled: true,
+        crawlLinks: true,
+      },
+    }),
     viteReact(),
   ],
 });

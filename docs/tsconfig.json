@@ -10,7 +10,7 @@
       "@/*": ["./src/*"]
     },
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "types": ["vite/client"],
+    "types": ["@lonik/prestige/client", "vite/client"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
