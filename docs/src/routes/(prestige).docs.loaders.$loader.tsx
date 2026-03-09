@@ -1,11 +1,10 @@
+import { Aside, Code, PrestigePage } from "@lonik/prestige/ui";
 import { createFileRoute } from "@tanstack/react-router";
 import { loaders } from "../loaders/loaders";
-import { Aside, Code, PrestigePage } from "@lonik/prestige/ui";
 
 // 1. Define the Route and Data Loader (Replaces getStaticPaths)
 export const Route = createFileRoute("/(prestige)/docs/loaders/$loader")({
   loader: ({ params }) => {
-    console.log("CAAAME HEREE ", params);
     const loaderData = loaders.find((l) => l.slug === params.loader);
 
     if (!loaderData) {
