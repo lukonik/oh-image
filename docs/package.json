@@ -13,7 +13,7 @@
     "prestige": "pnpm i @lonik/prestige@latest -S --registry http://localhost:4873/"
   },
   "dependencies": {
-    "@lonik/prestige": "^0.0.8",
+    "@lonik/prestige": "^0.0.10",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-router": "latest",
@@ -21,7 +21,7 @@
     "@tanstack/react-router-ssr-query": "latest",
     "@tanstack/react-start": "latest",
     "@tanstack/router-plugin": "^1.132.0",
-    "lucide-react": "^0.545.0",
+    "lucide-react": "^0.577.0",
     "nitro": "npm:nitro-nightly@latest",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

@@ -9,37 +9,9 @@
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-:root[data-theme="dark"] {
-  --color-white: black;
-}
-
-:root {
-  --color-white: white;
-}
-
 @theme {
   --font-rubik: "Rubik Wet Paint", system-ui;
   --font-sans: "Inter", sans-serif;
   --font-mono: "Geist Mono", monospace;
-  --spacing-header: 64px;
-  --height-main: calc(100vh - var(--spacing-header));
-  --width-sidebar: 300px;
-
-  --color-white: var(--color-white);
 }
-.prose {
-  /* Shiki Dual Theme Dark Mode Overrides */
-  :root .shiki,
-  :root .shiki span {
-    background-color: var(--color-default-50) !important;
-  }
 
-  :root[data-theme="dark"] .shiki,
-  :root[data-theme="dark"] .shiki span {
-    color: var(--shiki-dark) !important;
-    background-color: var(--shiki-dark-bg) !important;
-    font-style: var(--shiki-dark-font-style) !important;
-    font-weight: var(--shiki-dark-font-weight) !important;
-    text-decoration: var(--shiki-dark-text-decoration) !important;
-  }
-}
