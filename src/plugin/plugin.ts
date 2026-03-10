@@ -51,7 +51,9 @@ export function ohImage(options?: Partial<PluginConfig>): Plugin {
       cacheDir = join(viteConfig.cacheDir, DEV_DIR);
       isBuild = viteConfig.command === "build";
       assetsDir = viteConfig.build.assetsDir;
-      outDir = join(viteConfig.root, viteConfig.build.outDir);
+      outDir = config.outDir
+        ? join(viteConfig.root, config.outDir)
+        : join(viteConfig.root, viteConfig.build.outDir);
     },
     enforce: "pre",
     configureServer(server) {

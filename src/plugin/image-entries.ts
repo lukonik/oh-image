@@ -1,6 +1,4 @@
 import type { ImageEntry } from "./types";
-const PLACEHOLDER_IMG_SIZE = 8;
-const PLACEHOLDER_BLUR_QUALITY = 70;
 
 export function createImageEntries() {
   const map = new Map<string, ImageEntry>();

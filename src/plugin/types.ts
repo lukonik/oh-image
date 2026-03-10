@@ -70,6 +70,7 @@ export type PluginPlaceholderTransforms = Omit<
 
 export interface PluginConfig {
   distDir: string;
+  outDir?: string;
   transforms?: PluginTransforms;
   placeholder?: PluginPlaceholderTransforms;
   breakpoints?: number[];
