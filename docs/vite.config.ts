@@ -15,7 +15,6 @@ const config = defineConfig({
     dedupe: ["react", "react-dom"],
   },
   plugins: [
-    ohImage(),
     prestige({
       title: "Oh Image",
       collections: [
@@ -62,8 +61,12 @@ const config = defineConfig({
         crawlLinks: false,
       },
     }),
+    ohImage(),
     viteReact(),
   ],
+  build: {
+    outDir: ".output/public",
+  },
 });
 
 export default config;
