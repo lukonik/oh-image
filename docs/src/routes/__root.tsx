@@ -5,15 +5,9 @@ import {
   Outlet,
   Scripts,
 } from "@tanstack/react-router";
-import appCss from "../styles.css?url";
 import config from "virtual:prestige/config";
-
+import appCss from "../styles.css?url";
 const options = {
-  github: "https://github.com/lukonik/Prestige",
-  license: {
-    label: "MIT License",
-    url: "https://opensource.org/licenses/MIT",
-  },
   customHeaderTitle: () => (
     <span className="font-rubik text-primary-600 text-2xl">Oh Image</span>
   ),

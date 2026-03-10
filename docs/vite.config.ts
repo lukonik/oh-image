@@ -4,6 +4,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 
+import { ohImage } from "@lonik/oh-image/plugin";
 import { prestige } from "@lonik/prestige/vite";
 import tailwindcss from "@tailwindcss/vite";
 import viteReact from "@vitejs/plugin-react";
@@ -14,6 +15,7 @@ const config = defineConfig({
     dedupe: ["react", "react-dom"],
   },
   plugins: [
+    ohImage(),
     prestige({
       title: "Oh Image",
       collections: [
@@ -57,7 +59,7 @@ const config = defineConfig({
     tanstackStart({
       prerender: {
         enabled: true,
-        crawlLinks: true,
+        crawlLinks: false,
       },
     }),
     viteReact(),

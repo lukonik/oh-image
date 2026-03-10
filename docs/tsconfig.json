@@ -1,5 +1,5 @@
 {
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "@lonik/oh-image/client"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
@@ -10,7 +10,11 @@
       "@/*": ["./src/*"]
     },
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "types": ["@lonik/prestige/client", "vite/client"],
+    "types": [
+      "@lonik/prestige/client",
+      "@lonik/oh-iamge/client",
+      "vite/client"
+    ],
 
     /* Bundler mode */
     "moduleResolution": "bundler",

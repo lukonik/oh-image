@@ -1,7 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&display=swap");
 @import "tailwindcss";
-@import "@lonik/prestige/themes/primary-violet.css";
-@import "@lonik/prestige/themes/default-stone.css";
+@import "@lonik/prestige/themes/primary-rose.css";
+@import "@lonik/prestige/themes/default-slate.css";
+@import "@lonik/prestige/themes/core.css";
 @plugin "@tailwindcss/typography";
 @source "../node_modules/@lonik/prestige";
 
@@ -9,123 +11,35 @@
 
 :root[data-theme="dark"] {
   --color-white: black;
-  --color-primary: var(--color-primary-600);
-  --color-on-primary: var(--color-white);
-
-  --color-default: var(--color-default-300);
-  --color-surface-container: var(--color-white);
-
-  .prose {
-    --tw-prose-code: var(--color-default-700);
-    --tw-prose-body: var(--color-default-500);
-  }
 }
 
 :root {
   --color-white: white;
-  --color-primary: var(--color-primary-600);
-  --color-on-primary: var(--color-white);
-
-  --color-default: var(--color-default-300);
-  --color-surface-container: var(--color-white);
-
-  .prose {
-    --tw-prose-code: var(--color-default-700);
-  }
-}
-
-:root {
-  @apply bg-white text-default-500 font-sans;
 }
 
 @theme {
+  --font-rubik: "Rubik Wet Paint", system-ui;
   --font-sans: "Inter", sans-serif;
   --font-mono: "Geist Mono", monospace;
   --spacing-header: 64px;
   --height-main: calc(100vh - var(--spacing-header));
   --width-sidebar: 300px;
 
-  --color-primary: var(--color-primary-600);
-  --color-on-primary: var(--color-white);
-
-  --color-default: var(--color-default-300);
   --color-white: var(--color-white);
 }
+.prose {
+  /* Shiki Dual Theme Dark Mode Overrides */
+  :root .shiki,
+  :root .shiki span {
+    background-color: var(--color-default-50) !important;
+  }
 
-h1 {
-  font-size: 2rem;
-  line-height: 1.2rem;
-  font-family: var(--font-sans);
-  letter-spacing: -0.02rem;
-  font-weight: 400;
-  @apply text-default-700;
-}
-h2 {
-  font-size: 1.875rem;
-  line-height: 1.2rem;
-  font-family: var(--font-sans);
-  letter-spacing: -0.03rem;
-  font-weight: 400;
-  @apply text-default-700;
-}
-h3 {
-  font-size: 1.5rem;
-  line-height: 1.2rem;
-  font-family: var(--font-sans);
-  letter-spacing: -0.03rem;
-  font-weight: 400;
-  @apply text-default-700;
-}
-h4 {
-  font-size: 1.4rem;
-  line-height: 1.2rem;
-  font-family: var(--font-sans);
-  letter-spacing: -0.03rem;
-  font-weight: 400;
-  @apply text-default-700;
-}
-h5 {
-  font-size: 1.3rem;
-  line-height: 1.2rem;
-  font-family: var(--font-sans);
-  letter-spacing: -0.03rem;
-  font-weight: 400;
-  @apply text-default-700;
-}
-h6 {
-  font-size: 1.2rem;
-  line-height: 1.2rem;
-  font-family: var(--font-sans);
-  letter-spacing: -0.03rem;
-  font-weight: 400;
-  @apply text-default-700;
-}
-p {
-  font-size: 1rem;
-  line-height: 1.5rem;
-  font-family: var(--font-sans);
-  font-weight: 400;
-  @apply text-default-500;
-}
-
-strong {
-  @apply font-medium text-default-700;
-}
-code:not(:has(span)) {
-  @apply bg-default-100 p-1 rounded;
-}
-
-/* Shiki Dual Theme Dark Mode Overrides */
-:root .shiki,
-:root .shiki span {
-  background-color: var(--color-default-50) !important;
-}
-
-:root[data-theme="dark"] .shiki,
-:root[data-theme="dark"] .shiki span {
-  color: var(--shiki-dark) !important;
-  background-color: var(--shiki-dark-bg) !important;
-  font-style: var(--shiki-dark-font-style) !important;
-  font-weight: var(--shiki-dark-font-weight) !important;
-  text-decoration: var(--shiki-dark-text-decoration) !important;
+  :root[data-theme="dark"] .shiki,
+  :root[data-theme="dark"] .shiki span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
 }

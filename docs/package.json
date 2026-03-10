@@ -9,10 +9,11 @@
     "dev": "vite dev --port 3000",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prestige": "pnpm i @lonik/prestige@latest -S --registry http://localhost:4873/"
   },
   "dependencies": {
-    "@lonik/prestige": "^0.0.5",
+    "@lonik/prestige": "^0.0.8",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-router": "latest",
@@ -27,6 +28,7 @@
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
+    "@lonik/oh-image": "^3.1.0",
     "@tailwindcss/typography": "^0.5.16",
     "@tanstack/devtools-vite": "latest",
     "@testing-library/dom": "^10.4.1",
