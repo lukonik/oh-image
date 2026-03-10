@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@lonik/prestige':
         specifier: ^0.10.0
-        version: 0.10.0(ee455e54d953005b3afd7e92a4153551)
+        version: 0.10.0(6632aacd90e04df6eb9bce69d4919aa2)
       '@lonik/themer':
         specifier: ^0.5.2
         version: 0.5.2(@tanstack/react-router@1.166.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))
@@ -52,8 +52,8 @@ importers:
         version: 4.2.1
     devDependencies:
       '@lonik/oh-image':
-        specifier: ^3.1.0
-        version: 3.1.0(playwright@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sharp@0.34.5)(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))(vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.19.15)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))
+        specifier: ^3.2.0
+        version: 3.2.0(playwright@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sharp@0.34.5)(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))(vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.19.15)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))
       '@tailwindcss/typography':
         specifier: ^0.5.16
         version: 0.5.19(tailwindcss@4.2.1)
@@ -730,8 +730,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@lonik/oh-image@3.1.0':
-    resolution: {integrity: sha512-8DimJleQxgGfIk3dhY07x0sQqc2ly7hvwi8K8CvMYeeHdF+NFksNvhkV96fNy4BF1lu2IECdBd85EWCh3rqilw==}
+  '@lonik/oh-image@3.2.0':
+    resolution: {integrity: sha512-4CV2kLPugtULdFiN6rjsrHF0YMyESCEBXVqQ18zE5ffEmNWos1UsAEW01rzT+rNwgnTxeOJxDZ5F7l75KYSzBA==}
     peerDependencies:
       react: '>=18'
       react-dom: '>=18'
@@ -3774,7 +3774,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@lonik/oh-image@3.1.0(playwright@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sharp@0.34.5)(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))(vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.19.15)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))':
+  '@lonik/oh-image@3.2.0(playwright@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sharp@0.34.5)(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))(vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.19.15)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))':
     dependencies:
       '@vitest/browser-playwright': 4.0.18(playwright@1.58.2)(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))(vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.19.15)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))
       p-limit: 7.3.0
@@ -3790,12 +3790,12 @@ snapshots:
       - vite
       - vitest
 
-  '@lonik/prestige@0.10.0(ee455e54d953005b3afd7e92a4153551)':
+  '@lonik/prestige@0.10.0(6632aacd90e04df6eb9bce69d4919aa2)':
     dependencies:
       '@base-ui/react': 1.2.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@docsearch/css': 4.6.0
       '@docsearch/react': 4.6.0(@algolia/client-search@5.49.2)(@types/react@19.2.14)(algoliasearch@5.49.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(search-insights@2.17.3)
-      '@lonik/oh-image': 3.1.0(playwright@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sharp@0.34.5)(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))(vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.19.15)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))
+      '@lonik/oh-image': 3.2.0(playwright@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sharp@0.34.5)(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))(vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.19.15)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))
       '@lonik/themer': 0.5.2(@tanstack/react-router@1.166.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))
       '@mdx-js/mdx': 3.1.1
       '@mdx-js/react': 3.1.1(@types/react@19.2.14)(react@19.2.4)

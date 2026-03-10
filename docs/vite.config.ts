@@ -61,12 +61,11 @@ const config = defineConfig({
         crawlLinks: false,
       },
     }),
-    ohImage(),
+    ohImage({
+      outDir: ".output/public",
+    }),
     viteReact(),
   ],
-  build: {
-    outDir: ".output/public",
-  },
 });
 
 export default config;
