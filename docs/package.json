@@ -13,7 +13,7 @@
     "prestige": "pnpm i @lonik/prestige@latest -S --registry http://localhost:4873/"
   },
   "dependencies": {
-    "@lonik/prestige": "^0.4.0",
+    "@lonik/prestige": "^0.10.0",
     "@lonik/themer": "^0.5.2",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",

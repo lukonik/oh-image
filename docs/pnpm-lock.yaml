@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@lonik/prestige':
-        specifier: ^0.4.0
-        version: 0.4.0(ee455e54d953005b3afd7e92a4153551)
+        specifier: ^0.10.0
+        version: 0.10.0(ee455e54d953005b3afd7e92a4153551)
       '@lonik/themer':
         specifier: ^0.5.2
         version: 0.5.2(@tanstack/react-router@1.166.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))
@@ -737,8 +737,8 @@ packages:
       react-dom: '>=18'
       sharp: '>=0.34.5'
 
-  '@lonik/prestige@0.4.0':
-    resolution: {integrity: sha512-0Tu8OipQd3T8fS7JFWj9VC+CM5gGTCm/fsY4dMvhsfAIludFl228b5DlwFgcjJbgDvMU5P1vESisXjE/IwhUEA==}
+  '@lonik/prestige@0.10.0':
+    resolution: {integrity: sha512-Qwt0fywxzNlg0PKPypmKf3YlXGCq6lZbDbzzuF9grHHwIWtPXMaAVSoyfe1d53XdDHfmRH4Zl183eh5mbtbBXA==}
     peerDependencies:
       '@base-ui/react': ^1.2.0
       '@docsearch/css': ^4.6.0
@@ -3790,7 +3790,7 @@ snapshots:
       - vite
       - vitest
 
-  '@lonik/prestige@0.4.0(ee455e54d953005b3afd7e92a4153551)':
+  '@lonik/prestige@0.10.0(ee455e54d953005b3afd7e92a4153551)':
     dependencies:
       '@base-ui/react': 1.2.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@docsearch/css': 4.6.0

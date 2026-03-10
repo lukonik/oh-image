@@ -128,7 +128,7 @@ function App() {
           </p>
           <h2>{`${loaderItem.title} Global Options`}</h2>
 
-          <Code code={loaderItem.globalOptions} language="ts" />
+          <Code language="ts">{loaderItem.globalOptions}</Code>
         </>
       )}
 
