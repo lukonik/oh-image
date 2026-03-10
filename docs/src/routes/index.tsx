@@ -31,7 +31,7 @@ export function App() {
       </div>
 
       <div className="shrink-0">
-        <Heroimage className="w-100 h-100" />
+        <Heroimage placeholder={false} className="w-100 h-100" />
       </div>
     </div>
   );
