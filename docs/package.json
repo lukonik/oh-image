@@ -6,11 +6,10 @@
     "#/*": "./src/*"
   },
   "scripts": {
-    "dev": "vite dev --port 3000",
+    "dev": "TSR_VITE_DEBUG=true vite dev --port 3000",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest run",
-    "prestige": "pnpm i @lonik/prestige@latest -S --registry http://localhost:4873/"
+    "test": "vitest run"
   },
   "dependencies": {
     "@lonik/prestige": "^0.10.0",
