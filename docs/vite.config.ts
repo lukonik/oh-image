@@ -14,7 +14,9 @@ const config = defineConfig({
   resolve: {
     dedupe: ["react", "react-dom"],
   },
+
   plugins: [
+    tsconfigPaths({ projects: ["./tsconfig.json"] }),
     prestige({
       title: "Oh Image",
       license: {
@@ -60,8 +62,12 @@ const config = defineConfig({
         },
       ],
     }),
-    nitro({ rollupConfig: { external: [/^@sentry\//] } }),
-    tsconfigPaths({ projects: ["./tsconfig.json"] }),
+    nitro({
+      rollupConfig: { external: [/^@sentry\//] },
+      // baseURL: "/oh-image",
+      renderer: false,
+    }),
+
     tailwindcss(),
     devtools(),
     tanstackStart({
