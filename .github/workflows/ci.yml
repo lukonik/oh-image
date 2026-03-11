@@ -33,11 +33,11 @@ jobs:
       - name: Build
         run: pnpm build
 
-  website:
+  docs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: website # Sets the default directory for all 'run' steps
+        working-directory: docs # Sets the default directory for all 'run' steps
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
         with:
           node-version: "lts/*"
           cache: "pnpm"
-          cache-dependency-path: website/pnpm-lock.yaml
+          cache-dependency-path: docs/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

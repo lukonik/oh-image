@@ -11,6 +11,7 @@ import viteReact from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
 
 const config = defineConfig({
+  base: "/oh-image/",
   resolve: {
     dedupe: ["react", "react-dom"],
   },
@@ -64,7 +65,7 @@ const config = defineConfig({
     }),
     nitro({
       rollupConfig: { external: [/^@sentry\//] },
-      // baseURL: "/oh-image",
+      baseURL: "/oh-image",
       renderer: false,
     }),
 

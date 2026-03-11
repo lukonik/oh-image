@@ -22,7 +22,7 @@ The project also includes adapters (loaders) for various external image CDNs lik
     *   Uses `useImgLoaded` hook to manage loading states and placeholder transitions.
 *   **`src/loaders/`**: Contains loader implementations for external image services.
 *   **`playground/`**: A Vite-based React application used for testing and demonstrating the library's features during development.
-*   **`website/`**: Documentation site built with Astro.
+*   **`docs/`**: Documentation site built with Vite and TanStack Start.
 
 ## Key Files
 
