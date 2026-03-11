@@ -8,7 +8,20 @@
     "**/node_modules": true,
     "**/.output": true,
     "**/dist": true,
-    "**/__screenshots__": true
+    "**/__screenshots__": true,
+    "**/.tanstack": true
+  },
+  "files.watcherExclude": {
+    "**/routeTree.gen.ts": true,
+    "**/(prestige)/**": true
+  },
+  "search.exclude": {
+    "**/routeTree.gen.ts": true,
+    "**/(prestige)/**": true
+  },
+  "files.readonlyInclude": {
+    "**/routeTree.gen.ts": true,
+    "**/(prestige)/**": true
   },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
