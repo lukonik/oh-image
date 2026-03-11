@@ -1,0 +1,127 @@
+---
+title: Cloudinary Loader
+---
+
+import { Code, Aside } from "@lonik/prestige/ui";
+
+This integration allows you to use **Cloudinary** for image optimization.
+Because Cloudinary offers a vast array of transformations and options, we leverage the official `@cloudinary/url-gen` library to handle URL generation. This ensures you have access to the full power of Cloudinary's SDK while integrating seamlessly with `@lonik/oh-image`.
+
+For more details on Cloudinary transformations, refer to the [official documentation](https://cloudinary.com/documentation/transformation_reference).
+
+## Installation
+
+To use the Cloudinary loader, you must install the `@cloudinary/url-gen` package:
+
+<h2>Install dependency</h2>
+<Code code="pnpm add @cloudinary/url-gen" language="bash" />
+
+## Module import
+
+<Code
+  language="ts"
+  code={`import { useCloudinaryLoader } from "@lonik/oh-image/cloudinary";`}
+/>
+
+## CloudinaryLoaderProvider
+
+The `CloudinaryLoaderProvider` is the recommended way to configure your Cloudinary client globally. It requires a `Cloudinary` client instance.
+
+<h2>Configuring CloudinaryLoaderProvider</h2>
+<Code
+  code={`
+import { Cloudinary } from "@cloudinary/url-gen";
+import { CloudinaryLoaderProvider } from "@lonik/oh-image/loaders/cloudinary";
+
+const cld = new Cloudinary({
+cloud: {
+cloudName: "demo",
+},
+});
+
+function App() {
+return (
+
+<CloudinaryLoaderProvider
+client={cld}
+// Optional: Default transforms for all images
+transforms={(img) => img.quality('auto')} >
+<MyComponent />
+</CloudinaryLoaderProvider>
+);
+}
+`}
+language="tsx"
+/>
+
+## useCloudinaryLoader
+
+The `useCloudinaryLoader` hook generates the loader function. It integrates with the context provided by `CloudinaryLoaderProvider`.
+
+You can pass a transformation function directly to the hook to apply specific effects or optimizations to the image.
+
+<h2>Using useCloudinaryLoader</h2>
+<Code
+  code={`
+import { Cloudinary } from "@cloudinary/url-gen";
+import { sepia } from "@cloudinary/url-gen/actions/effect";
+import { useCloudinaryLoader } from "@lonik/oh-image/loaders/cloudinary";
+import { Image } from "@lonik/oh-image/react";
+
+function MyComponent() {
+// You can pass transforms directly to the hook
+const loader = useCloudinaryLoader((img) => img.effect(sepia()));
+
+return (
+
+<Image
+loader={loader}
+src="sample" // The public ID of the image in Cloudinary
+width={300}
+alt="My Image"
+/>
+);
+}
+`}
+language="tsx"
+/>
+
+## Global Defaults
+
+If no transforms are provided, the loader applies the following sensible defaults:
+
+- **Format:** `auto`
+- **Quality:** `auto`
+
+For placeholders, it defaults to:
+
+- **Width:** `10`
+- **Quality:** `auto:low`
+- **Format:** `auto`
+
+## Interface
+
+<Code
+  code={`
+import type { Cloudinary, CloudinaryImage } from "@cloudinary/url-gen";
+
+export type CloudinaryTransforms = (img: CloudinaryImage) => CloudinaryImage;
+
+export type CloudinaryGlobalOptions = {
+  cld: Cloudinary;
+};
+
+export interface CloudinaryLoaderHookOptions {
+  transforms?: CloudinaryTransforms;
+  placeholder?: CloudinaryTransforms;
+}
+
+export interface CloudinaryLoaderProviderProps {
+  client: Cloudinary;
+  children: React.ReactNode;
+  transforms?: CloudinaryTransforms;
+  placeholder?: CloudinaryTransforms;
+}
+`}
+  language="ts"
+/>

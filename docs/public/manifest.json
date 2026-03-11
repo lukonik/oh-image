@@ -1,0 +1,6 @@
+{
+  "short_name": "TanStack App",
+  "name": "Create TanStack App Sample",
+  "start_url": ".",
+  "display": "standalone"
+}
