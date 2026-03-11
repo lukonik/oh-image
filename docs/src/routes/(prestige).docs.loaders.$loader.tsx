@@ -11,7 +11,9 @@ export const Route = createFileRoute("/(prestige)/docs/loaders/$loader")({
       throw new Error(`Loader with slug "${params.loader}" not found`);
     }
 
-    return loaderData;
+    return loaderData as typeof loaderData & {
+      globalOptions: string | undefined | null;
+    };
   },
   component: LoaderDocumentationPage,
 });
@@ -128,7 +130,7 @@ function App() {
           </p>
           <h2>{`${loaderItem.title} Global Options`}</h2>
 
-          <Code language="ts">{loaderItem.globalOptions}</Code>
+          <Code code={loaderItem.globalOptions} language="ts"></Code>
         </>
       )}
 

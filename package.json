@@ -118,7 +118,6 @@
     "vitest-browser-react": "^2.0.5"
   },
   "dependencies": {
-    "@lonik/prestige": "^0.0.4",
     "@vitest/browser-playwright": "^4.0.18",
     "p-limit": "^7.3.0",
     "query-string": "^9.3.1"
