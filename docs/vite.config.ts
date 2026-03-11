@@ -17,6 +17,10 @@ const config = defineConfig({
   plugins: [
     prestige({
       title: "Oh Image",
+      license: {
+        label: "MIT",
+        url: "https://github.com/lonik/oh-image/blob/main/LICENSE",
+      },
       collections: [
         {
           id: "docs",

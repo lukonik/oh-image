@@ -12,7 +12,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@lonik/prestige": "^0.10.0",
+    "@lonik/prestige": "^0.2.0",
     "@lonik/themer": "^0.5.2",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",

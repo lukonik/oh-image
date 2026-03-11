@@ -1,4 +1,4 @@
-import { PrestigeShell } from "@lonik/prestige/ui";
+import { PrestigeShell, type PrestigeShellProps } from "@lonik/prestige/ui";
 import {
   createRootRoute,
   HeadContent,
@@ -7,9 +7,19 @@ import {
 } from "@tanstack/react-router";
 import config from "virtual:prestige/config";
 import appCss from "../styles.css?url";
-const options = {
+const options: PrestigeShellProps = {
   customHeaderTitle: () => (
     <span className="font-rubik text-primary-600 text-2xl">Oh Image</span>
+  ),
+  copyright: () => (
+    <a
+      className="underline"
+      href="https://github.com/lukonik/Prestige"
+      target="_blank"
+      rel="noreferrer"
+    >
+      Built with Prestige 🎩
+    </a>
   ),
 };
 
