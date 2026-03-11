@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Github } from "lucide-react";
 import Heroimage from "../assets/oh-image-hero.svg?$oh";
-
+import config from "virtual:prestige/config";
 export const Route = createFileRoute("/")({ component: App });
 
 export function App() {
@@ -18,11 +18,7 @@ export function App() {
               Introduction <ArrowRight size={20} />
             </button>
           </Link>
-          <a
-            rel="noreferrer"
-            href="https://github.com/lukonik/Prestige"
-            target="_blank"
-          >
+          <a rel="noreferrer" href={config.github} target="_blank">
             <button className="rounded-full px-4 lg:px-8  h-14 flex items-center justify-center gap-4 cursor-pointer">
               Star on Github <Github />
             </button>

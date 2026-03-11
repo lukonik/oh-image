@@ -24,6 +24,7 @@ const config = defineConfig({
         label: "MIT",
         url: "https://github.com/lonik/oh-image/blob/main/LICENSE",
       },
+      github: "https://github.com/lukonik/oh-image",
       algolia: {
         appId: "IYIAYOLJHX",
         apiKey: "137a443b7b9b637b8b76b11a2c82c15e",
