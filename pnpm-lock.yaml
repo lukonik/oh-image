@@ -14,6 +14,9 @@ importers:
       p-limit:
         specifier: ^7.3.0
         version: 7.3.0
+      pathe:
+        specifier: ^2.0.3
+        version: 2.0.3
       query-string:
         specifier: ^9.3.1
         version: 9.3.1

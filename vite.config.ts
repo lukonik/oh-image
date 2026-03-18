@@ -1,5 +1,5 @@
 /// <reference types="vitest/config" />
-import path from "node:path";
+import path from "pathe";
 import tanstackRouter from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";

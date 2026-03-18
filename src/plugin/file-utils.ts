@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname } from "node:path";
+import { dirname } from "pathe";
 
 export async function getHash(value: string | Buffer) {
   return createHash("sha256").update(value).digest("hex").slice(0, 16);

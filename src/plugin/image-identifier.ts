@@ -1,4 +1,4 @@
-import { basename, join } from "node:path";
+import { basename, join } from "pathe";
 import type { FormatEnum } from "sharp";
 
 export interface IdentifierDirs {
