@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { readFileSafe } from "../src/plugin/utils";
 import { writeFile, unlink, mkdir } from "node:fs/promises";
-import { join } from "node:path";
+import { join } from "pathe";
 import { tmpdir } from "node:os";
 
 describe("readFileSafe", () => {
