@@ -20,6 +20,10 @@
       "types": "./dist/plugin.d.ts",
       "default": "./dist/plugin.js"
     },
+    "./ng": {
+      "types": "./dist/ng.d.ts",
+      "default": "./dist/ng.js"
+    },
     "./react": {
       "types": "./dist/react.d.ts",
       "default": "./dist/react.js"
@@ -119,6 +123,7 @@
   },
   "dependencies": {
     "@vitest/browser-playwright": "^4.0.18",
+    "esbuild": "^0.27.4",
     "p-limit": "^7.3.0",
     "pathe": "^2.0.3",
     "query-string": "^9.3.1"

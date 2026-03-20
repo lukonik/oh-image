@@ -5,6 +5,7 @@ export default defineConfig({
   platform: "neutral",
   entry: {
     plugin: "src/plugin/index.ts",
+    ng: "src/ng/index.ts",
     react: "src/react/index.ts",
     cloudflare: "src/loaders/cloudflare/index.ts",
     cloudinary: "src/loaders/cloudinary/index.ts",
