@@ -53,6 +53,7 @@ const config = defineConfig({
                 { label: "Imgproxy", link: "/docs/loaders/imgproxy" },
                 { label: "Kontent", link: "/docs/loaders/kontent" },
                 { label: "Netlify", link: "/docs/loaders/netlify" },
+                { label: "Supabase", link: "/docs/loaders/supabase" },
                 { label: "Wordpress", link: "/docs/loaders/wordpress" },
                 {
                   label: "Custom Loader",
