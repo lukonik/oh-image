@@ -2,7 +2,30 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Github } from "lucide-react";
 import Heroimage from "../assets/oh-image-hero.svg?$oh";
 import config from "virtual:prestige/config";
-export const Route = createFileRoute("/")({ component: App });
+
+const siteUrl = "https://lukonik.github.io/oh-image";
+const homeTitle = "React Image Component and Vite Image Plugin | Oh Image";
+const homeDescription =
+  "Oh Image is a React image component and Vite image plugin for responsive images, placeholders, static optimization, and CDN loaders.";
+const homeKeywords =
+  "react image component, vite image component, vite image plugin, responsive react images, image optimization vite, react image placeholder";
+
+export const Route = createFileRoute("/")({
+  component: App,
+  head: () => ({
+    meta: [
+      { title: homeTitle },
+      { name: "description", content: homeDescription },
+      { name: "keywords", content: homeKeywords },
+      { property: "og:title", content: homeTitle },
+      { property: "og:description", content: homeDescription },
+      { property: "og:url", content: `${siteUrl}/` },
+      { name: "twitter:title", content: homeTitle },
+      { name: "twitter:description", content: homeDescription },
+    ],
+    links: [{ rel: "canonical", href: `${siteUrl}/` }],
+  }),
+});
 
 export function App() {
   return (
@@ -27,7 +50,7 @@ export function App() {
       </div>
 
       <div className="shrink-0">
-        <Heroimage placeholder={false} className="w-100 h-100" />
+        <Heroimage alt="Oh Image hero illustration" className="w-100 h-100" />
       </div>
     </div>
   );

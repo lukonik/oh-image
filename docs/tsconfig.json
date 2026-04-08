@@ -12,7 +12,7 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "types": [
       "@lonik/prestige/client",
-      "@lonik/oh-iamge/client",
+      "@lonik/oh-image/client",
       "vite/client"
     ],
 

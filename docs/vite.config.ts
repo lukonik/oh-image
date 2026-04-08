@@ -78,6 +78,7 @@ const config = defineConfig({
         enabled: true,
         crawlLinks: true,
       },
+      sitemap: { enabled: true, host: "https://lukonik.github.io/oh-image/" },
     }),
     ohImage({
       outDir: ".output/public",

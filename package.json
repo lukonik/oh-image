@@ -124,6 +124,7 @@
   "dependencies": {
     "@vitest/browser-playwright": "^4.0.18",
     "p-limit": "^7.3.0",
+    "pathe": "^2.0.3",
     "query-string": "^9.3.1"
   },
   "keywords": [

@@ -19,7 +19,6 @@ export default defineConfig({
   external: [
     "react",
     "react-dom",
-    "node:path",
     "node:crypto",
     "node:fs",
     "p-limit",

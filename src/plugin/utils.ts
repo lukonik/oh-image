@@ -6,7 +6,7 @@ import type {
   PluginConfig,
   PluginTransforms,
 } from "./types";
-import { extname } from "node:path";
+import { extname } from "pathe";
 import type { FormatEnum } from "sharp";
 
 /**

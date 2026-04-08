@@ -29,6 +29,12 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: config.title },
+      { name: "application-name", content: config.title },
+      { name: "robots", content: "index, follow" },
+      { property: "og:site_name", content: config.title },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: config.title },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

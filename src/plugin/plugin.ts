@@ -1,4 +1,4 @@
-import { basename, extname, join, parse } from "node:path";
+import { basename, extname, join, parse } from "pathe";
 import type { PluginConfig, ImageSrc, ImageEntry } from "./types";
 import {
   getCleanExt,
