@@ -13,6 +13,7 @@ export default defineConfig({
     contentful: "src/loaders/contentful/index.ts",
     wordpress: "src/loaders/wordpress/index.ts",
     netlify: "src/loaders/netlify/index.ts",
+    supabase: "src/loaders/supabase/index.ts",
   },
   dts: true,
   external: [

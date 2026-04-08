@@ -52,6 +52,10 @@
       "types": "./dist/netlify.d.ts",
       "default": "./dist/netlify.js"
     },
+    "./supabase": {
+      "types": "./dist/supabase.d.ts",
+      "default": "./dist/supabase.js"
+    },
     "./client": {
       "types": "./dist/client.d.ts"
     }

@@ -34,7 +34,7 @@ function LoaderDocumentationPage() {
     <PrestigePage>
       <h1 className="text-3xl font-bold">{loaderItem.title}</h1>
       <p className="mb-4">
-        This integration allows you to use <strong>{loaderItem.name}</strong>
+        This integration allows you to use <strong>{loaderItem.name}</strong>{" "}
         for image optimization. For more details, refer to the{" "}
         <a
           href={loaderItem.link}
