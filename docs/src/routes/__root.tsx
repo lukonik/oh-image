@@ -7,6 +7,14 @@ import {
 } from "@tanstack/react-router";
 import config from "virtual:prestige/config";
 import appCss from "../styles.css?url";
+
+const siteUrl = "https://lukonik.github.io/oh-image";
+const siteTitle = "oh-image";
+const siteDescription = `
+Oh Image is an image component library for React and Vite apps. It ships with a lightweight yet powerful Image component plus a Vite optimizer plugin that automatically optimizes static assets.
+`;
+const siteImage = `${siteUrl}/logo.png`;
+
 const options: PrestigeShellProps = {
   customHeaderTitle: () => (
     <span className="font-rubik text-primary-600 text-2xl">Oh Image</span>
@@ -35,6 +43,16 @@ export const Route = createRootRoute({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: config.title },
+
+      { property: "og:locale", content: "en_US" },
+      { property: "og:title", content: siteTitle },
+      { property: "og:description", content: siteDescription },
+      { property: "og:image", content: siteImage },
+      { property: "og:image:alt", content: "Themer logo" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: siteTitle },
+      { name: "twitter:description", content: siteDescription },
+      { name: "twitter:image", content: siteImage },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
