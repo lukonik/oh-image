@@ -6,6 +6,7 @@ import { KontentLoaderProvider } from "@lonik/oh-image/kontent";
 import { ContentfulLoaderProvider } from "@lonik/oh-image/contentful";
 import { WordpressLoaderProvider } from "@lonik/oh-image/wordpress";
 import { NetlifyLoaderProvider } from "@lonik/oh-image/netlify";
+import { ImgixLoaderProvider } from "@lonik/oh-image/imgix";
 import { Cloudinary } from "@cloudinary/url-gen";
 
 const cld = new Cloudinary({
@@ -37,95 +38,104 @@ function RootComponent() {
   };
 
   return (
-    <NetlifyLoaderProvider>
-      <WordpressLoaderProvider path={import.meta.env["VITE_WORDPRESS_PATH"]}>
-        <ContentfulLoaderProvider
-          path={import.meta.env["VITE_CONTENTFUL_PATH"]}
-        >
-          <KontentLoaderProvider path="http://kontent.ai">
-            <CloudinaryLoaderProvider client={cld}>
-              <CloudflareLoaderProvider path="http://cloudflare.com">
-                <ImgproxyLoaderProvider path="http://localhost:8080">
-                  <div className="container mx-auto pt-20 flex justify-center">
-                    <div>
-                      <header>
-                        <nav className="flex items-center gap-4 mb-20">
-                          <Link
-                            to="/image"
-                            style={buttonStyle}
-                            activeProps={{ style: activeButtonStyle }}
-                          >
-                            Image Component
-                          </Link>
-                          <Link
-                            to="/cloudflare"
-                            style={buttonStyle}
-                            activeProps={{ style: activeButtonStyle }}
-                          >
-                            Cloudflare Loader
-                          </Link>
-                          <Link
-                            to="/cloudinary"
-                            style={buttonStyle}
-                            activeProps={{ style: activeButtonStyle }}
-                          >
-                            Cloudinary Loader
-                          </Link>
-                          <Link
-                            to="/imgproxy"
-                            style={buttonStyle}
-                            activeProps={{ style: activeButtonStyle }}
-                          >
-                            Imgproxy Loader
-                          </Link>
-                          <Link
-                            to="/vite-image"
-                            style={buttonStyle}
-                            activeProps={{ style: activeButtonStyle }}
-                          >
-                            Vite Image
-                          </Link>
-                          <Link
-                            to="/kontent"
-                            style={buttonStyle}
-                            activeProps={{ style: activeButtonStyle }}
-                          >
-                            Kontent
-                          </Link>
-                          <Link
-                            to="/contentful"
-                            style={buttonStyle}
-                            activeProps={{ style: activeButtonStyle }}
-                          >
-                            Contentful
-                          </Link>
-                          <Link
-                            to="/wordpress"
-                            style={buttonStyle}
-                            activeProps={{ style: activeButtonStyle }}
-                          >
-                            WordPress
-                          </Link>
-                          <Link
-                            to="/netlify"
-                            style={buttonStyle}
-                            activeProps={{ style: activeButtonStyle }}
-                          >
-                            Netlify
-                          </Link>
-                        </nav>
-                      </header>
-                      <main>
-                        <Outlet />
-                      </main>
+    <ImgixLoaderProvider path="https://assets.imgix.net">
+      <NetlifyLoaderProvider>
+        <WordpressLoaderProvider path={import.meta.env["VITE_WORDPRESS_PATH"]}>
+          <ContentfulLoaderProvider
+            path={import.meta.env["VITE_CONTENTFUL_PATH"]}
+          >
+            <KontentLoaderProvider path="http://kontent.ai">
+              <CloudinaryLoaderProvider client={cld}>
+                <CloudflareLoaderProvider path="http://cloudflare.com">
+                  <ImgproxyLoaderProvider path="http://localhost:8080">
+                    <div className="container mx-auto pt-20 flex justify-center">
+                      <div>
+                        <header>
+                          <nav className="flex items-center gap-4 mb-20">
+                            <Link
+                              to="/image"
+                              style={buttonStyle}
+                              activeProps={{ style: activeButtonStyle }}
+                            >
+                              Image Component
+                            </Link>
+                            <Link
+                              to="/cloudflare"
+                              style={buttonStyle}
+                              activeProps={{ style: activeButtonStyle }}
+                            >
+                              Cloudflare Loader
+                            </Link>
+                            <Link
+                              to="/cloudinary"
+                              style={buttonStyle}
+                              activeProps={{ style: activeButtonStyle }}
+                            >
+                              Cloudinary Loader
+                            </Link>
+                            <Link
+                              to="/imgproxy"
+                              style={buttonStyle}
+                              activeProps={{ style: activeButtonStyle }}
+                            >
+                              Imgproxy Loader
+                            </Link>
+                            <Link
+                              to="/vite-image"
+                              style={buttonStyle}
+                              activeProps={{ style: activeButtonStyle }}
+                            >
+                              Vite Image
+                            </Link>
+                            <Link
+                              to="/kontent"
+                              style={buttonStyle}
+                              activeProps={{ style: activeButtonStyle }}
+                            >
+                              Kontent
+                            </Link>
+                            <Link
+                              to="/contentful"
+                              style={buttonStyle}
+                              activeProps={{ style: activeButtonStyle }}
+                            >
+                              Contentful
+                            </Link>
+                            <Link
+                              to="/wordpress"
+                              style={buttonStyle}
+                              activeProps={{ style: activeButtonStyle }}
+                            >
+                              WordPress
+                            </Link>
+                            <Link
+                              to="/netlify"
+                              style={buttonStyle}
+                              activeProps={{ style: activeButtonStyle }}
+                            >
+                              Netlify
+                            </Link>
+                            <Link
+                              to="/imgix"
+                              style={buttonStyle}
+                              activeProps={{ style: activeButtonStyle }}
+                            >
+                              Imgix
+                            </Link>
+                          </nav>
+                        </header>
+                        <main>
+                          <Outlet />
+                        </main>
+                      </div>
                     </div>
-                  </div>
-                </ImgproxyLoaderProvider>
-              </CloudflareLoaderProvider>
-            </CloudinaryLoaderProvider>
-          </KontentLoaderProvider>
-        </ContentfulLoaderProvider>
-      </WordpressLoaderProvider>
-    </NetlifyLoaderProvider>
+                  </ImgproxyLoaderProvider>
+                </CloudflareLoaderProvider>
+              </CloudinaryLoaderProvider>
+            </KontentLoaderProvider>
+          </ContentfulLoaderProvider>
+        </WordpressLoaderProvider>
+      </NetlifyLoaderProvider>
+    </ImgixLoaderProvider>
   );
 }

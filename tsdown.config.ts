@@ -14,6 +14,7 @@ export default defineConfig({
     wordpress: "src/loaders/wordpress/index.ts",
     netlify: "src/loaders/netlify/index.ts",
     supabase: "src/loaders/supabase/index.ts",
+    imgix: "src/loaders/imgix/index.ts",
   },
   dts: true,
   external: [
