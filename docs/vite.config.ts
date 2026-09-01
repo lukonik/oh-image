@@ -51,6 +51,7 @@ const config = defineConfig({
                 { label: "Cloudinary", slug: "docs/loaders/cloudinary" },
                 { label: "Contentful", link: "/docs/loaders/contentful" },
                 { label: "Imgproxy", link: "/docs/loaders/imgproxy" },
+                { label: "Imgix", link: "/docs/loaders/imgix" },
                 { label: "Kontent", link: "/docs/loaders/kontent" },
                 { label: "Netlify", link: "/docs/loaders/netlify" },
                 { label: "Supabase", link: "/docs/loaders/supabase" },
