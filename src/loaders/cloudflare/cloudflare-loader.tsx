@@ -26,6 +26,11 @@ export const {
     widthKey: "width",
     heightKey: "height",
   },
-  ({ path, params, imageOptions }) =>
-    `${path}/cdn-cgi/image/${params}/${imageOptions.src}`,
+  ({ path, params, imageOptions, options }) => {
+    if (options.variant !== undefined) {
+      return `${path}/${imageOptions.src}/${options.variant}`;
+    }
+
+    return `${path}/cdn-cgi/image/${params}/${imageOptions.src}`;
+  },
 );
