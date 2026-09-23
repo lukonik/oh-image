@@ -32,5 +32,13 @@ export type CloudflareTransforms = Partial<{
 }>;
 
 export type CloudflareOptions = BaseLoaderOptions<CloudflareTransforms>;
-export type CloudflareGlobalOptions =
-  BaseGlobalLoaderOptions<CloudflareTransforms>;
+export interface CloudflareGlobalOptions
+  extends BaseGlobalLoaderOptions<CloudflareTransforms> {
+  /**
+   * A predefined variant for images hosted by Cloudflare Images.
+   *
+   * When set, `path` should include the account hash, for example
+   * `https://imagedelivery.net/<account_hash>`.
+   */
+  variant?: string;
+}

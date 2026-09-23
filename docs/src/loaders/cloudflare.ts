@@ -2,7 +2,8 @@ export const cloudflare = {
   slug: "cloudflare",
   name: "Cloudflare",
   title: "Cloudflare Loader",
-  urlSchema: "<path>/cdn-cgi/image/<params>/<src>",
+  urlSchema:
+    "<path>/cdn-cgi/image/<params>/<src> or <path>/<src>/<variant>",
   defaults: `
   {
     transforms: {
@@ -43,4 +44,12 @@ export const cloudflare = {
     onerror: "redirect";
     "slow-connection-quality": number;
   }`,
+  globalOptions: `export interface CloudflareGlobalOptions {
+  /**
+   * A predefined variant for images hosted by Cloudflare Images.
+   * When set, path should include the account hash, for example:
+   * https://imagedelivery.net/<account_hash>
+   */
+  variant?: string;
+}`,
 };
